@@ -1,0 +1,20 @@
+/* src/components/ExamResult.css */
+.exam-result {
+    background-color: #e1f7d5;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.exam-result h2 {
+    color: #28a745;
+}
+
+.exam-result ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.exam-result li {
+    padding: 5px 0;
+}

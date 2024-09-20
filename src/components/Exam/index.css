@@ -1,0 +1,20 @@
+/* src/components/Exam.css */
+.exam {
+    background-color: #e9f7f9;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.exam h2 {
+    color: #007bff;
+}
+
+.exam ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.exam li {
+    padding: 5px 0;
+}

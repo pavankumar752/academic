@@ -1,0 +1,18 @@
+/* src/components/ExamType.css */
+.exam-type-container {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.exam-type h2 {
+    color: #333;
+}
+
+.exam-type-dropdown {
+    padding: 10px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    width: 100%; /* Make the dropdown full width */
+}
