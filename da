@@ -1,4 +1,4 @@
-// DualListBox.js
+// DualistBox.js
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
@@ -6,85 +6,60 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;  // Full viewport height
+  height: 100vh;
 `;
 
 const Box = styled.div`
+  width: 200px;
+  height: 200px;
+  margin: 20px;
   display: flex;
-  flex-direction: column;
-  width: 400px;
-`;
-
-const List = styled.ul`
-  list-style-type: none;
-  padding: 0;
-  border: 1px solid #ccc;
-  height: 200px;  // Fixed height
-  overflow-y: auto;
-  margin: 0;  // Remove default margin
-`;
-
-const ListItem = styled.li`
-  padding: 8px;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #333;
+  background-color: ${props => (props.isActive ? '#4caf50' : '#f44336')};
+  color: white;
+  font-size: 24px;
+  transition: background-color 0.3s;
   cursor: pointer;
-  background-color: ${({ selected }) => (selected ? '#007bff' : 'white')};
-  color: ${({ selected }) => (selected ? 'white' : 'black')};
 
   &:hover {
-    background-color: #f0f0f0;
+    opacity: 0.9;
   }
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
+const DualistBox = () => {
+  const [activeBox, setActiveBox] = useState(null);
+  const [permissions, setPermissions] = useState({
+    box1: 'No Access',
+    box2: 'No Access',
+  });
 
-const DualListBox = ({ items }) => {
-  const [leftList, setLeftList] = useState(items);
-  const [rightList, setRightList] = useState([]);
-
-  const moveItem = (item, sourceList, setSourceList, targetList, setTargetList) => {
-    setTargetList([...targetList, item]);
-    setSourceList(sourceList.filter(i => i !== item));
-  };
-
-  const handleDoubleClick = (item) => {
-    if (leftList.includes(item)) {
-      moveItem(item, leftList, setLeftList, rightList, setRightList);
-    } else {
-      moveItem(item, rightList, setRightList, leftList, setLeftList);
-    }
+  const handleDoubleClick = (boxId) => {
+    setActiveBox(prev => (prev === boxId ? null : boxId));
+    
+    setPermissions(prev => ({
+      ...prev,
+      [boxId === 1 ? 'box1' : 'box2']: prev[boxId === 1 ? 'box1' : 'box2'] === 'Access Granted' ? 'No Access' : 'Access Granted',
+    }));
   };
 
   return (
     <Container>
-      <Box>
-        <h2>Permissions</h2>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <List>
-            {leftList.map((item, index) => (
-              <ListItem key={index} onDoubleClick={() => handleDoubleClick(item)}>
-                {item}
-              </ListItem>
-            ))}
-          </List>
-          <ButtonContainer>
-            <button onClick={() => rightList.forEach(item => moveItem(item, rightList, setRightList, leftList, setLeftList))}>Move All Left</button>
-            <button onClick={() => leftList.forEach(item => moveItem(item, leftList, setLeftList, rightList, setRightList))}>Move All Right</button>
-          </ButtonContainer>
-          <List>
-            {rightList.map((item, index) => (
-              <ListItem key={index} onDoubleClick={() => handleDoubleClick(item)}>
-                {item}
-              </ListItem>
-            ))}
-          </List>
-        </div>
+      <Box
+        isActive={activeBox === 1}
+        onDoubleClick={() => handleDoubleClick(1)}
+      >
+        {permissions.box1}
+      </Box>
+      <Box
+        isActive={activeBox === 2}
+        onDoubleClick={() => handleDoubleClick(2)}
+      >
+        {permissions.box2}
       </Box>
     </Container>
   );
 };
 
-export default DualListBox;
+export default DualistBox;
