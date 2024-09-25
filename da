@@ -19,8 +19,9 @@ const List = styled.ul`
   list-style-type: none;
   padding: 0;
   border: 1px solid #ccc;
-  height: 200px;
+  height: 200px;  // Fixed height
   overflow-y: auto;
+  margin: 0;  // Remove default margin
 `;
 
 const ListItem = styled.li`
@@ -32,6 +33,12 @@ const ListItem = styled.li`
   &:hover {
     background-color: #f0f0f0;
   }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 const DualListBox = ({ items }) => {
@@ -63,10 +70,10 @@ const DualListBox = ({ items }) => {
               </ListItem>
             ))}
           </List>
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <ButtonContainer>
             <button onClick={() => rightList.forEach(item => moveItem(item, rightList, setRightList, leftList, setLeftList))}>Move All Left</button>
             <button onClick={() => leftList.forEach(item => moveItem(item, leftList, setLeftList, rightList, setRightList))}>Move All Right</button>
-          </div>
+          </ButtonContainer>
           <List>
             {rightList.map((item, index) => (
               <ListItem key={index} onDoubleClick={() => handleDoubleClick(item)}>
