@@ -44,6 +44,17 @@ const DualListComponent = () => {
   const [selectedLeft, setSelectedLeft] = useState(null);
   const [selectedRight, setSelectedRight] = useState(null);
 
+  const handleDoubleClick = (index, listType) => {
+    const newItem = prompt("Enter new value:", listType === 'left' ? leftList[index] : rightList[index]);
+    if (newItem) {
+      if (listType === 'left') {
+        setLeftList(prev => prev.map((item, i) => (i === index ? newItem : item)));
+      } else {
+        setRightList(prev => prev.map((item, i) => (i === index ? newItem : item)));
+      }
+    }
+  };
+
   const moveToRight = () => {
     if (selectedLeft !== null) {
       const item = leftList[selectedLeft];
@@ -68,7 +79,11 @@ const DualListComponent = () => {
         <h3>Left List</h3>
         <List>
           {leftList.map((item, index) => (
-            <ListItem key={index} onClick={() => setSelectedLeft(index)}>
+            <ListItem
+              key={index}
+              onClick={() => setSelectedLeft(index)}
+              onDoubleClick={() => handleDoubleClick(index, 'left')}
+            >
               {item}
             </ListItem>
           ))}
@@ -79,7 +94,11 @@ const DualListComponent = () => {
         <h3>Right List</h3>
         <List>
           {rightList.map((item, index) => (
-            <ListItem key={index} onClick={() => setSelectedRight(index)}>
+            <ListItem
+              key={index}
+              onClick={() => setSelectedRight(index)}
+              onDoubleClick={() => handleDoubleClick(index, 'right')}
+            >
               {item}
             </ListItem>
           ))}
