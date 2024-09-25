@@ -1,4 +1,4 @@
-// DualistBox.js
+// DualListComponent.js
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
@@ -9,57 +9,85 @@ const Container = styled.div`
   height: 100vh;
 `;
 
-const Box = styled.div`
-  width: 200px;
-  height: 200px;
-  margin: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 2px solid #333;
-  background-color: ${props => (props.isActive ? '#4caf50' : '#f44336')};
-  color: white;
-  font-size: 24px;
-  transition: background-color 0.3s;
+const ListContainer = styled.div`
+  margin: 0 20px;
+  text-align: center;
+`;
+
+const List = styled.ul`
+  list-style: none;
+  padding: 0;
+  border: 1px solid #333;
+  height: 300px;
+  overflow-y: auto;
+`;
+
+const ListItem = styled.li`
+  padding: 10px;
   cursor: pointer;
+  background-color: #f0f0f0;
+  margin: 5px 0;
 
   &:hover {
-    opacity: 0.9;
+    background-color: #ccc;
   }
 `;
 
-const DualistBox = () => {
-  const [activeBox, setActiveBox] = useState(null);
-  const [permissions, setPermissions] = useState({
-    box1: 'No Access',
-    box2: 'No Access',
-  });
+const Button = styled.button`
+  margin: 10px;
+  padding: 10px;
+`;
 
-  const handleDoubleClick = (boxId) => {
-    setActiveBox(prev => (prev === boxId ? null : boxId));
-    
-    setPermissions(prev => ({
-      ...prev,
-      [boxId === 1 ? 'box1' : 'box2']: prev[boxId === 1 ? 'box1' : 'box2'] === 'Access Granted' ? 'No Access' : 'Access Granted',
-    }));
+const DualListComponent = () => {
+  const [leftList, setLeftList] = useState(['Item 1', 'Item 2', 'Item 3']);
+  const [rightList, setRightList] = useState(['Item A', 'Item B', 'Item C']);
+  const [selectedLeft, setSelectedLeft] = useState(null);
+  const [selectedRight, setSelectedRight] = useState(null);
+
+  const moveToRight = () => {
+    if (selectedLeft !== null) {
+      const item = leftList[selectedLeft];
+      setLeftList(prev => prev.filter((_, index) => index !== selectedLeft));
+      setRightList(prev => [...prev, item]);
+      setSelectedLeft(null);
+    }
+  };
+
+  const moveToLeft = () => {
+    if (selectedRight !== null) {
+      const item = rightList[selectedRight];
+      setRightList(prev => prev.filter((_, index) => index !== selectedRight));
+      setLeftList(prev => [...prev, item]);
+      setSelectedRight(null);
+    }
   };
 
   return (
     <Container>
-      <Box
-        isActive={activeBox === 1}
-        onDoubleClick={() => handleDoubleClick(1)}
-      >
-        {permissions.box1}
-      </Box>
-      <Box
-        isActive={activeBox === 2}
-        onDoubleClick={() => handleDoubleClick(2)}
-      >
-        {permissions.box2}
-      </Box>
+      <ListContainer>
+        <h3>Left List</h3>
+        <List>
+          {leftList.map((item, index) => (
+            <ListItem key={index} onClick={() => setSelectedLeft(index)}>
+              {item}
+            </ListItem>
+          ))}
+        </List>
+        <Button onClick={moveToRight}> &gt; </Button>
+      </ListContainer>
+      <ListContainer>
+        <h3>Right List</h3>
+        <List>
+          {rightList.map((item, index) => (
+            <ListItem key={index} onClick={() => setSelectedRight(index)}>
+              {item}
+            </ListItem>
+          ))}
+        </List>
+        <Button onClick={moveToLeft}> &lt; </Button>
+      </ListContainer>
     </Container>
   );
 };
 
-export default DualistBox;
+export default DualListComponent;
