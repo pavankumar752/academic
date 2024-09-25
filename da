@@ -1,79 +1,3 @@
-we have to develop a website in react js with styledComponents that there is a sriChaitanya school consist of the sevaral branches in the through out the india in different states having different academic programs. now we have to develop a web application on academic reports of the students in the application students having with academic years, classes, genders, orientations, sections and in exams exam instances, exam results, exam types, exams, subjects. To add an exam the form should consist of name, date, duration, orientation, student class, section and exam type. To add a student the form consist of the scs number, name, gender, student status, state, zone, branch, orientation, student class, section. To add an exam instance the form should consist of the exam, subject, date, exam start time, exam end time, maximum marks, pass marks.           create a best attractive react js application with styledComponents.
-
-
-
-
-
-
-firstly in web application 
-
-.the login page will display with the username,password and login button. After the authontication from the backend if the creditintials are valid it will redirect to the dashboard with authorization.
-
-1.There are four types of dashboards there are Admin Dashboard, Student Dashboard, Teacher Dashboard, Parent Dashboard
-
-
-
-Admin Dashboard
-
-1. In Admin dashboard it consist of the Sidebar component, Header Component and page
-
-
-In Sidebar Component it consist of the 
-
-1.SriChaitanya Logo, 
-2.Sri Chaitanya Heading, 
-3.Main in main it consist of the Dashboard having Admin Dashboard, Student Dashboard, Teacher Dashboard, Parent Dashboard and in Application having chat, call, calender, Email, To Do, Notes, File Manager.
-4.Layout it consist of Dark
-5.peoples it consists of the 
-		1.Students
-			1.All Students
-			2.Students List
-			3.Student Details
-			4.Student Promotion
-		2.parents
-			1.All Parents
-		3.Teachers	
-			1.All Teachers
-			2.Teachers List
-			3.Teacher Details
-			4.Routine
-6.Academic 	
-		1.Classes
-			1.All Classes
-			2.Schedule
-		2.Class Room
-		3.Class Routine
-		4.Section
-		5.Subject
-		6.Syllabus
-		7.Time Table
-		8.Home Work
-		9.Examinations
-			1.Exam
-			2.Exam Schedule
-			3.Grade
-			4.Exam Attendance
-			5.Exam Results
-7.Reports
-		1.Attendance Report
-		2.Student Report
-		3.Grade Report
-8.Support
-		1.Contact Messages
-		2.Tickets
-9.Pages
-		1.Profile
-		2.Authentication
-			1.Login
-			2.Register
-			3.Forgot Password
-			4.Reset Password
-		3.Error pages
-			1.404 Error
-			2.500 Error
-
-
-
 // DualListBox.js
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -103,31 +27,20 @@ const ListItem = styled.li`
   }
 `;
 
-const Button = styled.button`
-  margin: 5px;
-`;
-
 const DualListBox = ({ items }) => {
   const [leftList, setLeftList] = useState(items);
   const [rightList, setRightList] = useState([]);
-  const [selectedLeft, setSelectedLeft] = useState(null);
-  const [selectedRight, setSelectedRight] = useState(null);
 
-  const moveToRight = () => {
-    if (selectedLeft !== null) {
-      const item = leftList[selectedLeft];
-      setRightList([...rightList, item]);
-      setLeftList(leftList.filter((_, index) => index !== selectedLeft));
-      setSelectedLeft(null);
-    }
+  const moveItem = (item, sourceList, setSourceList, targetList, setTargetList) => {
+    setTargetList([...targetList, item]);
+    setSourceList(sourceList.filter(i => i !== item));
   };
 
-  const moveToLeft = () => {
-    if (selectedRight !== null) {
-      const item = rightList[selectedRight];
-      setLeftList([...leftList, item]);
-      setRightList(rightList.filter((_, index) => index !== selectedRight));
-      setSelectedRight(null);
+  const handleDoubleClick = (item) => {
+    if (leftList.includes(item)) {
+      moveItem(item, leftList, setLeftList, rightList, setRightList);
+    } else {
+      moveItem(item, rightList, setRightList, leftList, setLeftList);
     }
   };
 
@@ -137,26 +50,18 @@ const DualListBox = ({ items }) => {
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <List>
           {leftList.map((item, index) => (
-            <ListItem
-              key={index}
-              selected={selectedLeft === index}
-              onClick={() => setSelectedLeft(index)}
-            >
+            <ListItem key={index} onDoubleClick={() => handleDoubleClick(item)}>
               {item}
             </ListItem>
           ))}
         </List>
-        <div>
-          <Button onClick={moveToRight}> &gt; </Button>
-          <Button onClick={moveToLeft}> &lt; </Button>
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <button onClick={() => rightList.forEach(item => moveItem(item, rightList, setRightList, leftList, setLeftList))}>Move All Left</button>
+          <button onClick={() => leftList.forEach(item => moveItem(item, leftList, setLeftList, rightList, setRightList))}>Move All Right</button>
         </div>
         <List>
           {rightList.map((item, index) => (
-            <ListItem
-              key={index}
-              selected={selectedRight === index}
-              onClick={() => setSelectedRight(index)}
-            >
+            <ListItem key={index} onDoubleClick={() => handleDoubleClick(item)}>
               {item}
             </ListItem>
           ))}
@@ -167,5 +72,3 @@ const DualListBox = ({ items }) => {
 };
 
 export default DualListBox;
-
-	
