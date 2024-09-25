@@ -1,4 +1,4 @@
-// DualListComponent.js
+// DualListBox.js
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
@@ -33,43 +33,19 @@ const ListItem = styled.li`
   }
 `;
 
-const Button = styled.button`
-  margin: 10px;
-  padding: 10px;
-`;
-
-const DualListComponent = () => {
+const DualListBox = () => {
   const [leftList, setLeftList] = useState(['Item 1', 'Item 2', 'Item 3']);
   const [rightList, setRightList] = useState(['Item A', 'Item B', 'Item C']);
-  const [selectedLeft, setSelectedLeft] = useState(null);
-  const [selectedRight, setSelectedRight] = useState(null);
 
   const handleDoubleClick = (index, listType) => {
-    const newItem = prompt("Enter new value:", listType === 'left' ? leftList[index] : rightList[index]);
-    if (newItem) {
-      if (listType === 'left') {
-        setLeftList(prev => prev.map((item, i) => (i === index ? newItem : item)));
-      } else {
-        setRightList(prev => prev.map((item, i) => (i === index ? newItem : item)));
-      }
-    }
-  };
-
-  const moveToRight = () => {
-    if (selectedLeft !== null) {
-      const item = leftList[selectedLeft];
-      setLeftList(prev => prev.filter((_, index) => index !== selectedLeft));
+    if (listType === 'left') {
+      const item = leftList[index];
+      setLeftList(prev => prev.filter((_, i) => i !== index));
       setRightList(prev => [...prev, item]);
-      setSelectedLeft(null);
-    }
-  };
-
-  const moveToLeft = () => {
-    if (selectedRight !== null) {
-      const item = rightList[selectedRight];
-      setRightList(prev => prev.filter((_, index) => index !== selectedRight));
+    } else {
+      const item = rightList[index];
+      setRightList(prev => prev.filter((_, i) => i !== index));
       setLeftList(prev => [...prev, item]);
-      setSelectedRight(null);
     }
   };
 
@@ -81,14 +57,12 @@ const DualListComponent = () => {
           {leftList.map((item, index) => (
             <ListItem
               key={index}
-              onClick={() => setSelectedLeft(index)}
               onDoubleClick={() => handleDoubleClick(index, 'left')}
             >
               {item}
             </ListItem>
           ))}
         </List>
-        <Button onClick={moveToRight}> &gt; </Button>
       </ListContainer>
       <ListContainer>
         <h3>Right List</h3>
@@ -96,17 +70,15 @@ const DualListComponent = () => {
           {rightList.map((item, index) => (
             <ListItem
               key={index}
-              onClick={() => setSelectedRight(index)}
               onDoubleClick={() => handleDoubleClick(index, 'right')}
             >
               {item}
             </ListItem>
           ))}
         </List>
-        <Button onClick={moveToLeft}> &lt; </Button>
       </ListContainer>
     </Container>
   );
 };
 
-export default DualListComponent;
+export default DualListBox;
