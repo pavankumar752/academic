@@ -71,4 +71,101 @@ In Sidebar Component it consist of the
 		3.Error pages
 			1.404 Error
 			2.500 Error
+
+
+
+// DualListBox.js
+import React, { useState } from 'react';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+`;
+
+const List = styled.ul`
+  list-style-type: none;
+  padding: 0;
+  border: 1px solid #ccc;
+  height: 200px;
+  overflow-y: auto;
+`;
+
+const ListItem = styled.li`
+  padding: 8px;
+  cursor: pointer;
+  background-color: ${({ selected }) => (selected ? '#007bff' : 'white')};
+  color: ${({ selected }) => (selected ? 'white' : 'black')};
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+`;
+
+const Button = styled.button`
+  margin: 5px;
+`;
+
+const DualListBox = ({ items }) => {
+  const [leftList, setLeftList] = useState(items);
+  const [rightList, setRightList] = useState([]);
+  const [selectedLeft, setSelectedLeft] = useState(null);
+  const [selectedRight, setSelectedRight] = useState(null);
+
+  const moveToRight = () => {
+    if (selectedLeft !== null) {
+      const item = leftList[selectedLeft];
+      setRightList([...rightList, item]);
+      setLeftList(leftList.filter((_, index) => index !== selectedLeft));
+      setSelectedLeft(null);
+    }
+  };
+
+  const moveToLeft = () => {
+    if (selectedRight !== null) {
+      const item = rightList[selectedRight];
+      setLeftList([...leftList, item]);
+      setRightList(rightList.filter((_, index) => index !== selectedRight));
+      setSelectedRight(null);
+    }
+  };
+
+  return (
+    <Container>
+      <h2>Permissions</h2>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <List>
+          {leftList.map((item, index) => (
+            <ListItem
+              key={index}
+              selected={selectedLeft === index}
+              onClick={() => setSelectedLeft(index)}
+            >
+              {item}
+            </ListItem>
+          ))}
+        </List>
+        <div>
+          <Button onClick={moveToRight}> &gt; </Button>
+          <Button onClick={moveToLeft}> &lt; </Button>
+        </div>
+        <List>
+          {rightList.map((item, index) => (
+            <ListItem
+              key={index}
+              selected={selectedRight === index}
+              onClick={() => setSelectedRight(index)}
+            >
+              {item}
+            </ListItem>
+          ))}
+        </List>
+      </div>
+    </Container>
+  );
+};
+
+export default DualListBox;
+
 	
