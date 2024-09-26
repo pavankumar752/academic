@@ -27,7 +27,7 @@ const TableCell = styled.td`
 `;
 
 const Input = styled.input`
-  width: 80px;
+  width: 60px;
   padding: 5px;
 `;
 
@@ -44,97 +44,68 @@ const Button = styled.button`
   }
 `;
 
-const Form = styled.form`
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-`;
-
 const StudentsMarksEntry = () => {
-  const [students, setStudents] = useState([]);
-  const [newStudent, setNewStudent] = useState({ id: '', name: '', marks: {} });
+  const studentsData = [
+    { id: '1', name: 'John Doe' },
+    { id: '2', name: 'Jane Smith' },
+    { id: '3', name: 'Alice Johnson' },
+    { id: '4', name: 'Bob Brown' },
+  ];
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (name === 'id' || name === 'name') {
-      setNewStudent((prev) => ({ ...prev, [name]: value }));
-    } else {
-      setNewStudent((prev) => ({
-        ...prev,
-        marks: { ...prev.marks, [name]: value }
-      }));
-    }
+  const [students, setStudents] = useState(
+    studentsData.map(student => ({ ...student, marks: {} }))
+  );
+
+  const handleChange = (index, subject, value) => {
+    const updatedStudents = [...students];
+    updatedStudents[index].marks[subject] = value;
+    setStudents(updatedStudents);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setStudents((prev) => [...prev, newStudent]);
-    setNewStudent({ id: '', name: '', marks: {} });
+    console.log(students); // Handle the submission as needed
   };
 
   return (
     <Container>
       <Title>Students Marks Entry</Title>
-      <Form onSubmit={handleSubmit}>
-        <Input
-          type="text"
-          name="id"
-          value={newStudent.id}
-          onChange={handleChange}
-          placeholder="ID"
-          required
-        />
-        <Input
-          type="text"
-          name="name"
-          value={newStudent.name}
-          onChange={handleChange}
-          placeholder="Name"
-          required
-        />
-        {['English', 'Telugu', 'Hindi', 'Maths', 'Physics', 'Chemistry', 'Social'].map((subject) => (
-          <Input
-            key={subject}
-            type="number"
-            name={subject}
-            value={newStudent.marks[subject] || ''}
-            onChange={handleChange}
-            placeholder={subject}
-            required
-          />
-        ))}
-        <Button type="submit">Add Student</Button>
-      </Form>
-      <Table>
-        <thead>
-          <tr>
-            <TableHeader>ID</TableHeader>
-            <TableHeader>Name</TableHeader>
-            <TableHeader>English</TableHeader>
-            <TableHeader>Telugu</TableHeader>
-            <TableHeader>Hindi</TableHeader>
-            <TableHeader>Maths</TableHeader>
-            <TableHeader>Physics</TableHeader>
-            <TableHeader>Chemistry</TableHeader>
-            <TableHeader>Social</TableHeader>
-          </tr>
-        </thead>
-        <tbody>
-          {students.map((student, index) => (
-            <tr key={index}>
-              <TableCell>{student.id}</TableCell>
-              <TableCell>{student.name}</TableCell>
-              <TableCell>{student.marks.English || '-'}</TableCell>
-              <TableCell>{student.marks.Telugu || '-'}</TableCell>
-              <TableCell>{student.marks.Hindi || '-'}</TableCell>
-              <TableCell>{student.marks.Maths || '-'}</TableCell>
-              <TableCell>{student.marks.Physics || '-'}</TableCell>
-              <TableCell>{student.marks.Chemistry || '-'}</TableCell>
-              <TableCell>{student.marks.Social || '-'}</TableCell>
+      <form onSubmit={handleSubmit}>
+        <Table>
+          <thead>
+            <tr>
+              <TableHeader>ID</TableHeader>
+              <TableHeader>Name</TableHeader>
+              <TableHeader>English</TableHeader>
+              <TableHeader>Telugu</TableHeader>
+              <TableHeader>Hindi</TableHeader>
+              <TableHeader>Maths</TableHeader>
+              <TableHeader>Physics</TableHeader>
+              <TableHeader>Chemistry</TableHeader>
+              <TableHeader>Social</TableHeader>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {students.map((student, index) => (
+              <tr key={student.id}>
+                <TableCell>{student.id}</TableCell>
+                <TableCell>{student.name}</TableCell>
+                {['English', 'Telugu', 'Hindi', 'Maths', 'Physics', 'Chemistry', 'Social'].map((subject) => (
+                  <TableCell key={subject}>
+                    <Input
+                      type="number"
+                      value={student.marks[subject] || ''}
+                      onChange={(e) => handleChange(index, subject, e.target.value)}
+                      placeholder="0"
+                    />
+                  </TableCell>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        <Button type="submit">Submit Marks</Button>
+      </form>
     </Container>
   );
 };
