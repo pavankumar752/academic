@@ -32,6 +32,8 @@ const Input = styled.input`
 `;
 
 const StudentsMarksEntry = () => {
+  const subjects = ['English', 'Telugu', 'Hindi', 'Maths', 'Physics', 'Chemistry', 'Social'];
+  
   const studentsData = [
     { id: '1', name: 'John Doe' },
     { id: '2', name: 'Jane Smith' },
@@ -48,7 +50,7 @@ const StudentsMarksEntry = () => {
     updatedStudents[index].marks[subject] = value;
     setStudents(updatedStudents);
 
-    // Optionally, you could log or handle the saved data here
+    // Optional: Log or handle saved data
     console.log(updatedStudents);
   };
 
@@ -60,13 +62,9 @@ const StudentsMarksEntry = () => {
           <tr>
             <TableHeader>ID</TableHeader>
             <TableHeader>Name</TableHeader>
-            <TableHeader>English</TableHeader>
-            <TableHeader>Telugu</TableHeader>
-            <TableHeader>Hindi</TableHeader>
-            <TableHeader>Maths</TableHeader>
-            <TableHeader>Physics</TableHeader>
-            <TableHeader>Chemistry</TableHeader>
-            <TableHeader>Social</TableHeader>
+            {subjects.map((subject) => (
+              <TableHeader key={subject}>{subject}</TableHeader>
+            ))}
           </tr>
         </thead>
         <tbody>
@@ -74,7 +72,7 @@ const StudentsMarksEntry = () => {
             <tr key={student.id}>
               <TableCell>{student.id}</TableCell>
               <TableCell>{student.name}</TableCell>
-              {['English', 'Telugu', 'Hindi', 'Maths', 'Physics', 'Chemistry', 'Social'].map((subject) => (
+              {subjects.map((subject) => (
                 <TableCell key={subject}>
                   <Input
                     type="number"
