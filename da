@@ -31,19 +31,6 @@ const Input = styled.input`
   padding: 5px;
 `;
 
-const Button = styled.button`
-  margin-top: 20px;
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
-
 const StudentsMarksEntry = () => {
   const studentsData = [
     { id: '1', name: 'John Doe' },
@@ -60,52 +47,47 @@ const StudentsMarksEntry = () => {
     const updatedStudents = [...students];
     updatedStudents[index].marks[subject] = value;
     setStudents(updatedStudents);
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(students); // Handle the submission as needed
+    // Optionally, you could log or handle the saved data here
+    console.log(updatedStudents);
   };
 
   return (
     <Container>
       <Title>Students Marks Entry</Title>
-      <form onSubmit={handleSubmit}>
-        <Table>
-          <thead>
-            <tr>
-              <TableHeader>ID</TableHeader>
-              <TableHeader>Name</TableHeader>
-              <TableHeader>English</TableHeader>
-              <TableHeader>Telugu</TableHeader>
-              <TableHeader>Hindi</TableHeader>
-              <TableHeader>Maths</TableHeader>
-              <TableHeader>Physics</TableHeader>
-              <TableHeader>Chemistry</TableHeader>
-              <TableHeader>Social</TableHeader>
+      <Table>
+        <thead>
+          <tr>
+            <TableHeader>ID</TableHeader>
+            <TableHeader>Name</TableHeader>
+            <TableHeader>English</TableHeader>
+            <TableHeader>Telugu</TableHeader>
+            <TableHeader>Hindi</TableHeader>
+            <TableHeader>Maths</TableHeader>
+            <TableHeader>Physics</TableHeader>
+            <TableHeader>Chemistry</TableHeader>
+            <TableHeader>Social</TableHeader>
+          </tr>
+        </thead>
+        <tbody>
+          {students.map((student, index) => (
+            <tr key={student.id}>
+              <TableCell>{student.id}</TableCell>
+              <TableCell>{student.name}</TableCell>
+              {['English', 'Telugu', 'Hindi', 'Maths', 'Physics', 'Chemistry', 'Social'].map((subject) => (
+                <TableCell key={subject}>
+                  <Input
+                    type="number"
+                    value={student.marks[subject] || ''}
+                    onChange={(e) => handleChange(index, subject, e.target.value)}
+                    placeholder="0"
+                  />
+                </TableCell>
+              ))}
             </tr>
-          </thead>
-          <tbody>
-            {students.map((student, index) => (
-              <tr key={student.id}>
-                <TableCell>{student.id}</TableCell>
-                <TableCell>{student.name}</TableCell>
-                {['English', 'Telugu', 'Hindi', 'Maths', 'Physics', 'Chemistry', 'Social'].map((subject) => (
-                  <TableCell key={subject}>
-                    <Input
-                      type="number"
-                      value={student.marks[subject] || ''}
-                      onChange={(e) => handleChange(index, subject, e.target.value)}
-                      placeholder="0"
-                    />
-                  </TableCell>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-        <Button type="submit">Submit Marks</Button>
-      </form>
+          ))}
+        </tbody>
+      </Table>
     </Container>
   );
 };
