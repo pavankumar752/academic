@@ -1,13 +1,13 @@
-// Add this to check data retrieval
-useEffect(() => {
-  const storedExams = localStorage.getItem('exams');
-  console.log("Stored Exams:", storedExams);
-  if (storedExams) {
-    setData(JSON.parse(storedExams));
-  }
-}, []);
-
-// Temporary sample data to test table rendering
-const [data, setData] = useState<Exam1[]>([
-  { id: "1", key: 1, examName: "Sample Exam", examDate: "01-01-2024", startTime: "10:00 AM", endTime: "12:00 PM" },
-]);
+const handleAddExam = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const examWithId: Exam1 = {
+        ...newExam,
+        id: String(data.length + 1),
+        key: data.length + 1,
+    };
+    const updatedData = [...data, examWithId];
+    console.log("Updated Data:", updatedData); // Debug log
+    setData(updatedData);
+    localStorage.setItem('exams', JSON.stringify(updatedData));
+    setNewExam({ examName: "", examDate: dayjs().format("DD-MM-YYYY"), startTime: "", endTime: "" });
+};
