@@ -1,11 +1,1 @@
-Compiled with problems:
-×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:2:19
-TS7016: Could not find a declaration file for module 'react-modal'. 'C:/Users/Scts/Desktop/react/template/node_modules/react-modal/lib/index.js' implicitly has an 'any' type.
-  Try `npm i --save-dev @types/react-modal` if it exists or add a new declaration (.d.ts) file containing `declare module 'react-modal';`
-    1 | import React, { useRef,useState  } from "react";
-  > 2 | import Modal from 'react-modal';
-      |                   ^^^^^^^^^^^^^
-    3 | import { Link } from "react-router-dom";
-    4 | import Table from "../../../../core/common/dataTable/index";
-    5 | import { exam } from "../../../../core/data/json/exam";
+npm install --save-dev @types/react-modal
