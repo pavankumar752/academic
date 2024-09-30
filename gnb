@@ -1,5 +1,50 @@
-Type '(value: { value: string; }) => void' is not assignable to type '(option: Option | null) => void'.
-  Types of parameters 'value' and 'option' are incompatible.
-    Type 'Option | null' is not assignable to type '{ value: string; }'.
-      Type 'null' is not assignable to type '{ value: string; }'.ts(2322)
-commonSelect.tsx(14, 3): The expected type comes from property 'onChange' which is declared here on type 'IntrinsicAttributes & SelectProps'
+import React, { useEffect, useState } from "react";
+import Select from "react-select";
+
+export type Option = {
+  value: string;
+  label: string;
+};
+
+export interface SelectProps {
+  options: Option[];
+  defaultValue?: Option;
+  className?: string;
+  styles?: any; 
+  onChange?: (option: Option | null) => void; // Ensure this matches
+}
+
+const CommonSelect: React.FC<SelectProps> = ({
+  options,
+  defaultValue,
+  className,
+  styles,
+  onChange,
+}) => {
+  const [selectedOption, setSelectedOption] = useState<Option | null>(defaultValue || null);
+
+  const handleChange = (option: Option | null) => {
+    setSelectedOption(option);
+    if (onChange) {
+      onChange(option); // Call the onChange prop
+    }
+  };
+
+  useEffect(() => {
+    setSelectedOption(defaultValue || null);
+  }, [defaultValue]);
+
+  return (
+    <Select
+      classNamePrefix="react-select"
+      className={className}
+      styles={styles}
+      options={options}
+      value={selectedOption}
+      onChange={handleChange}
+      placeholder="Select"
+    />
+  );
+};
+
+export default CommonSelect;
