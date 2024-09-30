@@ -1,20 +1,49 @@
-Compiled with problems:
-×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:60:42
-TS2749: 'Option' refers to a value, but is being used as a type here. Did you mean 'typeof Option'?
-    58 |   };
-    59 |
-  > 60 |   const handleStartTimeChange = (option: Option | null) => {
-       |                                          ^^^^^^
-    61 |     setNewExam({ ...newExam, startTime: option ? option.value : "" });
-    62 |   };
-    63 |
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:64:40
-TS2749: 'Option' refers to a value, but is being used as a type here. Did you mean 'typeof Option'?
-    62 |   };
-    63 |
-  > 64 |   const handleEndTimeChange = (option: Option | null) => {
-       |                                        ^^^^^^
-    65 |     setNewExam({ ...newExam, endTime: option ? option.value : "" });
-    66 |   };
-    67 |   
+import React, { useEffect, useRef, useState } from "react";
+import CommonSelect, { Option } from "../../../../core/common/commonSelect"; // Adjust the import as necessary
+// other imports...
+
+
+
+const Exam = () => {
+  const [data, setData] = useState<YourDataType[]>(exam);
+  const [newExam, setNewExam] = useState<{ examName: string; examDate: string; startTime: string; endTime: string }>({
+    examName: "",
+    examDate: dayjs().format("DD-MM-YYYY"),
+    startTime: "",
+    endTime: "",
+  });
+
+  const handleStartTimeChange = (option: Option | null) => {
+    setNewExam({ ...newExam, startTime: option ? option.value : "" });
+  };
+
+  const handleEndTimeChange = (option: Option | null) => {
+    setNewExam({ ...newExam, endTime: option ? option.value : "" });
+  };
+
+  const handleAddExam = (e: React.FormEvent) => {
+    e.preventDefault();
+    const examWithId = { ...newExam, id: String(data.length + 1) };
+    setData([...data, examWithId]); // Update the exam list
+    setNewExam({ examName: "", examDate: dayjs().format("DD-MM-YYYY"), startTime: "", endTime: "" }); // Reset form
+  };
+
+  return (
+    <div>
+      {/* Your component JSX */}
+      <CommonSelect
+        className="select"
+        options={startTime}
+        onChange={handleStartTimeChange} // Correct usage
+      />
+      <CommonSelect
+        className="select"
+        options={startTimeOne}
+        onChange={handleEndTimeChange} // Correct usage
+      />
+      {/* More JSX for adding exams */}
+    </div>
+  );
+};
+
+export default Exam;
