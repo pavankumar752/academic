@@ -1,50 +1,46 @@
-import React, { useEffect, useState } from "react";
-import Select from "react-select";
+import React, { useEffect, useRef, useState } from "react";
+// other imports...
 
-export type Option = {
-  value: string;
-  label: string;
-};
+const Exam = () => {
+  const [data, setData] = useState<YourDataType[]>(exam);
+  const [newExam, setNewExam] = useState<{ examName: string; examDate: string; startTime: string; endTime: string }>({
+    examName: "",
+    examDate: dayjs().format("DD-MM-YYYY"),
+    startTime: "",
+    endTime: "",
+  });
 
-export interface SelectProps {
-  options: Option[];
-  defaultValue?: Option;
-  className?: string;
-  styles?: any; 
-  onChange?: (option: Option | null) => void; // Ensure this matches
-}
-
-const CommonSelect: React.FC<SelectProps> = ({
-  options,
-  defaultValue,
-  className,
-  styles,
-  onChange,
-}) => {
-  const [selectedOption, setSelectedOption] = useState<Option | null>(defaultValue || null);
-
-  const handleChange = (option: Option | null) => {
-    setSelectedOption(option);
-    if (onChange) {
-      onChange(option); // Call the onChange prop
-    }
+  const handleStartTimeChange = (option: Option | null) => {
+    setNewExam({ ...newExam, startTime: option ? option.value : "" });
   };
 
-  useEffect(() => {
-    setSelectedOption(defaultValue || null);
-  }, [defaultValue]);
+  const handleEndTimeChange = (option: Option | null) => {
+    setNewExam({ ...newExam, endTime: option ? option.value : "" });
+  };
+
+  const handleAddExam = (e: React.FormEvent) => {
+    e.preventDefault();
+    const examWithId = { ...newExam, id: String(data.length + 1) };
+    setData([...data, examWithId]); // Update the exam list
+    setNewExam({ examName: "", examDate: dayjs().format("DD-MM-YYYY"), startTime: "", endTime: "" }); // Reset form
+  };
 
   return (
-    <Select
-      classNamePrefix="react-select"
-      className={className}
-      styles={styles}
-      options={options}
-      value={selectedOption}
-      onChange={handleChange}
-      placeholder="Select"
-    />
+    <div>
+      {/* Your component JSX */}
+      <CommonSelect
+        className="select"
+        options={startTime}
+        onChange={handleStartTimeChange} // Correct usage
+      />
+      <CommonSelect
+        className="select"
+        options={startTimeOne}
+        onChange={handleEndTimeChange} // Correct usage
+      />
+      {/* More JSX for adding exams */}
+    </div>
   );
 };
 
-export default CommonSelect;
+export default Exam;
