@@ -1,20 +1,25 @@
-Compiled with problems:
-×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:59:14
-TS2322: Type '{ id: string; key: number; examName: string; examDate: string; startTime: string; endTime: string; }' is not assignable to type 'never'.
-    57 |       key: data.length + 1 // Ensure `key` is included
-    58 |     };
-  > 59 |     setData([...data, examWithId]);
-       |              ^^^^^^^
-    60 |     setNewExam({ examName: "", examDate: dayjs().format("DD-MM-YYYY"), startTime: "", endTime: "" });
-    61 |   };
-    62 |
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:59:23
-TS2322: Type '{ id: string; key: number; examName: string; examDate: string; startTime: string; endTime: string; }' is not assignable to type 'never'.
-    57 |       key: data.length + 1 // Ensure `key` is included
-    58 |     };
-  > 59 |     setData([...data, examWithId]);
-       |                       ^^^^^^^^^^
-    60 |     setNewExam({ examName: "", examDate: dayjs().format("DD-MM-YYYY"), startTime: "", endTime: "" });
-    61 |   };
-    62 |
+interface Exam {
+  id: string;
+  key: number;
+  examName: string;
+  examDate: string;
+  startTime: string;
+  endTime: string;
+}
+
+const Exam = () => {
+  const [data, setData] = useState<Exam[]>([]);
+
+  const handleAddExam = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const examWithId: Exam = {
+      ...newExam,
+      id: String(data.length + 1),
+      key: data.length + 1,
+    };
+    setData([...data, examWithId]);
+    setNewExam({ examName: "", examDate: dayjs().format("DD-MM-YYYY"), startTime: "", endTime: "" });
+  };
+
+  // ... rest of your component
+};
