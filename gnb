@@ -1,73 +1,137 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-
-interface Grade {
-  id: number;
-  grade: string;
-  percentage: number;
-  gradePoints: number;
-  status: string;
-}
-
-interface ModalProps {
-  id: string;
-  title: string;
-  children: React.ReactNode;
-}
-
-const Modal: React.FC<ModalProps> = ({ id, title, children }) => (
-  <div className="modal fade" id={id}>
-    <div className="modal-dialog modal-dialog-centered">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h4 className="modal-title">{title}</h4>
-          <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-        </div>
-        <div className="modal-body">{children}</div>
-        <div className="modal-footer">
-          <Link to="#" className="btn btn-light me-2" data-bs-dismiss="modal">Cancel</Link>
-          <Link to="#" className="btn btn-danger" data-bs-dismiss="modal">Delete</Link>
-        </div>
-      </div>
-    </div>
-  </div>
-);
-
-interface FormSelectProps {
-  label: string;
-  options: { value: string; label: string }[];
-}
-
-const FormSelect: React.FC<FormSelectProps> = ({ label, options }) => (
-  <div className="mb-3">
-    <label className="form-label">{label}</label>
-    <CommonSelect className="select" options={options} />
-  </div>
-);
-
-const Grade: React.FC = () => {
-  const grades: Grade[] = []; // Assume this is populated with your grade data
-
-  const columns = [
-    { title: "ID", dataIndex: "id", render: (text: string, record: Grade) => <Link to="#" className="link-primary">{record.id}</Link>, sorter: (a: Grade, b: Grade) => a.id - b.id },
-    { title: "Grade", dataIndex: "grade", sorter: (a: Grade, b: Grade) => a.grade.localeCompare(b.grade) },
-    { title: "Percentage", dataIndex: "percentage", sorter: (a: Grade, b: Grade) => a.percentage - b.percentage },
-    { title: "Grade Points", dataIndex: "gradePoints", sorter: (a: Grade, b: Grade) => a.gradePoints - b.gradePoints },
-    { title: "Status", dataIndex: "status", render: () => <span className="badge badge-soft-success"><i className="ti ti-circle-filled fs-5 me-1" />Active</span>, sorter: (a: Grade, b: Grade) => a.status.localeCompare(b.status) },
-    { title: "Action", dataIndex: "action", render: () => (
-      <div className="d-flex align-items-center">
-        <div className="dropdown">
-          {/* Dropdown for actions */}
-        </div>
-      </div>
-    )}
-  ];
-
-  return (
-    <div>
-      {/* Your table and other components using columns here */}
-    </div>
-  );
-};
-
-export default Grade;
+Compiled with problems:
+×
+ERROR in src/feature-module/academic/examinations/grade/index.tsx:21:143
+TS7006: Parameter 'a' implicitly has an 'any' type.
+    19 |
+    20 |   const columns = [
+  > 21 |     { title: "ID", dataIndex: "id", render: (text: string, record: any) => <Link to="#" className="link-primary">{record.id}</Link>, sorter: (a, b) => a.id.length - b.id.length },
+       |                                                                                                                                               ^
+    22 |     { title: "Grade", dataIndex: "grade", sorter: (a, b) => a.grade.length - b.grade.length },
+    23 |     { title: "Percentage", dataIndex: "percentage", sorter: (a, b) => a.percentage.length - b.percentage.length },
+    24 |     { title: "Grade Points", dataIndex: "gradePoints", sorter: (a, b) => a.gradePoints.length - b.gradePoints.length },
+ERROR in src/feature-module/academic/examinations/grade/index.tsx:21:146
+TS7006: Parameter 'b' implicitly has an 'any' type.
+    19 |
+    20 |   const columns = [
+  > 21 |     { title: "ID", dataIndex: "id", render: (text: string, record: any) => <Link to="#" className="link-primary">{record.id}</Link>, sorter: (a, b) => a.id.length - b.id.length },
+       |                                                                                                                                                  ^
+    22 |     { title: "Grade", dataIndex: "grade", sorter: (a, b) => a.grade.length - b.grade.length },
+    23 |     { title: "Percentage", dataIndex: "percentage", sorter: (a, b) => a.percentage.length - b.percentage.length },
+    24 |     { title: "Grade Points", dataIndex: "gradePoints", sorter: (a, b) => a.gradePoints.length - b.gradePoints.length },
+ERROR in src/feature-module/academic/examinations/grade/index.tsx:22:52
+TS7006: Parameter 'a' implicitly has an 'any' type.
+    20 |   const columns = [
+    21 |     { title: "ID", dataIndex: "id", render: (text: string, record: any) => <Link to="#" className="link-primary">{record.id}</Link>, sorter: (a, b) => a.id.length - b.id.length },
+  > 22 |     { title: "Grade", dataIndex: "grade", sorter: (a, b) => a.grade.length - b.grade.length },
+       |                                                    ^
+    23 |     { title: "Percentage", dataIndex: "percentage", sorter: (a, b) => a.percentage.length - b.percentage.length },
+    24 |     { title: "Grade Points", dataIndex: "gradePoints", sorter: (a, b) => a.gradePoints.length - b.gradePoints.length },
+    25 |     { title: "Status", dataIndex: "status", render: () => <span className="badge badge-soft-success"><i className="ti ti-circle-filled fs-5 me-1" />Active</span>, sorter: (a, b) => a.status.length - b.status.length },
+ERROR in src/feature-module/academic/examinations/grade/index.tsx:22:55
+TS7006: Parameter 'b' implicitly has an 'any' type.
+    20 |   const columns = [
+    21 |     { title: "ID", dataIndex: "id", render: (text: string, record: any) => <Link to="#" className="link-primary">{record.id}</Link>, sorter: (a, b) => a.id.length - b.id.length },
+  > 22 |     { title: "Grade", dataIndex: "grade", sorter: (a, b) => a.grade.length - b.grade.length },
+       |                                                       ^
+    23 |     { title: "Percentage", dataIndex: "percentage", sorter: (a, b) => a.percentage.length - b.percentage.length },
+    24 |     { title: "Grade Points", dataIndex: "gradePoints", sorter: (a, b) => a.gradePoints.length - b.gradePoints.length },
+    25 |     { title: "Status", dataIndex: "status", render: () => <span className="badge badge-soft-success"><i className="ti ti-circle-filled fs-5 me-1" />Active</span>, sorter: (a, b) => a.status.length - b.status.length },
+ERROR in src/feature-module/academic/examinations/grade/index.tsx:23:62
+TS7006: Parameter 'a' implicitly has an 'any' type.
+    21 |     { title: "ID", dataIndex: "id", render: (text: string, record: any) => <Link to="#" className="link-primary">{record.id}</Link>, sorter: (a, b) => a.id.length - b.id.length },
+    22 |     { title: "Grade", dataIndex: "grade", sorter: (a, b) => a.grade.length - b.grade.length },
+  > 23 |     { title: "Percentage", dataIndex: "percentage", sorter: (a, b) => a.percentage.length - b.percentage.length },
+       |                                                              ^
+    24 |     { title: "Grade Points", dataIndex: "gradePoints", sorter: (a, b) => a.gradePoints.length - b.gradePoints.length },
+    25 |     { title: "Status", dataIndex: "status", render: () => <span className="badge badge-soft-success"><i className="ti ti-circle-filled fs-5 me-1" />Active</span>, sorter: (a, b) => a.status.length - b.status.length },
+    26 |     { title: "Action", dataIndex: "action", render: () => (
+ERROR in src/feature-module/academic/examinations/grade/index.tsx:23:65
+TS7006: Parameter 'b' implicitly has an 'any' type.
+    21 |     { title: "ID", dataIndex: "id", render: (text: string, record: any) => <Link to="#" className="link-primary">{record.id}</Link>, sorter: (a, b) => a.id.length - b.id.length },
+    22 |     { title: "Grade", dataIndex: "grade", sorter: (a, b) => a.grade.length - b.grade.length },
+  > 23 |     { title: "Percentage", dataIndex: "percentage", sorter: (a, b) => a.percentage.length - b.percentage.length },
+       |                                                                 ^
+    24 |     { title: "Grade Points", dataIndex: "gradePoints", sorter: (a, b) => a.gradePoints.length - b.gradePoints.length },
+    25 |     { title: "Status", dataIndex: "status", render: () => <span className="badge badge-soft-success"><i className="ti ti-circle-filled fs-5 me-1" />Active</span>, sorter: (a, b) => a.status.length - b.status.length },
+    26 |     { title: "Action", dataIndex: "action", render: () => (
+ERROR in src/feature-module/academic/examinations/grade/index.tsx:24:65
+TS7006: Parameter 'a' implicitly has an 'any' type.
+    22 |     { title: "Grade", dataIndex: "grade", sorter: (a, b) => a.grade.length - b.grade.length },
+    23 |     { title: "Percentage", dataIndex: "percentage", sorter: (a, b) => a.percentage.length - b.percentage.length },
+  > 24 |     { title: "Grade Points", dataIndex: "gradePoints", sorter: (a, b) => a.gradePoints.length - b.gradePoints.length },
+       |                                                                 ^
+    25 |     { title: "Status", dataIndex: "status", render: () => <span className="badge badge-soft-success"><i className="ti ti-circle-filled fs-5 me-1" />Active</span>, sorter: (a, b) => a.status.length - b.status.length },
+    26 |     { title: "Action", dataIndex: "action", render: () => (
+    27 |       <div className="d-flex align-items-center">
+ERROR in src/feature-module/academic/examinations/grade/index.tsx:24:68
+TS7006: Parameter 'b' implicitly has an 'any' type.
+    22 |     { title: "Grade", dataIndex: "grade", sorter: (a, b) => a.grade.length - b.grade.length },
+    23 |     { title: "Percentage", dataIndex: "percentage", sorter: (a, b) => a.percentage.length - b.percentage.length },
+  > 24 |     { title: "Grade Points", dataIndex: "gradePoints", sorter: (a, b) => a.gradePoints.length - b.gradePoints.length },
+       |                                                                    ^
+    25 |     { title: "Status", dataIndex: "status", render: () => <span className="badge badge-soft-success"><i className="ti ti-circle-filled fs-5 me-1" />Active</span>, sorter: (a, b) => a.status.length - b.status.length },
+    26 |     { title: "Action", dataIndex: "action", render: () => (
+    27 |       <div className="d-flex align-items-center">
+ERROR in src/feature-module/academic/examinations/grade/index.tsx:25:173
+TS7006: Parameter 'a' implicitly has an 'any' type.
+    23 |     { title: "Percentage", dataIndex: "percentage", sorter: (a, b) => a.percentage.length - b.percentage.length },
+    24 |     { title: "Grade Points", dataIndex: "gradePoints", sorter: (a, b) => a.gradePoints.length - b.gradePoints.length },
+  > 25 |     { title: "Status", dataIndex: "status", render: () => <span className="badge badge-soft-success"><i className="ti ti-circle-filled fs-5 me-1" />Active</span>, sorter: (a, b) => a.status.length - b.status.length },
+       |                                                                                                                                                                             ^
+    26 |     { title: "Action", dataIndex: "action", render: () => (
+    27 |       <div className="d-flex align-items-center">
+    28 |         <div className="dropdown">
+ERROR in src/feature-module/academic/examinations/grade/index.tsx:25:176
+TS7006: Parameter 'b' implicitly has an 'any' type.
+    23 |     { title: "Percentage", dataIndex: "percentage", sorter: (a, b) => a.percentage.length - b.percentage.length },
+    24 |     { title: "Grade Points", dataIndex: "gradePoints", sorter: (a, b) => a.gradePoints.length - b.gradePoints.length },
+  > 25 |     { title: "Status", dataIndex: "status", render: () => <span className="badge badge-soft-success"><i className="ti ti-circle-filled fs-5 me-1" />Active</span>, sorter: (a, b) => a.status.length - b.status.length },
+       |                                                                                                                                                                                ^
+    26 |     { title: "Action", dataIndex: "action", render: () => (
+    27 |       <div className="d-flex align-items-center">
+    28 |         <div className="dropdown">
+ERROR in src/feature-module/academic/examinations/grade/index.tsx:125:18
+TS7031: Binding element 'id' implicitly has an 'any' type.
+    123 | };
+    124 |
+  > 125 | const Modal = ({ id, title, children }) => (
+        |                  ^^
+    126 |   <div className="modal fade" id={id}>
+    127 |     <div className="modal-dialog modal-dialog-centered">
+    128 |       <div className="modal-content">
+ERROR in src/feature-module/academic/examinations/grade/index.tsx:125:22
+TS7031: Binding element 'title' implicitly has an 'any' type.
+    123 | };
+    124 |
+  > 125 | const Modal = ({ id, title, children }) => (
+        |                      ^^^^^
+    126 |   <div className="modal fade" id={id}>
+    127 |     <div className="modal-dialog modal-dialog-centered">
+    128 |       <div className="modal-content">
+ERROR in src/feature-module/academic/examinations/grade/index.tsx:125:29
+TS7031: Binding element 'children' implicitly has an 'any' type.
+    123 | };
+    124 |
+  > 125 | const Modal = ({ id, title, children }) => (
+        |                             ^^^^^^^^
+    126 |   <div className="modal fade" id={id}>
+    127 |     <div className="modal-dialog modal-dialog-centered">
+    128 |       <div className="modal-content">
+ERROR in src/feature-module/academic/examinations/grade/index.tsx:164:23
+TS7031: Binding element 'label' implicitly has an 'any' type.
+    162 | );
+    163 |
+  > 164 | const FormSelect = ({ label, options }) => (
+        |                       ^^^^^
+    165 |   <div className="mb-3">
+    166 |     <label className="form-label">{label}</label>
+    167 |     <CommonSelect className="select" options={options} />
+ERROR in src/feature-module/academic/examinations/grade/index.tsx:164:30
+TS7031: Binding element 'options' implicitly has an 'any' type.
+    162 | );
+    163 |
+  > 164 | const FormSelect = ({ label, options }) => (
+        |                              ^^^^^^^
+    165 |   <div className="mb-3">
+    166 |     <label className="form-label">{label}</label>
+    167 |     <CommonSelect className="select" options={options} />
