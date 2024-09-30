@@ -11,36 +11,34 @@ export interface SelectProps {
   defaultValue?: Option;
   className?: string;
   styles?: any; 
+  onChange?: (option: Option | null) => void; // Add onChange prop
 }
 
-const CommonSelect: React.FC<SelectProps> = ({ options, defaultValue, className }) => {
-  const [selectedOption, setSelectedOption] = useState<Option | undefined>(defaultValue);
-
-  // const customStyles = {
-  //   option: (base: any, state: any) => ({
-  //     ...base,
-  //     color: "#6A7287",
-  //     backgroundColor: state.isSelected ? "#ddd" : "white",
-  //     cursor: "pointer",
-  //     "&:hover": {
-  //       backgroundColor: state.isFocused ? "#3D5EE1" : "blue",
-  //       color: state.isFocused ? "#fff" : "#6A7287",
-  //     },
-  //   }),
-  // };
+const CommonSelect: React.FC<SelectProps> = ({
+  options,
+  defaultValue,
+  className,
+  styles,
+  onChange,
+}) => {
+  const [selectedOption, setSelectedOption] = useState<Option | null>(defaultValue || null);
 
   const handleChange = (option: Option | null) => {
-    setSelectedOption(option || undefined);
+    setSelectedOption(option);
+    if (onChange) {
+      onChange(option);
+    }
   };
+
   useEffect(() => {
-    setSelectedOption(defaultValue || undefined);
-  }, [defaultValue])
-  
+    setSelectedOption(defaultValue || null);
+  }, [defaultValue]);
+
   return (
     <Select
-     classNamePrefix="react-select"
+      classNamePrefix="react-select"
       className={className}
-      // styles={customStyles}
+      styles={styles}
       options={options}
       value={selectedOption}
       onChange={handleChange}
