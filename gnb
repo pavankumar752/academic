@@ -1,16 +1,11 @@
-import * as bootstrap from 'bootstrap';
-// ... other imports
-
-const modalRef = useRef<HTMLAnchorElement | null>(null);
-
-// Inside your JSX
-<Link
-  to="#"
-  className="btn btn-primary"
-  data-bs-toggle="modal"
-  data-bs-target="#add_exam"
-  ref={modalRef}
->
-  <i className="ti ti-square-rounded-plus-filled me-2" />
-  Add Exam
-</Link>
+Compiled with problems:
+×
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:70:7
+TS18047: 'modal' is possibly 'null'.
+    68 |       const modalElement = modalRef.current as any;
+    69 |       const modal = bootstrap.Modal.getInstance(modalElement);
+  > 70 |       modal.hide();
+       |       ^^^^^
+    71 |     }
+    72 |   };
+    73 |
