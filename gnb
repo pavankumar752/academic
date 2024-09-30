@@ -1,264 +1,32 @@
-import React, { useRef } from "react";
-import { Link } from "react-router-dom";
-import Table from "../../../../core/common/dataTable/index";
-import {
-  examOne,
-  examtwo,
-  startTime,
-  startTimeOne,
-} from "../../../../core/common/selectoption/selectoption";
-import PredefinedDateRanges from "../../../../core/common/datePicker";
-import CommonSelect from "../../../../core/common/commonSelect";
-import { DatePicker } from "antd";
-import dayjs from "dayjs";
-import { all_routes } from "../../../router/all_routes";
-import TooltipOption from "../../../../core/common/tooltipOption";
-
-const Exam = () => {
-  const routes = all_routes;
-
-  // Sample data for exams
-  const sampleExamData = [
-    {
-      id: "1",
-      examName: "Mathematics Exam",
-      examDate: "01-10-2024",
-      startTime: "09:00 AM",
-      endTime: "11:00 AM",
-    },
-    {
-      id: "2",
-      examName: "Physics Exam",
-      examDate: "02-10-2024",
-      startTime: "10:00 AM",
-      endTime: "12:00 PM",
-    },
-    {
-      id: "3",
-      examName: "Chemistry Exam",
-      examDate: "03-10-2024",
-      startTime: "01:00 PM",
-      endTime: "03:00 PM",
-    },
-    {
-      id: "4",
-      examName: "Biology Exam",
-      examDate: "04-10-2024",
-      startTime: "02:00 PM",
-      endTime: "04:00 PM",
-    },
-    {
-      id: "5",
-      examName: "History Exam",
-      examDate: "05-10-2024",
-      startTime: "03:00 PM",
-      endTime: "05:00 PM",
-    },
-  ];
-
-  const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
-
-  const today = new Date();
-  const formattedDate = `${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}-${today.getFullYear()}`;
-  const defaultValue = dayjs(formattedDate);
-
-  // Handle dropdown menu close
-  const handleApplyClick = () => {
-    if (dropdownMenuRef.current) {
-      dropdownMenuRef.current.classList.remove("show");
-    }
-  };
-
-  // Get container for modal date picker
-  const getModalContainer = () => document.getElementById("modal-datepicker") || document.body;
-
-  // Define table columns
-  const columns = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      render: (_: any, record: { id: string }) => (
-        <Link to="#" className="link-primary">
-          {record.id}
-        </Link>
-      ),
-      sorter: (a: { id: string }, b: { id: string }) => a.id.length - b.id.length,
-    },
-    {
-      title: "Exam Name",
-      dataIndex: "examName",
-      sorter: (a: { examName: string }, b: { examName: string }) =>
-        a.examName.length - b.examName.length,
-    },
-    {
-      title: "Exam Date",
-      dataIndex: "examDate",
-      sorter: (a: { examDate: string }, b: { examDate: string }) =>
-        a.examDate.length - b.examDate.length,
-    },
-    {
-      title: "Start Time",
-      dataIndex: "startTime",
-      sorter: (a: { startTime: string }, b: { startTime: string }) =>
-        a.startTime.length - b.startTime.length,
-    },
-    {
-      title: "End Time",
-      dataIndex: "endTime",
-      sorter: (a: { endTime: string }, b: { endTime: string }) =>
-        a.endTime.length - b.endTime.length,
-    },
-    {
-      title: "Action",
-      dataIndex: "action",
-      render: () => (
-        <div className="d-flex align-items-center">
-          <div className="dropdown">
-            <Link
-              to="#"
-              className="btn btn-white btn-icon btn-sm d-flex align-items-center justify-content-center rounded-circle p-0"
-              data-bs-toggle="dropdown"
-            >
-              <i className="ti ti-dots-vertical fs-14" />
-            </Link>
-            <ul className="dropdown-menu dropdown-menu-right p-3">
-              <li>
-                <Link
-                  className="dropdown-item rounded-1"
-                  to="#"
-                  data-bs-toggle="modal"
-                  data-bs-target="#edit_exam"
-                >
-                  <i className="ti ti-edit-circle me-2" />
-                  Edit
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="dropdown-item rounded-1"
-                  to="#"
-                  data-bs-toggle="modal"
-                  data-bs-target="#delete-modal"
-                >
-                  <i className="ti ti-trash-x me-2" />
-                  Delete
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      ),
-    },
-  ];
-
-  return (
-    <div>
-      <div className="page-wrapper">
-        <div className="content">
-          <div className="d-md-flex d-block align-items-center justify-content-between mb-3">
-            <div className="my-auto mb-2">
-              <h3 className="page-title mb-1">Exam</h3>
-              <nav>
-                <ol className="breadcrumb mb-0">
-                  <li className="breadcrumb-item">
-                    <Link to={routes.adminDashboard}>Dashboard</Link>
-                  </li>
-                  <li className="breadcrumb-item">
-                    <Link to="#">Academic</Link>
-                  </li>
-                  <li className="breadcrumb-item active" aria-current="page">
-                    Exam
-                  </li>
-                </ol>
-              </nav>
-            </div>
-            <div className="d-flex my-xl-auto right-content align-items-center flex-wrap">
-              <TooltipOption />
-              <div className="mb-2">
-                <Link
-                  to="#"
-                  className="btn btn-primary"
-                  data-bs-toggle="modal"
-                  data-bs-target="#add_exam"
-                >
-                  <i className="ti ti-square-rounded-plus-filled me-2" />
-                  Add Exam
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="card-header d-flex align-items-center justify-content-between flex-wrap pb-0">
-              <h4 className="mb-3">Exam List</h4>
-              <div className="d-flex align-items-center flex-wrap">
-                <div className="input-icon-start mb-3 me-2 position-relative">
-                  <PredefinedDateRanges />
-                </div>
-                <div className="dropdown mb-3 me-2">
-                  <Link
-                    to="#"
-                    className="btn btn-outline-light bg-white dropdown-toggle"
-                    data-bs-toggle="dropdown"
-                    data-bs-auto-close="outside"
-                  >
-                    <i className="ti ti-filter me-2" />
-                    Filter
-                  </Link>
-                  <div className="dropdown-menu drop-width" ref={dropdownMenuRef}>
-                    <form>
-                      <div className="d-flex align-items-center border-bottom p-3">
-                        <h4>Filter</h4>
-                      </div>
-                      <div className="p-3">
-                        <CommonSelect
-                          title="Exam Name"
-                          options={examOne}
-                          placeholder="Select Exam"
-                          value=""
-                        />
-                        <CommonSelect
-                          title="Exam Type"
-                          options={examtwo}
-                          placeholder="Select Exam Type"
-                          value=""
-                        />
-                        <DatePicker
-                          getPopupContainer={getModalContainer}
-                          defaultValue={defaultValue}
-                          style={{ width: "100%" }}
-                          placeholder="Select Date"
-                        />
-                      </div>
-                      <div className="d-flex justify-content-between align-items-center px-3 py-2 border-top">
-                        <Link to="#" className="btn btn-light" onClick={handleApplyClick}>
-                          Apply
-                        </Link>
-                        <Link to="#" className="btn btn-secondary" onClick={handleApplyClick}>
-                          Reset
-                        </Link>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="card-body">
-              <Table
-                columns={columns}
-                dataSource={sampleExamData} // Use the sample data here
-                pagination={{
-                  showSizeChanger: true,
-                  pageSizeOptions: [5, 10, 15],
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default Exam;
+Compiled with problems:
+×
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:215:27
+TS2322: Type '{ title: string; options: { value: string; label: string; }[]; placeholder: string; value: string; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
+  Property 'title' does not exist on type 'IntrinsicAttributes & SelectProps'.
+    213 |                       <div className="p-3">
+    214 |                         <CommonSelect
+  > 215 |                           title="Exam Name"
+        |                           ^^^^^
+    216 |                           options={examOne}
+    217 |                           placeholder="Select Exam"
+    218 |                           value=""
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:221:27
+TS2322: Type '{ title: string; options: { value: string; label: string; }[]; placeholder: string; value: string; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
+  Property 'title' does not exist on type 'IntrinsicAttributes & SelectProps'.
+    219 |                         />
+    220 |                         <CommonSelect
+  > 221 |                           title="Exam Type"
+        |                           ^^^^^
+    222 |                           options={examtwo}
+    223 |                           placeholder="Select Exam Type"
+    224 |                           value=""
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:251:17
+TS2322: Type '{ columns: ({ title: string; dataIndex: string; render: (_: any, record: { id: string; }) => Element; sorter: (a: { id: string; }, b: { id: string; }) => number; } | { title: string; dataIndex: string; sorter: (a: { ...; }, b: { ...; }) => number; render?: undefined; } | { ...; } | { ...; } | { ...; } | { ...; })[];...' is not assignable to type 'IntrinsicAttributes & DatatableProps'.
+  Property 'pagination' does not exist on type 'IntrinsicAttributes & DatatableProps'.
+    249 |                 columns={columns}
+    250 |                 dataSource={sampleExamData} // Use the sample data here
+  > 251 |                 pagination={{
+        |                 ^^^^^^^^^^
+    252 |                   showSizeChanger: true,
+    253 |                   pageSizeOptions: [5, 10, 15],
+    254 |                 }}
