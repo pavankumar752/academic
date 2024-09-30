@@ -1,5 +1,40 @@
-create a popup form to add exam to the table of headings id: examID,
-      examName,
-      examDate,
-      startTime,
-      endTime, in react js
+import React, { useState } from 'react';
+import Modal from 'react-modal';
+
+const ExamForm = ({ isOpen, onRequestClose, onAddExam }) => {
+  const [exam, setExam] = useState({
+    examID: '',
+    examName: '',
+    examDate: '',
+    startTime: '',
+    endTime: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setExam({ ...exam, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onAddExam(exam);
+    setExam({ examID: '', examName: '', examDate: '', startTime: '', endTime: '' });
+    onRequestClose();
+  };
+
+  return (
+    <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
+      <h2>Add Exam</h2>
+      <form onSubmit={handleSubmit}>
+        <input type="text" name="examID" value={exam.examID} onChange={handleChange} placeholder="Exam ID" required />
+        <input type="text" name="examName" value={exam.examName} onChange={handleChange} placeholder="Exam Name" required />
+        <input type="date" name="examDate" value={exam.examDate} onChange={handleChange} required />
+        <input type="time" name="startTime" value={exam.startTime} onChange={handleChange} required />
+        <input type="time" name="endTime" value={exam.endTime} onChange={handleChange} required />
+        <button type="submit">Add Exam</button>
+      </form>
+    </Modal>
+  );
+};
+
+export default ExamForm;
