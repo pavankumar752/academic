@@ -1,0 +1,205 @@
+import React, { useRef, useState } from 'react';
+import ImageWithBasePath from '../../../../core/common/imageWithBasePath';
+import { examresult } from '../../../../core/data/json/exam-result';
+import { TableData } from '../../../../core/data/interface';
+import Table from "../../../../core/common/dataTable/index";
+import { Link } from 'react-router-dom';
+import PredefinedDateRanges from '../../../../core/common/datePicker';
+import CommonSelect from '../../../../core/common/commonSelect';
+import { allClass, classSection, weeklytest } from '../../../../core/common/selectoption/selectoption';
+import { all_routes } from '../../../router/all_routes';
+import TooltipOption from '../../../../core/common/tooltipOption';
+
+const StudentMarksEntry = () => {
+  const routes = all_routes;
+  const [data, setData] = useState(examresult);
+  const [selectedExam, setSelectedExam] = useState<string | null>(null);
+  const [filterClass, setFilterClass] = useState('');
+  const [filterSection, setFilterSection] = useState('');
+  const [students, setStudents] = useState<any[]>([]); // State to hold student data
+  const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
+
+  const handleApplyClick = () => {
+    if (dropdownMenuRef.current) {
+      dropdownMenuRef.current.classList.remove("show");
+    }
+  };
+
+  const handleMarksClick = (exam: string) => {
+    setSelectedExam(exam);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Mock student data based on filterClass and filterSection
+    const mockStudents = [
+      { id: '1', name: 'John Doe' },
+      { id: '2', name: 'Jane Smith' },
+    ];
+    setStudents(mockStudents);
+  };
+
+  const handleInputChange = (index: number, subject: string, value: string) => {
+    const updatedData = [...data];
+    updatedData[index] = { ...updatedData[index], [subject]: value };
+    setData(updatedData);
+  };
+
+  const columns = [
+    {
+      title: "Admission No",
+      dataIndex: "admissionNo",
+      render: (text: string, record: any) => (
+        <Link to="#" className="link-primary">{record.admissionNo}</Link>
+      ),
+      sorter: (a: TableData, b: TableData) => a.admissionNo.length - b.admissionNo.length,
+    },
+    {
+      title: "Student Name",
+      dataIndex: "studentName",
+      render: (text: string, record: any) => (
+        <div className="d-flex align-items-center">
+          <Link to={routes.studentDetail} className="avatar avatar-md">
+            <ImageWithBasePath src={record.img} className="img-fluid rounded-circle" alt="img" />
+          </Link>
+          <div className="ms-2">
+            <p className="text-dark mb-0">
+              <Link to={routes.studentDetail}>{text}</Link>
+            </p>
+            <span className="fs-12">{record.roll}</span>
+          </div>
+        </div>
+      ),
+      sorter: (a: TableData, b: TableData) => a.studentName.length - b.studentName.length,
+    },
+    {
+      title: "Actions",
+      render: (text: string, record: any) => (
+        <button onClick={() => handleMarksClick(record.examName)} className="btn btn-primary">
+          Enter Exam Marks
+        </button>
+      ),
+    },
+  ];
+
+  return (
+    <div>
+      <div className="page-wrapper">
+        <div className="content">
+          <div className="d-md-flex d-block align-items-center justify-content-between mb-3">
+            <div className="my-auto mb-2">
+              <h3 className="page-title mb-1">Exam Result</h3>
+              <nav>
+                <ol className="breadcrumb mb-0">
+                  <li className="breadcrumb-item">
+                    <Link to={routes.adminDashboard}>Dashboard</Link>
+                  </li>
+                  <li className="breadcrumb-item active" aria-current="page">Exam Result</li>
+                </ol>
+              </nav>
+            </div>
+            <div className="d-flex my-xl-auto right-content align-items-center flex-wrap">
+              <TooltipOption />
+            </div>
+          </div>
+          <div className="card">
+            <div className="card-header d-flex align-items-center justify-content-between flex-wrap pb-0">
+              <h4 className="mb-3">Exam Results</h4>
+              <div className="d-flex align-items-center flex-wrap">
+                <div className="input-icon-start mb-3 me-2 position-relative">
+                  <PredefinedDateRanges />
+                </div>
+                <div className="dropdown mb-3 me-2">
+                  <Link
+                    to="#"
+                    className="btn btn-outline-light bg-white dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                    data-bs-auto-close="outside"
+                  >
+                    <i className="ti ti-filter me-2" /> Filter
+                  </Link>
+                  <div className="dropdown-menu drop-width" ref={dropdownMenuRef}>
+                    <form onSubmit={handleSubmit}>
+                      <div className="d-flex align-items-center border-bottom p-3">
+                        <h4>Filter</h4>
+                      </div>
+                      <div className="p-3 border-bottom pb-0">
+                        <div className="row">
+                          <div className="col-md-12 mb-3">
+                            <label className="form-label">Class</label>
+                            <CommonSelect
+                              className="select"
+                              options={allClass}
+                              onChange={setFilterClass}
+                            />
+                          </div>
+                          <div className="col-md-12 mb-3">
+                            <label className="form-label">Section</label>
+                            <CommonSelect
+                              className="select"
+                              options={classSection}
+                              onChange={setFilterSection}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="p-3 d-flex align-items-center justify-content-end">
+                        <button type="button" className="btn btn-light me-3" onClick={() => { /* Reset Logic */ }}>
+                          Reset
+                        </button>
+                        <button type="submit" className="btn btn-primary">Apply</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="card-body p-0 py-3">
+              <Table columns={columns} dataSource={data} Selection={true} />
+              {selectedExam && (
+                <div className="filter-form mt-4">
+                  <h4>Enter Marks for {selectedExam}</h4>
+                  <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                      <label className="form-label">Class</label>
+                      <CommonSelect options={allClass} onChange={setFilterClass} />
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Section</label>
+                      <CommonSelect options={classSection} onChange={setFilterSection} />
+                    </div>
+                    <button type="submit" className="btn btn-success">Fetch Students</button>
+                  </form>
+                  {students.length > 0 && (
+                    <table className="table mt-3">
+                      <thead>
+                        <tr>
+                          <th>Student ID</th>
+                          <th>Student Name</th>
+                          <th>Marks</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {students.map((student) => (
+                          <tr key={student.id}>
+                            <td>{student.id}</td>
+                            <td>{student.name}</td>
+                            <td>
+                              <input type="number" className="form-control" placeholder="Enter marks" />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default StudentMarksEntry;
