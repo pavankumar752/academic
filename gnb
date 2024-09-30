@@ -1,41 +1,52 @@
-Compiled with problems:
-×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:52:14
-TS2322: Type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; } | { id: string; examName: string; examDate: string; startTime: string; endTime: string; }' is not assignable to type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
-  Property 'key' is missing in type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; }' but required in type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
-    50 |     e.preventDefault();
-    51 |     const examWithId = { ...newExam, id: String(data.length + 1) };
-  > 52 |     setData([...data, examWithId]); // Update the exam list
-       |              ^^^^^^^
-    53 |     setNewExam({ examName: "", examDate: dayjs().format("DD-MM-YYYY"), startTime: "", endTime: "" }); // Reset form
-    54 |   };
-    55 |
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:52:23
-TS2322: Type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; }' is not assignable to type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
-    50 |     e.preventDefault();
-    51 |     const examWithId = { ...newExam, id: String(data.length + 1) };
-  > 52 |     setData([...data, examWithId]); // Update the exam list
-       |                       ^^^^^^^^^^
-    53 |     setNewExam({ examName: "", examDate: dayjs().format("DD-MM-YYYY"), startTime: "", endTime: "" }); // Reset form
-    54 |   };
-    55 |
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:317:25
-TS2322: Type '{ className: string; options: { value: string; label: string; }[]; onChange: (value: { value: string; }) => void; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
-  Property 'onChange' does not exist on type 'IntrinsicAttributes & SelectProps'.
-    315 |                         className="select"
-    316 |                         options={startTime}
-  > 317 |                         onChange={(value: { value: string }) => setNewExam({ ...newExam, startTime: value.value })}
-        |                         ^^^^^^^^
-    318 |                       />
-    319 |                     </div>
-    320 |                     <div className="mb-0">
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:325:25
-TS2322: Type '{ className: string; options: { value: string; label: string; }[]; onChange: (value: { value: string; }) => void; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
-  Property 'onChange' does not exist on type 'IntrinsicAttributes & SelectProps'.
-    323 |                         className="select"
-    324 |                         options={startTimeOne}
-  > 325 |                         onChange={(value: { value: string }) => setNewExam({ ...newExam, endTime: value.value })}
-        |                         ^^^^^^^^
-    326 |                       />
-    327 |                     </div>
-    328 |                   </div>
+import React, { useEffect, useState } from "react";
+import Select from "react-select";
+
+export type Option = {
+  value: string;
+  label: string;
+};
+
+export interface SelectProps {
+  options: Option[];
+  defaultValue?: Option;
+  className?: string;
+  styles?: any; 
+}
+
+const CommonSelect: React.FC<SelectProps> = ({ options, defaultValue, className }) => {
+  const [selectedOption, setSelectedOption] = useState<Option | undefined>(defaultValue);
+
+  // const customStyles = {
+  //   option: (base: any, state: any) => ({
+  //     ...base,
+  //     color: "#6A7287",
+  //     backgroundColor: state.isSelected ? "#ddd" : "white",
+  //     cursor: "pointer",
+  //     "&:hover": {
+  //       backgroundColor: state.isFocused ? "#3D5EE1" : "blue",
+  //       color: state.isFocused ? "#fff" : "#6A7287",
+  //     },
+  //   }),
+  // };
+
+  const handleChange = (option: Option | null) => {
+    setSelectedOption(option || undefined);
+  };
+  useEffect(() => {
+    setSelectedOption(defaultValue || undefined);
+  }, [defaultValue])
+  
+  return (
+    <Select
+     classNamePrefix="react-select"
+      className={className}
+      // styles={customStyles}
+      options={options}
+      value={selectedOption}
+      onChange={handleChange}
+      placeholder="Select"
+    />
+  );
+};
+
+export default CommonSelect;
