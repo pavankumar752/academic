@@ -1,7 +1,6 @@
-import React, { useRef,useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Table from "../../../../core/common/dataTable/index";
-//import { exam } from "../../../../core/data/json/exam";
 import {
   examOne,
   examtwo,
@@ -9,11 +8,12 @@ import {
   startTimeOne,
 } from "../../../../core/common/selectoption/selectoption";
 import PredefinedDateRanges from "../../../../core/common/datePicker";
-import CommonSelect,{ Option }  from "../../../../core/common/commonSelect";
+import CommonSelect, { Option } from "../../../../core/common/commonSelect";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
 import { all_routes } from "../../../router/all_routes";
 import TooltipOption from "../../../../core/common/tooltipOption";
+
 interface Exam {
   id: string;
   key: number;
@@ -33,19 +33,18 @@ const Exam = () => {
     endTime: "",
   });
   const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
+  const modalRef = useRef<HTMLDivElement | null>(null);
 
   const today = new Date();
   const formattedDate = `${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}-${today.getFullYear()}`;
   const defaultValue = dayjs(formattedDate);
 
-  // Handle dropdown menu close
   const handleApplyClick = () => {
     if (dropdownMenuRef.current) {
       dropdownMenuRef.current.classList.remove("show");
     }
   };
 
-  // Get container for modal date picker
   const getModalContainer = () => document.getElementById("modal-datepicker") || document.body;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -53,7 +52,6 @@ const Exam = () => {
     setNewExam({ ...newExam, [name]: value });
   };
 
-  // Handle form submission for adding new exam
   const handleAddExam = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const examWithId: Exam = {
@@ -63,6 +61,13 @@ const Exam = () => {
     };
     setData([...data, examWithId]);
     setNewExam({ examName: "", examDate: dayjs().format("DD-MM-YYYY"), startTime: "", endTime: "" });
+
+    // Close the modal
+    if (modalRef.current) {
+      const modalElement = modalRef.current as any;
+      const modal = bootstrap.Modal.getInstance(modalElement);
+      modal.hide();
+    }
   };
 
   const handleStartTimeChange = (option: Option | null) => {
@@ -72,9 +77,7 @@ const Exam = () => {
   const handleEndTimeChange = (option: Option | null) => {
     setNewExam({ ...newExam, endTime: option ? option.value : "" });
   };
-  
 
-  // Define table columns
   const columns = [
     {
       title: "ID",
@@ -182,6 +185,7 @@ const Exam = () => {
                   className="btn btn-primary"
                   data-bs-toggle="modal"
                   data-bs-target="#add_exam"
+                  ref={modalRef}
                 >
                   <i className="ti ti-square-rounded-plus-filled me-2" />
                   Add Exam
