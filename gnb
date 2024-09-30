@@ -1,100 +1,59 @@
+const createColumn = (title: string, dataIndex: string, isLink = false) => ({
+  title,
+  dataIndex,
+  render: (text: string, record: any) => (
+    isLink ? (
+      <Link to="#" className="link-primary">{record[dataIndex]}</Link>
+    ) : (
+      text
+    )
+  ),
+  sorter: (a: TableData, b: TableData) => a[dataIndex].length - b[dataIndex].length,
+});
+
 const columns = [
-    {
-      title: "Subject",
-      dataIndex: "subject",
-      render: (text: string, record: any, index: number) => (
-        <>
-          <Link to="#" className="link-primary">
-            {record.subject}
+  createColumn("Subject", "subject", true),
+  createColumn("Exam Date", "examDate"),
+  createColumn("Start Time", "startTime"),
+  createColumn("End Time", "endTime"),
+  createColumn("Duration", "duration"),
+  createColumn("Room No", "roomNo"),
+  createColumn("Max Mark", "maxMarks"),
+  createColumn("Min Mark", "minMarks"),
+  {
+    title: "Action",
+    dataIndex: "action",
+    render: () => (
+      <div className="d-flex align-items-center">
+        <div className="dropdown">
+          <Link
+            to="#"
+            className="btn btn-white btn-icon btn-sm d-flex align-items-center justify-content-center rounded-circle p-0"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i className="ti ti-dots-vertical fs-14" />
           </Link>
-        </>
-      ),
-      sorter: (a: TableData, b: TableData) =>
-        a.subject.length - b.subject.length,
-    },
-    {
-      title: "Exam Date",
-      dataIndex: "examDate",
-      sorter: (a: TableData, b: TableData) =>
-        a.examDate.length - b.examDate.length,
-    },
-    {
-      title: "Start Time",
-      dataIndex: "startTime",
-      sorter: (a: TableData, b: TableData) =>
-        a.startTime.length - b.startTime.length,
-    },
-    {
-      title: "End Time",
-      dataIndex: "endTime",
-      sorter: (a: TableData, b: TableData) =>
-        a.endTime.length - b.endTime.length,
-    },
-    {
-      title: "Duration",
-      dataIndex: "duration",
-      sorter: (a: TableData, b: TableData) =>
-        a.duration.length - b.duration.length,
-    },
-    {
-      title: "Room No",
-      dataIndex: "roomNo",
-      sorter: (a: TableData, b: TableData) => a.roomNo.length - b.roomNo.length,
-    },
-    {
-      title: "Max Mark",
-      dataIndex: "maxMarks",
-      sorter: (a: TableData, b: TableData) =>
-        a.maxMarks.length - b.maxMarks.length,
-    },
-    {
-      title: "Min Mark",
-      dataIndex: "minMarks",
-      sorter: (a: TableData, b: TableData) =>
-        a.minMarks.length - b.minMarks.length,
-    },
-    {
-      title: "Action",
-      dataIndex: "action",
-      render: () => (
-        <>
-          <div className="d-flex align-items-center">
-            <div className="dropdown">
-              <Link
-                to="#"
-                className="btn btn-white btn-icon btn-sm d-flex align-items-center justify-content-center rounded-circle p-0"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <i className="ti ti-dots-vertical fs-14" />
-              </Link>
-              <ul className="dropdown-menu dropdown-menu-right p-3">
-                <li>
-                  <Link
-                    className="dropdown-item rounded-1"
-                    to="#"
-                    data-bs-toggle="modal"
-                    data-bs-target="#edit_exam_schedule"
-                  >
-                    <i className="ti ti-edit-circle me-2" />
-                    Edit
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="dropdown-item rounded-1"
-                    to="#"
-                    data-bs-toggle="modal"
-                    data-bs-target="#delete-modal"
-                  >
-                    <i className="ti ti-trash-x me-2" />
-                    Delete
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </>
-      ),
-    },
-  ];
+          <ul className="dropdown-menu dropdown-menu-right p-3">
+            {[
+              { label: "Edit", icon: "ti-edit-circle", target: "#edit_exam_schedule" },
+              { label: "Delete", icon: "ti-trash-x", target: "#delete-modal" },
+            ].map(({ label, icon, target }) => (
+              <li key={label}>
+                <Link
+                  className="dropdown-item rounded-1"
+                  to="#"
+                  data-bs-toggle="modal"
+                  data-bs-target={target}
+                >
+                  <i className={`${icon} me-2`} />
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    ),
+  },
+];
