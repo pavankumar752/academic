@@ -1,11 +1,26 @@
-Compiled with problems:
-×
-ERROR in src/feature-module/academic/examinations/exam-schedule/CommonSelect.tsx:3:23
-TS7006: Parameter 'props' implicitly has an 'any' type.
-    1 | import React from 'react';
-    2 |
-  > 3 | const CommonSelect = (props) => {
-      |                       ^^^^^
-    4 |   // Your select implementation
-    5 |   return <select {...props}>{/* Options go here */}</select>;
-    6 | };
+import React from 'react';
+
+// Define the interface for props
+interface Option {
+  value: string;
+  label: string;
+}
+
+interface CommonSelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  options: Option[]; // Array of options for the select
+}
+
+const CommonSelect: React.FC<CommonSelectProps> = ({ options, ...props }) => {
+  return (
+    <select {...props}>
+      <option value="">Select an option</option>
+      {options.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
+  );
+};
+
+export default CommonSelect;
