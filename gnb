@@ -1,10 +1,26 @@
-const handleAddExam = (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  const examWithId = { 
-    ...newExam, 
-    id: String(data.length + 1), 
-    key: data.length + 1 // Ensure `key` is included
-  };
-  setData([...data, examWithId]);
-  setNewExam({ examName: "", examDate: dayjs().format("DD-MM-YYYY"), startTime: "", endTime: "" });
-};
+Compiled with problems:
+×
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:322:25
+TS2322: Type '(value: { value: string; }) => void' is not assignable to type '(option: Option | null) => void'.
+  Types of parameters 'value' and 'option' are incompatible.
+    Type 'Option | null' is not assignable to type '{ value: string; }'.
+      Type 'null' is not assignable to type '{ value: string; }'.
+    320 |                         className="select"
+    321 |                         options={startTime}
+  > 322 |                         onChange={(value: { value: string }) => setNewExam({ ...newExam, startTime: value.value })}
+        |                         ^^^^^^^^
+    323 |                       />
+    324 |                     </div>
+    325 |                     <div className="mb-0">
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:330:25
+TS2322: Type '(value: { value: string; }) => void' is not assignable to type '(option: Option | null) => void'.
+  Types of parameters 'value' and 'option' are incompatible.
+    Type 'Option | null' is not assignable to type '{ value: string; }'.
+      Type 'null' is not assignable to type '{ value: string; }'.
+    328 |                         className="select"
+    329 |                         options={startTimeOne}
+  > 330 |                         onChange={(value: { value: string }) => setNewExam({ ...newExam, endTime: value.value })}
+        |                         ^^^^^^^^
+    331 |                       />
+    332 |                     </div>
+    333 |                   </div>
