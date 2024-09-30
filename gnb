@@ -1,126 +1,180 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import CommonSelect from "./CommonSelect"; // Adjust the import based on your file structure
-
-// Define types for the data records
-interface GradeRecord {
-  id: string;
-  grade: string;
-  percentage: string;
-  gradePoints: string;
-  status: string;
-}
-
-// Define the props for the Modal component
-type ModalProps = {
-  id: string;
-  title: string;
-  children: React.ReactNode;
-};
-
-// Modal Component
-const Modal: React.FC<ModalProps> = ({ id, title, children }) => (
-  <div className="modal fade" id={id}>
-    <div className="modal-dialog modal-dialog-centered">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h5 className="modal-title">{title}</h5>
-          <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-        </div>
-        <div className="modal-body">{children}</div>
-      </div>
-    </div>
-  </div>
-);
-
-// Define the props for the FormSelect component
-type FormSelectProps = {
-  label: string;
-  options: Array<{ label: string; value: string }>; // Adjust this based on your option structure
-};
-
-// FormSelect Component
-const FormSelect: React.FC<FormSelectProps> = ({ label, options }) => (
-  <div className="mb-3">
-    <label className="form-label">{label}</label>
-    <CommonSelect className="select" options={options} />
-  </div>
-);
-
-// Grade Component
-const Grade: React.FC = () => {
-  // Example data for the grades
-  const data: GradeRecord[] = [
-    { id: "1", grade: "A", percentage: "90%", gradePoints: "4.0", status: "Active" },
-    { id: "2", grade: "B", percentage: "80%", gradePoints: "3.0", status: "Active" },
-    // Add more records as needed
-  ];
-
-  // Define columns for the table
-  const columns = [
+const columns = [
     {
-      title: "ID",
-      dataIndex: "id",
-      render: (text: string, record: GradeRecord) => (
-        <Link to="#" className="link-primary">
-          {record.id}
-        </Link>
+      title: "Admission No",
+      dataIndex: "admissionNo",
+      render: (text: string, record: any, index: number) => (
+        <>
+          <Link to="#" className="link-primary">
+            {record.admissionNo}
+          </Link>
+        </>
       ),
-      sorter: (a: GradeRecord, b: GradeRecord) => a.id.length - b.id.length,
+      sorter: (a: TableData, b: TableData) => a.admissionNo.length - b.admissionNo.length,
+    },
+
+    {
+      title: "Student Name",
+      dataIndex: "studentName",
+      render: (text: string, record: any) => (
+        <div className="d-flex align-items-center">
+            <Link to={routes.studentDetail} className="avatar avatar-md">
+                <ImageWithBasePath
+                    src={record.img}
+                    className="img-fluid rounded-circle"
+                    alt="img"
+                />
+            </Link>
+            <div className="ms-2">
+                <p className="text-dark mb-0">
+                
+                    <Link to={routes.studentDetail}>{text}</Link>
+                </p>
+                <span className="fs-12">{record.roll}</span>
+            </div>
+        </div>
+    ),
+      sorter: (a: TableData, b: TableData) => a.studentName.length - b.studentName.length,
+    },
+    {
+      title: "English",
+      dataIndex: "english",
+      render: (text: string, record: any, index: number) => (
+        <>
+          <input
+          type="number"
+          value={text}
+          onChange={(e) => handleInputChange(index, 'english', e.target.value)}
+          className={`form-control ${text === "30" ? "text-danger" : ""}`}
+        />
+        </>
+      ),
+      sorter: (a: TableData, b: TableData) => a.english.length - b.english.length,
+    },
+    {
+      title: "Spanish",
+      dataIndex: "spanish",
+      render: (text: string, record: any, index: number) => (
+        <>
+          <input
+          type="number"
+          //value={text}
+          onChange={(e) => handleInputChange(index, 'spanish', e.target.value)}
+          className={`form-control ${text === "30" ? "text-danger" : ""}`}
+        />
+        </>
+      ),
+      sorter: (a: TableData, b: TableData) => a.spanish.length - b.spanish.length,
+    },
+    {
+      title: "Physics",
+      dataIndex: "physics",
+      render: (text: string, record: any, index: number) => (
+        <>
+          <input
+          type="number"
+          //value={text}
+          onChange={(e) => handleInputChange(index, 'physics', e.target.value)}
+          className={`form-control ${text === "30" ? "text-danger" : ""}`}
+        />
+        </>
+      ),
+      sorter: (a: TableData, b: TableData) => a.physics.length - b.physics.length,
+    },
+    {
+      title: "Chemistry",
+      dataIndex: "chemistry",
+      render: (text: string, record: any, index: number) => (
+        <>
+          <input
+          type="number"
+          //value={text}
+          onChange={(e) => handleInputChange(index, 'chemistry', e.target.value)}
+          className={`form-control ${text === "30" ? "text-danger" : ""}`}
+        />
+        </>
+      ),
+      sorter: (a: TableData, b: TableData) => a.chemistry.length - b.chemistry.length,
+    },
+    {
+      title: "Maths",
+      dataIndex: "maths",
+      render: (text: string, record: any, index: number) => (
+        <>
+          <input
+          type="number"
+          //value={text}
+          onChange={(e) => handleInputChange(index, 'maths', e.target.value)}
+          className={`form-control ${text === "30" ? "text-danger" : ""}`}
+        />
+        </>
+      ),
+      sorter: (a: TableData, b: TableData) => a.maths.length - b.maths.length,
+    },
+    {
+      title: "Computer",
+      dataIndex: "computer",
+      render: (text: string, record: any, index: number) => (
+        <>
+          <input
+          type="number"
+          //value={text}
+          onChange={(e) => handleInputChange(index, 'computer', e.target.value)}
+          className={`form-control ${text === "30" ? "text-danger" : ""}`}
+        />
+        </>
+      ),
+      
+      sorter: (a: TableData, b: TableData) => a.computer.length - b.computer.length,
+    },
+    {
+      title: "Env Science",
+      dataIndex: "envScience",
+      render: (text: string, record: any, index: number) => (
+        <>
+          <input
+          type="number"
+          //value={text}
+          onChange={(e) => handleInputChange(index, 'envScience', e.target.value)}
+          className={`form-control ${text === "30" ? "text-danger" : ""}`}
+        />
+        </>
+      ),
+      sorter: (a: TableData, b: TableData) => a.envScience.length - b.envScience.length,
+    },
+    {
+      title: "Total",
+      //dataIndex: "total",
+      sorter: (a: TableData, b: TableData) => a.total.length - b.total.length,
+    },
+    {
+      title: "Percent",
+      //dataIndex: "percent",
+      sorter: (a: TableData, b: TableData) => a.percent.length - b.percent.length,
     },
     {
       title: "Grade",
-      dataIndex: "grade",
-      sorter: (a: GradeRecord, b: GradeRecord) => a.grade.length - b.grade.length,
+      //dataIndex: "grade",
+      sorter: (a: TableData, b: TableData) => a.grade.length - b.grade.length,
     },
     {
-      title: "Percentage",
-      dataIndex: "percentage",
-      sorter: (a: GradeRecord, b: GradeRecord) => a.percentage.length - b.percentage.length,
-    },
-    {
-      title: "Grade Points",
-      dataIndex: "gradePoints",
-      sorter: (a: GradeRecord, b: GradeRecord) => a.gradePoints.length - b.gradePoints.length,
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      render: () => (
-        <span className="badge badge-soft-success">
-          <i className="ti ti-circle-filled fs-5 me-1" />Active
-        </span>
+      title: "Result",
+      dataIndex: "Pass",
+      render: (text: string) => (
+        <>
+          {text === "Pass" ? (
+            <span className="badge badge-soft-success d-inline-flex align-items-center">
+              <i className="ti ti-circle-filled fs-5 me-1"></i>
+              {text}
+            </span>
+          ) : (
+            <span className="badge badge-soft-danger d-inline-flex align-items-center">
+              <i className="ti ti-circle-filled fs-5 me-1"></i>
+              {text}
+            </span>
+          )}
+        </>
       ),
-      sorter: (a: GradeRecord, b: GradeRecord) => a.status.length - b.status.length,
-    },
-    {
-      title: "Action",
-      dataIndex: "action",
-      render: () => (
-        <div className="d-flex align-items-center">
-          <div className="dropdown">
-            {/* Dropdown content for actions */}
-            <button className="btn btn-secondary dropdown-toggle" type="button" id="actionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              Actions
-            </button>
-            <ul className="dropdown-menu" aria-labelledby="actionDropdown">
-              <li><Link className="dropdown-item" to="#">Edit</Link></li>
-              <li><Link className="dropdown-item" to="#">Delete</Link></li>
-            </ul>
-          </div>
-        </div>
-      ),
-    },
+      sorter: (a: TableData, b: TableData) => a.result.length - b.result.length,
+    }
+   
   ];
-
-  return (
-    <div>
-      <h1>Grades</h1>
-      {/* Render your table component here, passing in the data and columns */}
-      {/* For example: <Table data={data} columns={columns} /> */}
-      {/* Replace with your actual table rendering code */}
-    </div>
-  );
-};
-
-export default Grade;
