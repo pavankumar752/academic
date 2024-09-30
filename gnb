@@ -1,24 +1,16 @@
-Compiled with problems:
-×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:68:21
-TS2304: Cannot find name 'bootstrap'.
-    66 |     if (modalRef.current) {
-    67 |       const modalElement = modalRef.current as any;
-  > 68 |       const modal = bootstrap.Modal.getInstance(modalElement);
-       |                     ^^^^^^^^^
-    69 |       modal.hide();
-    70 |     }
-    71 |   };
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:188:19
-TS2322: Type 'MutableRefObject<HTMLDivElement | null>' is not assignable to type 'LegacyRef<HTMLAnchorElement> | undefined'.
-  Type 'MutableRefObject<HTMLDivElement | null>' is not assignable to type 'RefObject<HTMLAnchorElement>'.
-    Types of property 'current' are incompatible.
-      Type 'HTMLDivElement | null' is not assignable to type 'HTMLAnchorElement | null'.
-        Type 'HTMLDivElement' is missing the following properties from type 'HTMLAnchorElement': charset, coords, download, hreflang, and 21 more.
-    186 |                   data-bs-toggle="modal"
-    187 |                   data-bs-target="#add_exam"
-  > 188 |                   ref={modalRef}
-        |                   ^^^
-    189 |                 >
-    190 |                   <i className="ti ti-square-rounded-plus-filled me-2" />
-    191 |                   Add Exam
+import * as bootstrap from 'bootstrap';
+// ... other imports
+
+const modalRef = useRef<HTMLAnchorElement | null>(null);
+
+// Inside your JSX
+<Link
+  to="#"
+  className="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#add_exam"
+  ref={modalRef}
+>
+  <i className="ti ti-square-rounded-plus-filled me-2" />
+  Add Exam
+</Link>
