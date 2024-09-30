@@ -1,167 +1,193 @@
-Compiled with problems:
-×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:28:26
-TS7006: Parameter 'e' implicitly has an 'any' type.
-    26 |   const [isEditing, setIsEditing] = useState(false);
-    27 |   const [editIndex, setEditIndex] = useState(null);
-  > 28 |   const handleAddExam = (e) => {
-       |                          ^
-    29 |     e.preventDefault();
-    30 |     
-    31 |     if (isEditing) {
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:34:20
-TS2538: Type 'null' cannot be used as an index type.
-    32 |       // Update existing exam
-    33 |       const updatedExams = [...exams];
-  > 34 |       updatedExams[editIndex] = examDetails;
-       |                    ^^^^^^^^^
-    35 |       setExams(updatedExams);
-    36 |       setIsEditing(false);
-    37 |       setEditIndex(null);
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:40:17
-TS2322: Type '{ name: string; date: null; startTime: string; endTime: string; }' is not assignable to type 'never'.
-    38 |     } else {
-    39 |       // Add new exam
-  > 40 |       setExams([...exams, examDetails]);
-       |                 ^^^^^^^^
-    41 |     }
-    42 |
-    43 |     // Reset form
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:40:27
-TS2322: Type '{ name: string; date: null; startTime: string; endTime: string; }' is not assignable to type 'never'.
-    38 |     } else {
-    39 |       // Add new exam
-  > 40 |       setExams([...exams, examDetails]);
-       |                           ^^^^^^^^^^^
-    41 |     }
-    42 |
-    43 |     // Reset form
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:47:30
-TS7006: Parameter 'e' implicitly has an 'any' type.
-    45 |     // Close modal can be done here if using refs to control modals
-    46 |   };
-  > 47 |   const handleInputChange = (e) => {
-       |                              ^
-    48 |     const { name, value } = e.target;
-    49 |     setExamDetails({ ...examDetails, [name]: value });
-    50 |   };
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:52:29
-TS7006: Parameter 'date' implicitly has an 'any' type.
-    50 |   };
-    51 |
-  > 52 |   const handleDateChange = (date) => {
-       |                             ^^^^
-    53 |     setExamDetails({ ...examDetails, date });
-    54 |   };
-    55 |
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:57:27
-TS7006: Parameter 'index' implicitly has an 'any' type.
-    55 |
-    56 |   // Function to start editing an exam
-  > 57 |   const handleEditExam = (index) => {
-       |                           ^^^^^
-    58 |     setExamDetails(exams[index]);
-    59 |     setIsEditing(true);
-    60 |     setEditIndex(index);
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:64:29
-TS7006: Parameter 'index' implicitly has an 'any' type.
-    62 |
-    63 |   // Function to delete an exam
-  > 64 |   const handleDeleteExam = (index) => {
-       |                             ^^^^^
-    65 |     const updatedExams = exams.filter((_, i) => i !== index);
-    66 |     setExams(updatedExams);
-    67 |   };
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:332:27
-TS2322: Type '{ className: string; format: string; selected: null; onChange: (date: any) => void; placeholderText: string; required: true; }' is not assignable to type 'IntrinsicAttributes & Omit<PickerProps<Dayjs>, "value" | "defaultValue" | "onChange" | "onOk"> & RefAttributes<PickerRef> & { ...; }'.
-  Property 'selected' does not exist on type 'IntrinsicAttributes & Omit<PickerProps<Dayjs>, "value" | "defaultValue" | "onChange" | "onOk"> & RefAttributes<PickerRef> & { ...; }'.
-    330 |                           className="form-control datetimepicker"
-    331 |                           format={"DD-MM-YYYY"}
-  > 332 |                           selected={examDetails.date}
-        |                           ^^^^^^^^
-    333 |                           onChange={handleDateChange}
-    334 |                           placeholderText="16 May 2024"
-    335 |                           required
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:347:25
-TS2322: Type '{ className: string; options: { value: string; label: string; }[]; onChange: (option: any) => void; value: string; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
-  Property 'onChange' does not exist on type 'IntrinsicAttributes & SelectProps'.
-    345 |                         className="select"
-    346 |                         options={startTime} // Make sure startTime has appropriate values
-  > 347 |                         onChange={(option) => setExamDetails({ ...examDetails, startTime: option.value })}
-        |                         ^^^^^^^^
-    348 |                         value={examDetails.startTime}
-    349 |                       />
-    350 |                     </div>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:347:36
-TS7006: Parameter 'option' implicitly has an 'any' type.
-    345 |                         className="select"
-    346 |                         options={startTime} // Make sure startTime has appropriate values
-  > 347 |                         onChange={(option) => setExamDetails({ ...examDetails, startTime: option.value })}
-        |                                    ^^^^^^
-    348 |                         value={examDetails.startTime}
-    349 |                       />
-    350 |                     </div>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:356:25
-TS2322: Type '{ className: string; options: { value: string; label: string; }[]; onChange: (option: any) => void; value: string; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
-  Property 'onChange' does not exist on type 'IntrinsicAttributes & SelectProps'.
-    354 |                         className="select"
-    355 |                         options={startTimeOne} // Make sure startTimeOne has appropriate values
-  > 356 |                         onChange={(option) => setExamDetails({ ...examDetails, endTime: option.value })}
-        |                         ^^^^^^^^
-    357 |                         value={examDetails.endTime}
-    358 |                       />
-    359 |                     </div>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:356:36
-TS7006: Parameter 'option' implicitly has an 'any' type.
-    354 |                         className="select"
-    355 |                         options={startTimeOne} // Make sure startTimeOne has appropriate values
-  > 356 |                         onChange={(option) => setExamDetails({ ...examDetails, endTime: option.value })}
-        |                                    ^^^^^^
-    357 |                         value={examDetails.endTime}
-    358 |                       />
-    359 |                     </div>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:382:21
-TS2339: Property 'name' does not exist on type 'never'.
-    380 |           {exams.map((exam, index) => (
-    381 |             <li key={index}>
-  > 382 |               {exam.name} - {exam.date ? exam.date.toLocaleDateString() : ''} - {exam.startTime} to {exam.endTime}
-        |                     ^^^^
-    383 |               <button onClick={() => handleEditExam(index)} className="btn btn-warning btn-sm ms-2">
-    384 |                 Edit
-    385 |               </button>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:382:35
-TS2339: Property 'date' does not exist on type 'never'.
-    380 |           {exams.map((exam, index) => (
-    381 |             <li key={index}>
-  > 382 |               {exam.name} - {exam.date ? exam.date.toLocaleDateString() : ''} - {exam.startTime} to {exam.endTime}
-        |                                   ^^^^
-    383 |               <button onClick={() => handleEditExam(index)} className="btn btn-warning btn-sm ms-2">
-    384 |                 Edit
-    385 |               </button>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:382:47
-TS2339: Property 'date' does not exist on type 'never'.
-    380 |           {exams.map((exam, index) => (
-    381 |             <li key={index}>
-  > 382 |               {exam.name} - {exam.date ? exam.date.toLocaleDateString() : ''} - {exam.startTime} to {exam.endTime}
-        |                                               ^^^^
-    383 |               <button onClick={() => handleEditExam(index)} className="btn btn-warning btn-sm ms-2">
-    384 |                 Edit
-    385 |               </button>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:382:87
-TS2339: Property 'startTime' does not exist on type 'never'.
-    380 |           {exams.map((exam, index) => (
-    381 |             <li key={index}>
-  > 382 |               {exam.name} - {exam.date ? exam.date.toLocaleDateString() : ''} - {exam.startTime} to {exam.endTime}
-        |                                                                                       ^^^^^^^^^
-    383 |               <button onClick={() => handleEditExam(index)} className="btn btn-warning btn-sm ms-2">
-    384 |                 Edit
-    385 |               </button>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:382:107
-TS2339: Property 'endTime' does not exist on type 'never'.
-    380 |           {exams.map((exam, index) => (
-    381 |             <li key={index}>
-  > 382 |               {exam.name} - {exam.date ? exam.date.toLocaleDateString() : ''} - {exam.startTime} to {exam.endTime}
-        |                                                                                                           ^^^^^^^
-    383 |               <button onClick={() => handleEditExam(index)} className="btn btn-warning btn-sm ms-2">
-    384 |                 Edit
-    385 |               </button>
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import DatePicker from 'react-datepicker';
+import CommonSelect from './CommonSelect';
+import 'react-datepicker/dist/react-datepicker.css';
+
+// Define the type for an Exam
+interface ExamDetails {
+  name: string;
+  date: Date | null;
+  startTime: string;
+  endTime: string;
+}
+
+const Exam: React.FC = () => {
+  // State to hold exams
+  const [exams, setExams] = useState<ExamDetails[]>([]);
+  const [examDetails, setExamDetails] = useState<ExamDetails>({
+    name: '',
+    date: null,
+    startTime: '',
+    endTime: '',
+  });
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [editIndex, setEditIndex] = useState<number | null>(null);
+
+  // Function to handle adding an exam
+  const handleAddExam = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (isEditing && editIndex !== null) {
+      // Update existing exam
+      const updatedExams = [...exams];
+      updatedExams[editIndex] = examDetails;
+      setExams(updatedExams);
+      setIsEditing(false);
+      setEditIndex(null);
+    } else {
+      // Add new exam
+      setExams([...exams, examDetails]);
+    }
+
+    // Reset form
+    setExamDetails({ name: '', date: null, startTime: '', endTime: '' });
+  };
+
+  // Function to handle input changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setExamDetails({ ...examDetails, [name]: value });
+  };
+
+  const handleDateChange = (date: Date | null) => {
+    setExamDetails({ ...examDetails, date });
+  };
+
+  // Function to start editing an exam
+  const handleEditExam = (index: number) => {
+    setExamDetails(exams[index]);
+    setIsEditing(true);
+    setEditIndex(index);
+  };
+
+  // Function to delete an exam
+  const handleDeleteExam = (index: number) => {
+    const updatedExams = exams.filter((_, i) => i !== index);
+    setExams(updatedExams);
+  };
+
+  return (
+    <div>
+      {/* Add Exam Modal */}
+      <div className="modal fade" id="add_exam">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">{isEditing ? 'Edit Exam' : 'Add Exam'}</h4>
+              <button
+                type="button"
+                className="btn-close custom-btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              >
+                <i className="ti ti-x" />
+              </button>
+            </div>
+            <form onSubmit={handleAddExam}>
+              <div className="modal-body">
+                <div className="row">
+                  <div className="col-md-12">
+                    <div className="mb-3">
+                      <label className="form-label">Exam Name</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="name"
+                        value={examDetails.name}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Exam Date</label>
+                      <div className="date-pic">
+                        <DatePicker
+                          className="form-control datetimepicker"
+                          selected={examDetails.date}
+                          onChange={handleDateChange}
+                          placeholderText="16 May 2024"
+                          required
+                        />
+                        <span className="cal-icon">
+                          <i className="ti ti-calendar" />
+                        </span>
+                      </div>
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Start Time</label>
+                      <CommonSelect
+                        className="select"
+                        options={startTime} // Ensure startTime has appropriate values
+                        onChange={(option: { value: string }) => setExamDetails({ ...examDetails, startTime: option.value })}
+                        value={examDetails.startTime}
+                      />
+                    </div>
+                    <div className="mb-0">
+                      <label className="form-label">End Time</label>
+                      <CommonSelect
+                        className="select"
+                        options={startTimeOne} // Ensure startTimeOne has appropriate values
+                        onChange={(option: { value: string }) => setExamDetails({ ...examDetails, endTime: option.value })}
+                        value={examDetails.endTime}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <Link to="#" className="btn btn-light me-2" data-bs-dismiss="modal">
+                  Cancel
+                </Link>
+                <button type="submit" className="btn btn-primary">
+                  {isEditing ? 'Edit Exam' : 'Add Exam'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {/* Display Exams */}
+      <div>
+        <h3>Exams List</h3>
+        <ul>
+          {exams.map((exam, index) => (
+            <li key={index}>
+              {exam.name} - {exam.date ? exam.date.toLocaleDateString() : ''} - {exam.startTime} to {exam.endTime}
+              <button onClick={() => handleEditExam(index)} className="btn btn-warning btn-sm ms-2">
+                Edit
+              </button>
+              <button onClick={() => handleDeleteExam(index)} className="btn btn-danger btn-sm ms-2">
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Modal for Delete Confirmation */}
+      <div className="modal fade" id="delete-modal">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-body text-center">
+              <i className="ti ti-trash-x fs-50 my-3 text-danger" />
+              <h4>Are you sure you want to delete this exam?</h4>
+              <div className="d-flex justify-content-center">
+                <Link className="btn btn-light me-3" to="#" data-bs-dismiss="modal">
+                  Cancel
+                </Link>
+                <Link className="btn btn-primary" to="#" data-bs-dismiss="modal">
+                  Delete
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Exam;
