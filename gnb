@@ -1,34 +1,4 @@
-import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { Link } from 'react-router-dom';
-import CommonSelect from './CommonSelect'; // Adjust the import based on your project structure
-
-// Sample data for class sections and exam names
-const classSection = [
-  { value: 'A', label: 'Class A' },
-  { value: 'B', label: 'Class B' },
-];
-
-const examtwo = [
-  { value: 'Math', label: 'Mathematics' },
-  { value: 'Science', label: 'Science' },
-];
-
-// Type definitions for the ExamForm component props
-interface ExamFormProps {
-  onSubmit: (values: any) => void;
-  initialValues: {
-    class: string;
-    section: string;
-    examName: string;
-    startTime: string;
-    endTime: string;
-    duration: string;
-  };
-}
-
-const ExamForm: React.FC<ExamFormProps> = ({ onSubmit, initialValues }) => {
+const ExamForm = ({ onSubmit, initialValues }) => {
   const validationSchema = Yup.object().shape({
     class: Yup.string().required('Class is required'),
     examName: Yup.string().required('Exam name is required'),
@@ -52,15 +22,8 @@ const ExamForm: React.FC<ExamFormProps> = ({ onSubmit, initialValues }) => {
                   {['class', 'section', 'examName', 'startTime', 'endTime', 'duration'].map((field, index) => (
                     <div className="col-md-4" key={index}>
                       <div className="mb-3">
-                        <label className="form-label">
-                          {field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-                        </label>
-                        <Field
-                          name={field}
-                          as={field === 'section' || field === 'examName' ? CommonSelect : 'input'}
-                          className="form-control"
-                          options={field === 'section' ? classSection : field === 'examName' ? examtwo : undefined}
-                        />
+                        <label className="form-label">{field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</label>
+                        <Field name={field} as={field === 'section' || field === 'examName' ? CommonSelect : 'input'} className="form-control" options={field === 'section' ? classSection : field === 'examName' ? examtwo : undefined} />
                         <ErrorMessage name={field} component="div" className="text-danger" />
                       </div>
                     </div>
@@ -89,58 +52,7 @@ const ExamSchedule = () => {
     duration: '',
   };
 
-  const handleAddExamSchedule = (values: any) => {
+  const handleAddExamSchedule = (values) => {
     console.log('Exam Schedule Added:', values);
     // Handle submission logic here
   };
-
-  return (
-    <div>
-      <div className="modal fade" id="add_exam_schedule">
-        <div className="modal-dialog modal-dialog-centered modal-xl">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title">Add Exam Schedule</h4>
-              <button type="button" className="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                <i className="ti ti-x" />
-              </button>
-            </div>
-            <ExamForm onSubmit={handleAddExamSchedule} initialValues={initialValues} />
-          </div>
-        </div>
-      </div>
-
-      <div className="modal fade" id="edit_exam_schedule">
-        <div className="modal-dialog modal-dialog-centered modal-xl">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title">Edit Exam Schedule</h4>
-              <button type="button" className="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                <i className="ti ti-x" />
-              </button>
-            </div>
-            <ExamForm onSubmit={handleAddExamSchedule} initialValues={initialValues} />
-          </div>
-        </div>
-      </div>
-
-      <div className="modal fade" id="delete-modal">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-body text-center">
-              <span className="delete-icon"><i className="ti ti-trash-x" /></span>
-              <h4>Confirm Deletion</h4>
-              <p>You want to delete all the marked items; this can't be undone once you delete.</p>
-              <div className="d-flex justify-content-center">
-                <Link to="#" className="btn btn-light me-3" data-bs-dismiss="modal">Cancel</Link>
-                <Link to="#" className="btn btn-danger" data-bs-dismiss="modal">Yes, Delete</Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default ExamSchedule;
