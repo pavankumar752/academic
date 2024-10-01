@@ -1,75 +1,22 @@
-import React, { useEffect, useState } from "react";
-import Select from "react-select";
-
-export type Option = {
-  value: string;
-  label: string;
-};
-
-export interface SelectProps {
-  options: Option[];
-  value?: Option; // Add this line
-  defaultValue?: Option;
-  className?: string;
-  styles?: any; 
-  onChange?: (option: Option | null) => void;
-}
-
-const CommonSelect: React.FC<SelectProps> = ({
-  options,
-  value, // Use value prop
-  defaultValue,
-  className,
-  styles,
-  onChange,
-}) => {
-  const [selectedOption, setSelectedOption] = useState<Option | null>(defaultValue || null);
-
-  useEffect(() => {
-    // Update local state when external value prop changes
-    setSelectedOption(value || null);
-  }, [value]);
-
-  const handleChange = (option: Option | null) => {
-    setSelectedOption(option);
-    if (onChange) {
-      onChange(option);
-    }
-  };
-
-  return (
-    <Select
-      classNamePrefix="react-select"
-      className={className}
-      styles={styles}
-      options={options}
-      value={selectedOption}
-      onChange={handleChange}
-      placeholder="Select"
-    />
-  );
-};
-
-export default CommonSelect;
-
-
-
-
-
-<CommonSelect
-  className="select"
-  options={startTime}
-  value={newExam.startTime ? { value: newExam.startTime, label: newExam.startTime } : null} // Create an option object if startTime exists
-  onChange={(option: Option | null) => {
-    setNewExam({ ...newExam, startTime: option?.value || "" });
-  }}
-/>
-
-<CommonSelect
-  className="select"
-  options={startTimeOne}
-  value={newExam.endTime ? { value: newExam.endTime, label: newExam.endTime } : null} // Create an option object if endTime exists
-  onChange={(option: Option | null) => {
-    setNewExam({ ...newExam, endTime: option?.value || "" });
-  }}
-/>
+Compiled with problems:
+×
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:279:21
+TS2322: Type '{ value: string; label: string; } | null' is not assignable to type 'Option | undefined'.
+  Type 'null' is not assignable to type 'Option | undefined'.
+    277 |                     className="select"
+    278 |                     options={startTime}
+  > 279 |                     value={newExam.startTime ? { value: newExam.startTime, label: newExam.startTime } : null} // Create an option object if startTime exists
+        |                     ^^^^^
+    280 |                     onChange={(option: Option | null) => {
+    281 |                       setNewExam({ ...newExam, startTime: option?.value || "" });
+    282 |                     }}
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:292:21
+TS2322: Type '{ value: string; label: string; } | null' is not assignable to type 'Option | undefined'.
+  Type 'null' is not assignable to type 'Option | undefined'.
+    290 |                     className="select"
+    291 |                     options={startTimeOne}
+  > 292 |                     value={newExam.endTime ? { value: newExam.endTime, label: newExam.endTime } : null} // Create an option object if endTime exists
+        |                     ^^^^^
+    293 |                     onChange={(option: Option | null) => {
+    294 |                       setNewExam({ ...newExam, endTime: option?.value || "" });
+    295 |                     }}
