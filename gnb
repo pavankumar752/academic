@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Select from "react-select";
+import Select, { StylesConfig } from "react-select";
 
 export type Option = {
   value: string;
@@ -10,8 +10,8 @@ export interface SelectProps {
   options: Option[];
   defaultValue?: Option;
   className?: string;
-  styles?: any; 
-  onChange?: (option: Option | null) => void; // Ensure this matches
+  styles?: StylesConfig<Option>; // Define the type for styles
+  onChange?: (option: Option | null) => void; // Callback when the value changes
 }
 
 const CommonSelect: React.FC<SelectProps> = ({
@@ -26,12 +26,12 @@ const CommonSelect: React.FC<SelectProps> = ({
   const handleChange = (option: Option | null) => {
     setSelectedOption(option);
     if (onChange) {
-      onChange(option); // Call the onChange prop
+      onChange(option); // Call the onChange prop with the selected option
     }
   };
 
   useEffect(() => {
-    setSelectedOption(defaultValue || null);
+    setSelectedOption(defaultValue || null); // Update state when defaultValue changes
   }, [defaultValue]);
 
   return (
