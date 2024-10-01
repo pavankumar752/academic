@@ -1,22 +1,50 @@
-Compiled with problems:
-×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:279:21
-TS2322: Type '{ className: string; options: { value: string; label: string; }[]; value: string; onChange: (option: Option | null) => void; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
-  Property 'value' does not exist on type 'IntrinsicAttributes & SelectProps'.
-    277 |                     className="select"
-    278 |                     options={startTime}
-  > 279 |                     value={newExam.startTime}
-        |                     ^^^^^
-    280 |                     onChange={(option: Option | null) => {
-    281 |                       setNewExam({ ...newExam, startTime: option?.value || "" });
-    282 |                     }}
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:292:21
-TS2322: Type '{ className: string; options: { value: string; label: string; }[]; value: string; onChange: (option: Option | null) => void; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
-  Property 'value' does not exist on type 'IntrinsicAttributes & SelectProps'.
-    290 |                     className="select"
-    291 |                     options={startTimeOne}
-  > 292 |                     value={newExam.endTime}
-        |                     ^^^^^
-    293 |                     onChange={(option: Option | null) => {
-    294 |                       setNewExam({ ...newExam, endTime: option?.value || "" });
-    295 |                     }}
+import React, { useEffect, useState } from "react";
+import Select from "react-select";
+
+export type Option = {
+  value: string;
+  label: string;
+};
+
+export interface SelectProps {
+  options: Option[];
+  defaultValue?: Option;
+  className?: string;
+  styles?: any; 
+  onChange?: (option: Option | null) => void;
+}
+
+const CommonSelect: React.FC<SelectProps> = ({
+  options,
+  defaultValue,
+  className,
+  styles,
+  onChange,
+}) => {
+  const [selectedOption, setSelectedOption] = useState<Option | null>(defaultValue || null);
+
+  const handleChange = (option: Option | null) => {
+    setSelectedOption(option);
+    if (onChange) {
+      onChange(option);
+    }
+  };
+
+  useEffect(() => {
+    setSelectedOption(defaultValue || null);
+  }, [defaultValue]);
+
+  return (
+    <Select
+      classNamePrefix="react-select"
+      className={className}
+      styles={styles}
+      options={options}
+      value={selectedOption}
+      onChange={handleChange}
+      placeholder="Select"
+    />
+  );
+};
+
+export default CommonSelect;
