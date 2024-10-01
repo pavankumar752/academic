@@ -1,68 +1,264 @@
-import React, { useRef, useState } from "react";
-// Other imports...
-
-interface Option {
-  value: string;
-  label: string;
-}
-
-interface Exam1 {
-  subject: Option | null;
-  examDate: Option | null;
-  startTime: Option | null;
-  endTime: Option | null;
-  duration: Option | null;
-  roomNo: Option | null;
-  maxMarks: Option | null;
-  minMarks: Option | null;
-  key: number;
-}
-
-const ExamSchedule = () => {
-  // Other states...
-  const [formValues, setFormValues] = useState<Exam1>({
-    subject: null,
-    examDate: null,
-    startTime: null,
-    endTime: null,
-    duration: null,
-    roomNo: null,
-    maxMarks: null,
-    minMarks: null,
-    key: data.length,
-  });
-
-  const handleInputChange = (name: keyof Exam1, value: Option | null) => {
-    setFormValues({
-      ...formValues,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setData([...data, { ...formValues, key: data.length }]);
-    // Reset form values after adding
-    setFormValues({
-      subject: null,
-      examDate: null,
-      startTime: null,
-      endTime: null,
-      duration: null,
-      roomNo: null,
-      maxMarks: null,
-      minMarks: null,
-      key: data.length,
-    });
-  };
-
-  // In the render part of the component:
-  <CommonSelect
-    className="select"
-    options={classSection}
-    name="section"
-    value={formValues.section}
-    onChange={(selectedOption) => handleInputChange("section", selectedOption)}
-  />
-  // Repeat for other selects...
-};
+Compiled with problems:
+×
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:25:12
+TS2749: 'Option' refers to a value, but is being used as a type here. Did you mean 'typeof Option'?
+    23 | import TooltipOption from "../../../../core/common/tooltipOption";
+    24 | interface Exam1 {
+  > 25 |   subject: Option | null;
+       |            ^^^^^^
+    26 |   examDate: Option | null;
+    27 |   startTime: Option | null;
+    28 |   endTime: Option | null;
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:26:13
+TS2749: 'Option' refers to a value, but is being used as a type here. Did you mean 'typeof Option'?
+    24 | interface Exam1 {
+    25 |   subject: Option | null;
+  > 26 |   examDate: Option | null;
+       |             ^^^^^^
+    27 |   startTime: Option | null;
+    28 |   endTime: Option | null;
+    29 |   duration: Option | null;
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:27:14
+TS2749: 'Option' refers to a value, but is being used as a type here. Did you mean 'typeof Option'?
+    25 |   subject: Option | null;
+    26 |   examDate: Option | null;
+  > 27 |   startTime: Option | null;
+       |              ^^^^^^
+    28 |   endTime: Option | null;
+    29 |   duration: Option | null;
+    30 |   roomNo: Option | null;
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:28:12
+TS2749: 'Option' refers to a value, but is being used as a type here. Did you mean 'typeof Option'?
+    26 |   examDate: Option | null;
+    27 |   startTime: Option | null;
+  > 28 |   endTime: Option | null;
+       |            ^^^^^^
+    29 |   duration: Option | null;
+    30 |   roomNo: Option | null;
+    31 |   maxMarks: Option | null;
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:29:13
+TS2749: 'Option' refers to a value, but is being used as a type here. Did you mean 'typeof Option'?
+    27 |   startTime: Option | null;
+    28 |   endTime: Option | null;
+  > 29 |   duration: Option | null;
+       |             ^^^^^^
+    30 |   roomNo: Option | null;
+    31 |   maxMarks: Option | null;
+    32 |   minMarks: Option | null;
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:30:11
+TS2749: 'Option' refers to a value, but is being used as a type here. Did you mean 'typeof Option'?
+    28 |   endTime: Option | null;
+    29 |   duration: Option | null;
+  > 30 |   roomNo: Option | null;
+       |           ^^^^^^
+    31 |   maxMarks: Option | null;
+    32 |   minMarks: Option | null;
+    33 |   class: Option | null,
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:31:13
+TS2749: 'Option' refers to a value, but is being used as a type here. Did you mean 'typeof Option'?
+    29 |   duration: Option | null;
+    30 |   roomNo: Option | null;
+  > 31 |   maxMarks: Option | null;
+       |             ^^^^^^
+    32 |   minMarks: Option | null;
+    33 |   class: Option | null,
+    34 |   key: number;
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:32:13
+TS2749: 'Option' refers to a value, but is being used as a type here. Did you mean 'typeof Option'?
+    30 |   roomNo: Option | null;
+    31 |   maxMarks: Option | null;
+  > 32 |   minMarks: Option | null;
+       |             ^^^^^^
+    33 |   class: Option | null,
+    34 |   key: number;
+    35 |
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:33:10
+TS2749: 'Option' refers to a value, but is being used as a type here. Did you mean 'typeof Option'?
+    31 |   maxMarks: Option | null;
+    32 |   minMarks: Option | null;
+  > 33 |   class: Option | null,
+       |          ^^^^^^
+    34 |   key: number;
+    35 |
+    36 | }
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:43:55
+TS2345: Argument of type '{ subject: null; examDate: null; startTime: null; endTime: null; duration: null; roomNo: null; maxMarks: null; minMarks: null; key: number; }' is not assignable to parameter of type 'Exam1 | (() => Exam1)'.
+  Property 'class' is missing in type '{ subject: null; examDate: null; startTime: null; endTime: null; duration: null; roomNo: null; maxMarks: null; minMarks: null; key: number; }' but required in type 'Exam1'.
+    41 |   ]);
+    42 |   const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
+  > 43 |   const [formValues, setFormValues] = useState<Exam1>({
+       |                                                       ^
+  > 44 |     subject: null,
+       | ^^^^^^^^^^^^^^^^^^
+  > 45 |     examDate: null,
+       | ^^^^^^^^^^^^^^^^^^
+  > 46 |     startTime: null,
+       | ^^^^^^^^^^^^^^^^^^
+  > 47 |     endTime: null,
+       | ^^^^^^^^^^^^^^^^^^
+  > 48 |     duration: null,
+       | ^^^^^^^^^^^^^^^^^^
+  > 49 |     roomNo: null,
+       | ^^^^^^^^^^^^^^^^^^
+  > 50 |     maxMarks: null,
+       | ^^^^^^^^^^^^^^^^^^
+  > 51 |     minMarks: null,
+       | ^^^^^^^^^^^^^^^^^^
+  > 52 |     key: data.length,
+       | ^^^^^^^^^^^^^^^^^^
+  > 53 |   });
+       | ^^^^
+    54 |   const handleInputChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+    55 |     const { name, value } = e.target;
+    56 |     setFormValues({
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:65:19
+TS2345: Argument of type '{ subject: null; examDate: null; startTime: null; endTime: null; duration: null; roomNo: null; maxMarks: null; minMarks: null; key: number; }' is not assignable to parameter of type 'SetStateAction<Exam1>'.
+  Property 'class' is missing in type '{ subject: null; examDate: null; startTime: null; endTime: null; duration: null; roomNo: null; maxMarks: null; minMarks: null; key: number; }' but required in type 'Exam1'.
+    63 |     setData([...data, { ...formValues, key: data.length }]);
+    64 |     // Reset form values after adding
+  > 65 |     setFormValues({
+       |                   ^
+  > 66 |       subject: null,
+       | ^^^^^^^^^^^^^^^^^^^^
+  > 67 |     examDate: null,
+       | ^^^^^^^^^^^^^^^^^^^^
+  > 68 |     startTime: null,
+       | ^^^^^^^^^^^^^^^^^^^^
+  > 69 |     endTime: null,
+       | ^^^^^^^^^^^^^^^^^^^^
+  > 70 |     duration: null,
+       | ^^^^^^^^^^^^^^^^^^^^
+  > 71 |     roomNo: null,
+       | ^^^^^^^^^^^^^^^^^^^^
+  > 72 |     maxMarks: null,
+       | ^^^^^^^^^^^^^^^^^^^^
+  > 73 |     minMarks: null,
+       | ^^^^^^^^^^^^^^^^^^^^
+  > 74 |     key: data.length,
+       | ^^^^^^^^^^^^^^^^^^^^
+  > 75 |     });
+       | ^^^^^^
+    76 |   };
+    77 |
+    78 |   const handleApplyClick = () => {
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:371:29
+TS2322: Type '{ className: string; options: { value: string; label: string; }[]; name: string; value: any; onChange: (selectedOption: Option | null) => void; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
+  Property 'name' does not exist on type 'IntrinsicAttributes & SelectProps'.
+    369 |                             className="select"
+    370 |                             options={classSection}
+  > 371 |                             name="section"
+        |                             ^^^^
+    372 |                             value={formValues.section}
+    373 |                             onChange={(selectedOption) => handleInputChange("section", selectedOption)}
+    374 |                           />
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:372:47
+TS2339: Property 'section' does not exist on type 'Exam1'.
+    370 |                             options={classSection}
+    371 |                             name="section"
+  > 372 |                             value={formValues.section}
+        |                                               ^^^^^^^
+    373 |                             onChange={(selectedOption) => handleInputChange("section", selectedOption)}
+    374 |                           />
+    375 |                         </div>
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:373:88
+TS2554: Expected 1 arguments, but got 2.
+    371 |                             name="section"
+    372 |                             value={formValues.section}
+  > 373 |                             onChange={(selectedOption) => handleInputChange("section", selectedOption)}
+        |                                                                                        ^^^^^^^^^^^^^^
+    374 |                           />
+    375 |                         </div>
+    376 |                       </div>
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:384:47
+TS2339: Property 'examName' does not exist on type 'Exam1'.
+    382 |                             options={examtwo}
+    383 |                             name="examName"
+  > 384 |                             value={formValues.examName}
+        |                                               ^^^^^^^^
+    385 |                             onChange={handleInputChange}
+    386 |                           />
+    387 |                         </div>
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:385:29
+TS2322: Type '(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void' is not assignable to type '(option: Option | null) => void'.
+    383 |                             name="examName"
+    384 |                             value={formValues.examName}
+  > 385 |                             onChange={handleInputChange}
+        |                             ^^^^^^^^
+    386 |                           />
+    387 |                         </div>
+    388 |                       </div>
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:397:29
+TS2322: Type '(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void' is not assignable to type '(option: Option | null) => void'.
+    395 |                             name="startTime"
+    396 |                             value={formValues.startTime}
+  > 397 |                             onChange={handleInputChange}
+        |                             ^^^^^^^^
+    398 |                           />
+    399 |                         </div>
+    400 |                       </div>
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:409:29
+TS2322: Type '(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void' is not assignable to type '(option: Option | null) => void'.
+    407 |                             name="endTime"
+    408 |                             value={formValues.endTime}
+  > 409 |                             onChange={handleInputChange}
+        |                             ^^^^^^^^
+    410 |                           />
+    411 |                         </div>
+    412 |                       </div>
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:421:29
+TS2322: Type '(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void' is not assignable to type '(option: Option | null) => void'.
+    419 |                             name="duration"
+    420 |                             value={formValues.duration}
+  > 421 |                             onChange={handleInputChange}
+        |                             ^^^^^^^^
+    422 |                           />
+    423 |                         </div>
+    424 |                       </div>
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:438:27
+TS2322: Type '(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void' is not assignable to type '(option: Option | null) => void'.
+  Types of parameters 'e' and 'option' are incompatible.
+    Type 'Option | null' is not assignable to type 'ChangeEvent<HTMLSelectElement | HTMLInputElement>'.
+      Type 'null' is not assignable to type 'ChangeEvent<HTMLSelectElement | HTMLInputElement>'.
+    436 |                           name="examDate"
+    437 |                           value={formValues.examDate}
+  > 438 |                           onChange={handleInputChange}
+        |                           ^^^^^^^^
+    439 |                         />
+    440 |                       </div>
+    441 |                     </div>
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:450:27
+TS2322: Type '(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void' is not assignable to type '(option: Option | null) => void'.
+    448 |                           name="subject"
+    449 |                           value={formValues.subject}
+  > 450 |                           onChange={handleInputChange}
+        |                           ^^^^^^^^
+    451 |                         />
+    452 |                       </div>
+    453 |                     </div>
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:462:27
+TS2322: Type '(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void' is not assignable to type '(option: Option | null) => void'.
+    460 |                           name="roomNo"
+    461 |                           value={formValues.roomNo}
+  > 462 |                           onChange={handleInputChange}
+        |                           ^^^^^^^^
+    463 |                         />
+    464 |                       </div>
+    465 |                     </div>
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:474:27
+TS2322: Type '(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void' is not assignable to type '(option: Option | null) => void'.
+    472 |                           name="maxMarks"
+    473 |                           value={formValues.maxMarks}
+  > 474 |                           onChange={handleInputChange}
+        |                           ^^^^^^^^
+    475 |                         />
+    476 |                       </div>
+    477 |                     </div>
+ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:487:29
+TS2322: Type '(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void' is not assignable to type '(option: Option | null) => void'.
+    485 |                             name="minMarks"
+    486 |                             value={formValues.minMarks}
+  > 487 |                             onChange={handleInputChange}
+        |                             ^^^^^^^^
+    488 |                           />
+    489 |                         </div>
+    490 |                       </div>
