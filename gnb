@@ -1,5 +1,18 @@
 import React, { useRef, useState } from "react";
 import PredefinedDateRanges from "../../../../core/common/datePicker";
+import {
+  classSection,
+  classSylabus,
+  count,
+  durationOne,
+  examOne,
+  examtwo,
+  maxMark,
+  minMark,
+  mothertongue,
+  startTime,
+  startTimeOne,
+} from "../../../../core/common/selectoption/selectoption";
 import Select from "react-select";
 import { Link } from "react-router-dom";
 import Table from "../../../../core/common/dataTable/index";
@@ -11,141 +24,117 @@ import TooltipOption from "../../../../core/common/tooltipOption";
 
 const ExamSchedule = () => {
   const routes = all_routes;
+  const data = examSchedule;
   const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
-  const [examSchedules, setExamSchedules] = useState([]);
-  const [newExam, setNewExam] = useState({
-    subject: "",
-    examDate: "",
-    startTime: "",
-    endTime: "",
-    duration: "",
-    roomNo: "",
-    maxMarks: "",
-    minMarks: "",
-  });
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewExam((prev) => ({ ...prev, [name]: value }));
+  const handleApplyClick = () => {
+    if (dropdownMenuRef.current) {
+      dropdownMenuRef.current.classList.remove("show");
+    }
   };
-
-  const handleAddExam = () => {
-    setExamSchedules((prev) => [...prev, newExam]);
-    setNewExam({
-      subject: "",
-      examDate: "",
-      startTime: "",
-      endTime: "",
-      duration: "",
-      roomNo: "",
-      maxMarks: "",
-      minMarks: "",
-    });
-  };
-
+  const [newContents, setNewContents] = useState<number[]>([0]);
   const columns = [
-    { title: "Subject", dataIndex: "subject" },
-    { title: "Exam Date", dataIndex: "examDate" },
-    { title: "Start Time", dataIndex: "startTime" },
-    { title: "End Time", dataIndex: "endTime" },
-    { title: "Duration", dataIndex: "duration" },
-    { title: "Room No", dataIndex: "roomNo" },
-    { title: "Max Mark", dataIndex: "maxMarks" },
-    { title: "Min Mark", dataIndex: "minMarks" },
+    {
+      title: "Subject",
+      dataIndex: "subject",
+      render: (text: string, record: any, index: number) => (
+        <>
+          <Link to="#" className="link-primary">
+            {record.subject}
+          </Link>
+        </>
+      ),
+      sorter: (a: TableData, b: TableData) =>
+        a.subject.length - b.subject.length,
+    },
+    {
+      title: "Exam Date",
+      dataIndex: "examDate",
+      sorter: (a: TableData, b: TableData) =>
+        a.examDate.length - b.examDate.length,
+    },
+    {
+      title: "Start Time",
+      dataIndex: "startTime",
+      sorter: (a: TableData, b: TableData) =>
+        a.startTime.length - b.startTime.length,
+    },
+    {
+      title: "End Time",
+      dataIndex: "endTime",
+      sorter: (a: TableData, b: TableData) =>
+        a.endTime.length - b.endTime.length,
+    },
+    {
+      title: "Duration",
+      dataIndex: "duration",
+      sorter: (a: TableData, b: TableData) =>
+        a.duration.length - b.duration.length,
+    },
+    {
+      title: "Room No",
+      dataIndex: "roomNo",
+      sorter: (a: TableData, b: TableData) => a.roomNo.length - b.roomNo.length,
+    },
+    {
+      title: "Max Mark",
+      dataIndex: "maxMarks",
+      sorter: (a: TableData, b: TableData) =>
+        a.maxMarks.length - b.maxMarks.length,
+    },
+    {
+      title: "Min Mark",
+      dataIndex: "minMarks",
+      sorter: (a: TableData, b: TableData) =>
+        a.minMarks.length - b.minMarks.length,
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      render: () => (
+        <>
+          <div className="d-flex align-items-center">
+            <div className="dropdown">
+              <Link
+                to="#"
+                className="btn btn-white btn-icon btn-sm d-flex align-items-center justify-content-center rounded-circle p-0"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i className="ti ti-dots-vertical fs-14" />
+              </Link>
+              <ul className="dropdown-menu dropdown-menu-right p-3">
+                <li>
+                  <Link
+                    className="dropdown-item rounded-1"
+                    to="#"
+                    data-bs-toggle="modal"
+                    data-bs-target="#edit_exam_schedule"
+                  >
+                    <i className="ti ti-edit-circle me-2" />
+                    Edit
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="dropdown-item rounded-1"
+                    to="#"
+                    data-bs-toggle="modal"
+                    data-bs-target="#delete-modal"
+                  >
+                    <i className="ti ti-trash-x me-2" />
+                    Delete
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </>
+      ),
+    },
   ];
-
-  return (
-    <div>
-      <div className="page-wrapper">
-        <div className="content">
-          {/* Page Header */}
-          <div className="d-md-flex d-block align-items-center justify-content-between mb-3">
-            <div className="my-auto mb-2">
-              <h3 className="page-title mb-1">Exam Schedule</h3>
-              <nav>
-                <ol className="breadcrumb mb-0">
-                  <li className="breadcrumb-item">
-                    <Link to={routes.adminDashboard}>Dashboard</Link>
-                  </li>
-                  <li className="breadcrumb-item active" aria-current="page">
-                    Exam Schedule
-                  </li>
-                </ol>
-              </nav>
-            </div>
-            <div className="d-flex my-xl-auto right-content align-items-center flex-wrap">
-              <TooltipOption />
-              <div className="mb-2">
-                <Link
-                  to="#"
-                  className="btn btn-primary"
-                  data-bs-toggle="modal"
-                  data-bs-target="#add_exam_schedule"
-                >
-                  Add Exam Schedule
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Exam Schedule Form */}
-          <div className="modal fade" id="add_exam_schedule">
-            <div className="modal-dialog modal-dialog-centered modal-xl">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h4 className="modal-title">Add Exam Schedule</h4>
-                  <button
-                    type="button"
-                    className="btn-close custom-btn-close"
-                    data-bs-dismiss="modal"
-                  ></button>
-                </div>
-                <form onSubmit={(e) => e.preventDefault()}>
-                  <div className="modal-body">
-                    <div className="row">
-                      <div className="col-md-12">
-                        <div className="row">
-                          {Object.keys(newExam).map((key) => (
-                            <div className="col-md-4" key={key}>
-                              <div className="mb-3">
-                                <label className="form-label">{key.replace(/([A-Z])/g, ' $1')}</label>
-                                <CommonSelect
-                                  className="select"
-                                  options={[]} // Replace with appropriate options
-                                  onChange={(selectedOption) =>
-                                    setNewExam((prev) => ({
-                                      ...prev,
-                                      [key]: selectedOption.value,
-                                    }))
-                                  }
-                                />
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                      <Link to="#" onClick={handleAddExam} className="btn btn-primary">
-                        Add Exam Schedule
-                      </Link>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-
-          {/* Table Displaying Exam Schedules */}
-          <div className="card">
-            <div className="card-body p-0 py-3">
-              <Table columns={columns} dataSource={examSchedules} />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default ExamSchedule;
+  const addNewContent = () => {
+    setNewContents([...newContents, newContents.length]);
+  };
+  const removeContent = (index:any) => {
+    setNewContents(newContents.filter((_, i) => i !== index));
+  };
