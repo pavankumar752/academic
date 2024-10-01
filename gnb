@@ -1,60 +1,50 @@
-Compiled with problems:
-×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:132:16
-TS7006: Parameter '_' implicitly has an 'any' type.
-    130 |       title: "Action",
-    131 |       dataIndex: "action",
-  > 132 |       render: (_, record) => (
-        |                ^
-    133 |         <div className="d-flex align-items-center">
-    134 |           <div className="dropdown">
-    135 |             <Link
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:132:19
-TS7006: Parameter 'record' implicitly has an 'any' type.
-    130 |       title: "Action",
-    131 |       dataIndex: "action",
-  > 132 |       render: (_, record) => (
-        |                   ^^^^^^
-    133 |         <div className="d-flex align-items-center">
-    134 |           <div className="dropdown">
-    135 |             <Link
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:273:25
-TS2322: Type '{ options: { value: string; label: string; }[]; placeholder: string; onChange: (option: Option | null) => void; value: string; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
-  Property 'placeholder' does not exist on type 'IntrinsicAttributes & SelectProps'.
-    271 |                       <CommonSelect
-    272 |                         options={startTime}
-  > 273 |                         placeholder="Select Start Time"
-        |                         ^^^^^^^^^^^
-    274 |                         onChange={handleStartTimeChange}
-    275 |                         value={newExam.startTime}
-    276 |                       />
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:282:25
-TS2322: Type '{ options: { value: string; label: string; }[]; placeholder: string; onChange: (option: Option | null) => void; value: string; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
-  Property 'placeholder' does not exist on type 'IntrinsicAttributes & SelectProps'.
-    280 |                       <CommonSelect
-    281 |                         options={startTimeOne}
-  > 282 |                         placeholder="Select End Time"
-        |                         ^^^^^^^^^^^
-    283 |                         onChange={handleEndTimeChange}
-    284 |                         value={newExam.endTime}
-    285 |                       />
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:353:25
-TS2322: Type '{ options: { value: string; label: string; }[]; placeholder: string; onChange: (option: Option | null) => void; value: string; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
-  Property 'placeholder' does not exist on type 'IntrinsicAttributes & SelectProps'.
-    351 |                       <CommonSelect
-    352 |                         options={startTime}
-  > 353 |                         placeholder="Select Start Time"
-        |                         ^^^^^^^^^^^
-    354 |                         onChange={handleStartTimeChange}
-    355 |                         value={newExam.startTime}
-    356 |                       />
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:362:25
-TS2322: Type '{ options: { value: string; label: string; }[]; placeholder: string; onChange: (option: Option | null) => void; value: string; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
-  Property 'placeholder' does not exist on type 'IntrinsicAttributes & SelectProps'.
-    360 |                       <CommonSelect
-    361 |                         options={startTimeOne}
-  > 362 |                         placeholder="Select End Time"
-        |                         ^^^^^^^^^^^
-    363 |                         onChange={handleEndTimeChange}
-    364 |                         value={newExam.endTime}
-    365 |                       />
+import React, { useEffect, useState } from "react";
+import Select from "react-select";
+
+export type Option = {
+  value: string;
+  label: string;
+};
+
+export interface SelectProps {
+  options: Option[];
+  defaultValue?: Option;
+  className?: string;
+  styles?: any; 
+  onChange?: (option: Option | null) => void; // Ensure this matches
+}
+
+const CommonSelect: React.FC<SelectProps> = ({
+  options,
+  defaultValue,
+  className,
+  styles,
+  onChange,
+}) => {
+  const [selectedOption, setSelectedOption] = useState<Option | null>(defaultValue || null);
+
+  const handleChange = (option: Option | null) => {
+    setSelectedOption(option);
+    if (onChange) {
+      onChange(option); // Call the onChange prop
+    }
+  };
+
+  useEffect(() => {
+    setSelectedOption(defaultValue || null);
+  }, [defaultValue]);
+
+  return (
+    <Select
+      classNamePrefix="react-select"
+      className={className}
+      styles={styles}
+      options={options}
+      value={selectedOption}
+      onChange={handleChange}
+      placeholder="Select"
+    />
+  );
+};
+
+export default CommonSelect;
