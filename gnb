@@ -1,12 +1,14 @@
 import React, { useRef, useState, useEffect } from "react";
-import PredefinedDateRanges from "../../../../core/common/datePicker";
-import { classSection, examNames, subjects, roomNumbers, startTime, startTimeOne, durationOne, maxMark, minMark, examOne } from "../../../../core/common/selectoption/selectoption";
 import Select from "react-select";
 import { Link } from "react-router-dom";
-import Table from "../../../../core/common/dataTable/index";
-import { Option } from "../../../../core/common/commonSelect";
-import { all_routes } from "../../../router/all_routes";
-import TooltipOption from "../../../../core/common/tooltipOption";
+import Table from "../../../../core/common/dataTable/index"; // Adjust this import based on your actual structure
+import { all_routes } from "../../../router/all_routes"; // Adjust this import based on your actual structure
+import TooltipOption from "../../../../core/common/tooltipOption"; // Adjust this import based on your actual structure
+
+interface Option {
+  value: string;
+  label: string;
+}
 
 interface Exam1 {
   subject: Option | null;
@@ -23,8 +25,58 @@ interface Exam1 {
   key: number;
 }
 
+const subjects: Option[] = [
+  { value: 'math', label: 'Mathematics' },
+  { value: 'sci', label: 'Science' },
+  { value: 'eng', label: 'English' },
+];
+
+const classSection: Option[] = [
+  { value: 'A', label: 'A' },
+  { value: 'B', label: 'B' },
+];
+
+const examNames: Option[] = [
+  { value: 'midterm', label: 'Midterm Exam' },
+  { value: 'final', label: 'Final Exam' },
+];
+
+const startTime: Option[] = [
+  { value: '09:00', label: '09:00 AM' },
+  { value: '10:00', label: '10:00 AM' },
+];
+
+const startTimeOne: Option[] = [
+  { value: '11:00', label: '11:00 AM' },
+  { value: '12:00', label: '12:00 PM' },
+];
+
+const durationOne: Option[] = [
+  { value: '60', label: '60 min' },
+  { value: '90', label: '90 min' },
+];
+
+const maxMark: Option[] = [
+  { value: '100', label: '100' },
+  { value: '50', label: '50' },
+];
+
+const minMark: Option[] = [
+  { value: '40', label: '40' },
+  { value: '20', label: '20' },
+];
+
+const examOne: Option[] = [
+  { value: '2024-10-01', label: 'October 1, 2024' },
+  { value: '2024-10-02', label: 'October 2, 2024' },
+];
+
+const roomNumbers: Option[] = [
+  { value: '101', label: 'Room 101' },
+  { value: '102', label: 'Room 102' },
+];
+
 const ExamSchedule = () => {
-  const routes = all_routes;
   const [data, setData] = useState<Exam1[]>([]);
   const [formValues, setFormValues] = useState<Exam1>({
     subject: null,
@@ -58,7 +110,11 @@ const ExamSchedule = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Form Values Before Submit:", formValues); // Debugging line
+
     const newData: Exam1 = { ...formValues, key: data.length };
+    console.log("New Data Being Added:", newData); // Debugging line
+
     const updatedData = [...data, newData];
     setData(updatedData);
     localStorage.setItem("examSchedule", JSON.stringify(updatedData));
