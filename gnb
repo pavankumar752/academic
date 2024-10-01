@@ -1,20 +1,73 @@
-Compiled with problems:
-×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:129:16
-TS7006: Parameter '_' implicitly has an 'any' type.
-    127 |       title: "Action",
-    128 |       dataIndex: "action",
-  > 129 |       render: (_, record) => (
-        |                ^
-    130 |         <div className="d-flex align-items-center">
-    131 |           <div className="dropdown">
-    132 |             <Link
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:129:19
-TS7006: Parameter 'record' implicitly has an 'any' type.
-    127 |       title: "Action",
-    128 |       dataIndex: "action",
-  > 129 |       render: (_, record) => (
-        |                   ^^^^^^
-    130 |         <div className="d-flex align-items-center">
-    131 |           <div className="dropdown">
-    132 |             <Link
+const columns = [
+  {
+    title: "ID",
+    dataIndex: "id",
+    render: (_: any, record: { id: string }) => (
+      <Link to="#" className="link-primary">
+        {record.id}
+      </Link>
+    ),
+    sorter: (a: { id: string }, b: { id: string }) => a.id.length - b.id.length,
+  },
+  {
+    title: "Exam Name",
+    dataIndex: "examName",
+    sorter: (a: { examName: string }, b: { examName: string }) =>
+      a.examName.length - b.examName.length,
+  },
+  {
+    title: "Exam Date",
+    dataIndex: "examDate",
+    sorter: (a: { examDate: string }, b: { examDate: string }) =>
+      a.examDate.length - b.examDate.length,
+  },
+  {
+    title: "Start Time",
+    dataIndex: "startTime",
+    sorter: (a: { startTime: string }, b: { startTime: string }) =>
+      a.startTime.length - b.startTime.length,
+  },
+  {
+    title: "End Time",
+    dataIndex: "endTime",
+    sorter: (a: { endTime: string }, b: { endTime: string }) =>
+      a.endTime.length - b.endTime.length,
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    render: (_: any, record: Exam1) => (  // Define 'record' as Exam1 type
+      <div className="d-flex align-items-center">
+        <div className="dropdown">
+          <Link
+            to="#"
+            className="btn btn-white btn-icon btn-sm"
+            data-bs-toggle="dropdown"
+          >
+            <i className="ti ti-dots-vertical fs-14" />
+          </Link>
+          <ul className="dropdown-menu dropdown-menu-right">
+            <li>
+              <Link
+                className="dropdown-item"
+                to="#"
+                onClick={() => openEditModal(record)}
+                data-bs-toggle="modal"
+                data-bs-target="#edit_exam"
+              >
+                <i className="ti ti-edit-circle me-2" />
+                Edit
+              </Link>
+            </li>
+            <li>
+              <Link className="dropdown-item" to="#">
+                <i className="ti ti-trash-x me-2" />
+                Delete
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </div>
+    ),
+  },
+];
