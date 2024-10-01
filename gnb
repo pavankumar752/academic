@@ -1,37 +1,20 @@
-{
-  title: "Action",
-  dataIndex: "action",
-  render: (_, record) => (
-    <div className="d-flex align-items-center">
-      <div className="dropdown">
-        <Link
-          to="#"
-          className="btn btn-white btn-icon btn-sm"
-          data-bs-toggle="dropdown"
-        >
-          <i className="ti ti-dots-vertical fs-14" />
-        </Link>
-        <ul className="dropdown-menu dropdown-menu-right">
-          <li>
-            <Link
-              className="dropdown-item"
-              to="#"
-              onClick={() => openEditModal(record)} // Corrected this line
-              data-bs-toggle="modal"
-              data-bs-target="#edit_exam"
-            >
-              <i className="ti ti-edit-circle me-2" />
-              Edit
-            </Link>
-          </li>
-          <li>
-            <Link className="dropdown-item" to="#">
-              <i className="ti ti-trash-x me-2" />
-              Delete
-            </Link>
-          </li>
-        </ul>
-      </div>
-    </div>
-  ),
-},
+Compiled with problems:
+×
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:129:16
+TS7006: Parameter '_' implicitly has an 'any' type.
+    127 |       title: "Action",
+    128 |       dataIndex: "action",
+  > 129 |       render: (_, record) => (
+        |                ^
+    130 |         <div className="d-flex align-items-center">
+    131 |           <div className="dropdown">
+    132 |             <Link
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:129:19
+TS7006: Parameter 'record' implicitly has an 'any' type.
+    127 |       title: "Action",
+    128 |       dataIndex: "action",
+  > 129 |       render: (_, record) => (
+        |                   ^^^^^^
+    130 |         <div className="d-flex align-items-center">
+    131 |           <div className="dropdown">
+    132 |             <Link
