@@ -1,185 +1,68 @@
-Compiled with problems:
-×
-ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:380:29
-TS2322: Type 'string' is not assignable to type 'Option'.
-    378 |                             options={classSection}
-    379 |                             name="section"
-  > 380 |                             value={formValues.section}
-        |                             ^^^^^
-    381 |                             onChange={handleInputChange}
-    382 |                           />
-    383 |                         </div>
-ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:381:29
-TS2322: Type '(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void' is not assignable to type '(option: Option | null) => void'.
-    379 |                             name="section"
-    380 |                             value={formValues.section}
-  > 381 |                             onChange={handleInputChange}
-        |                             ^^^^^^^^
-    382 |                           />
-    383 |                         </div>
-    384 |                       </div>
-ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:392:29
-TS2322: Type 'string' is not assignable to type 'Option'.
-    390 |                             options={examtwo}
-    391 |                             name="examName"
-  > 392 |                             value={formValues.examName}
-        |                             ^^^^^
-    393 |                             onChange={handleInputChange}
-    394 |                           />
-    395 |                         </div>
-ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:393:29
-TS2322: Type '(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void' is not assignable to type '(option: Option | null) => void'.
-    391 |                             name="examName"
-    392 |                             value={formValues.examName}
-  > 393 |                             onChange={handleInputChange}
-        |                             ^^^^^^^^
-    394 |                           />
-    395 |                         </div>
-    396 |                       </div>
-ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:404:29
-TS2322: Type 'string' is not assignable to type 'Option'.
-    402 |                             options={startTime}
-    403 |                             name="startTime"
-  > 404 |                             value={formValues.startTime}
-        |                             ^^^^^
-    405 |                             onChange={handleInputChange}
-    406 |                           />
-    407 |                         </div>
-ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:405:29
-TS2322: Type '(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void' is not assignable to type '(option: Option | null) => void'.
-    403 |                             name="startTime"
-    404 |                             value={formValues.startTime}
-  > 405 |                             onChange={handleInputChange}
-        |                             ^^^^^^^^
-    406 |                           />
-    407 |                         </div>
-    408 |                       </div>
-ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:416:29
-TS2322: Type 'string' is not assignable to type 'Option'.
-    414 |                             options={startTimeOne}
-    415 |                             name="endTime"
-  > 416 |                             value={formValues.endTime}
-        |                             ^^^^^
-    417 |                             onChange={handleInputChange}
-    418 |                           />
-    419 |                         </div>
-ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:417:29
-TS2322: Type '(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void' is not assignable to type '(option: Option | null) => void'.
-    415 |                             name="endTime"
-    416 |                             value={formValues.endTime}
-  > 417 |                             onChange={handleInputChange}
-        |                             ^^^^^^^^
-    418 |                           />
-    419 |                         </div>
-    420 |                       </div>
-ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:428:29
-TS2322: Type 'string' is not assignable to type 'Option'.
-    426 |                             options={durationOne}
-    427 |                             name="duration"
-  > 428 |                             value={formValues.duration}
-        |                             ^^^^^
-    429 |                             onChange={handleInputChange}
-    430 |                           />
-    431 |                         </div>
-ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:429:29
-TS2322: Type '(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void' is not assignable to type '(option: Option | null) => void'.
-    427 |                             name="duration"
-    428 |                             value={formValues.duration}
-  > 429 |                             onChange={handleInputChange}
-        |                             ^^^^^^^^
-    430 |                           />
-    431 |                         </div>
-    432 |                       </div>
-ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:445:27
-TS2322: Type 'string' is not assignable to type 'Option'.
-    443 |                           options={examOne}
-    444 |                           name="examDate"
-  > 445 |                           value={formValues.examDate}
-        |                           ^^^^^
-    446 |                           onChange={handleInputChange}
-    447 |                         />
-    448 |                       </div>
-ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:446:27
-TS2322: Type '(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void' is not assignable to type '(option: Option | null) => void'.
-  Types of parameters 'e' and 'option' are incompatible.
-    Type 'Option | null' is not assignable to type 'ChangeEvent<HTMLSelectElement | HTMLInputElement>'.
-      Type 'null' is not assignable to type 'ChangeEvent<HTMLSelectElement | HTMLInputElement>'.
-    444 |                           name="examDate"
-    445 |                           value={formValues.examDate}
-  > 446 |                           onChange={handleInputChange}
-        |                           ^^^^^^^^
-    447 |                         />
-    448 |                       </div>
-    449 |                     </div>
-ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:457:27
-TS2322: Type 'string' is not assignable to type 'Option'.
-    455 |                           options={mothertongue}
-    456 |                           name="subject"
-  > 457 |                           value={formValues.subject}
-        |                           ^^^^^
-    458 |                           onChange={handleInputChange}
-    459 |                         />
-    460 |                       </div>
-ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:458:27
-TS2322: Type '(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void' is not assignable to type '(option: Option | null) => void'.
-    456 |                           name="subject"
-    457 |                           value={formValues.subject}
-  > 458 |                           onChange={handleInputChange}
-        |                           ^^^^^^^^
-    459 |                         />
-    460 |                       </div>
-    461 |                     </div>
-ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:469:27
-TS2322: Type 'string' is not assignable to type 'Option'.
-    467 |                           options={count}
-    468 |                           name="roomNo"
-  > 469 |                           value={formValues.roomNo}
-        |                           ^^^^^
-    470 |                           onChange={handleInputChange}
-    471 |                         />
-    472 |                       </div>
-ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:470:27
-TS2322: Type '(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void' is not assignable to type '(option: Option | null) => void'.
-    468 |                           name="roomNo"
-    469 |                           value={formValues.roomNo}
-  > 470 |                           onChange={handleInputChange}
-        |                           ^^^^^^^^
-    471 |                         />
-    472 |                       </div>
-    473 |                     </div>
-ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:481:27
-TS2322: Type 'string' is not assignable to type 'Option'.
-    479 |                           options={maxMark}
-    480 |                           name="maxMarks"
-  > 481 |                           value={formValues.maxMarks}
-        |                           ^^^^^
-    482 |                           onChange={handleInputChange}
-    483 |                         />
-    484 |                       </div>
-ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:482:27
-TS2322: Type '(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void' is not assignable to type '(option: Option | null) => void'.
-    480 |                           name="maxMarks"
-    481 |                           value={formValues.maxMarks}
-  > 482 |                           onChange={handleInputChange}
-        |                           ^^^^^^^^
-    483 |                         />
-    484 |                       </div>
-    485 |                     </div>
-ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:494:29
-TS2322: Type 'string' is not assignable to type 'Option'.
-    492 |                             options={minMark}
-    493 |                             name="minMarks"
-  > 494 |                             value={formValues.minMarks}
-        |                             ^^^^^
-    495 |                             onChange={handleInputChange}
-    496 |                           />
-    497 |                         </div>
-ERROR in src/feature-module/academic/examinations/exam-schedule/index.tsx:495:29
-TS2322: Type '(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void' is not assignable to type '(option: Option | null) => void'.
-    493 |                             name="minMarks"
-    494 |                             value={formValues.minMarks}
-  > 495 |                             onChange={handleInputChange}
-        |                             ^^^^^^^^
-    496 |                           />
-    497 |                         </div>
-    498 |                       </div>
+import React, { useRef, useState } from "react";
+// Other imports...
+
+interface Option {
+  value: string;
+  label: string;
+}
+
+interface Exam1 {
+  subject: Option | null;
+  examDate: Option | null;
+  startTime: Option | null;
+  endTime: Option | null;
+  duration: Option | null;
+  roomNo: Option | null;
+  maxMarks: Option | null;
+  minMarks: Option | null;
+  key: number;
+}
+
+const ExamSchedule = () => {
+  // Other states...
+  const [formValues, setFormValues] = useState<Exam1>({
+    subject: null,
+    examDate: null,
+    startTime: null,
+    endTime: null,
+    duration: null,
+    roomNo: null,
+    maxMarks: null,
+    minMarks: null,
+    key: data.length,
+  });
+
+  const handleInputChange = (name: keyof Exam1, value: Option | null) => {
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setData([...data, { ...formValues, key: data.length }]);
+    // Reset form values after adding
+    setFormValues({
+      subject: null,
+      examDate: null,
+      startTime: null,
+      endTime: null,
+      duration: null,
+      roomNo: null,
+      maxMarks: null,
+      minMarks: null,
+      key: data.length,
+    });
+  };
+
+  // In the render part of the component:
+  <CommonSelect
+    className="select"
+    options={classSection}
+    name="section"
+    value={formValues.section}
+    onChange={(selectedOption) => handleInputChange("section", selectedOption)}
+  />
+  // Repeat for other selects...
+};
