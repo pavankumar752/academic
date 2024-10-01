@@ -1,50 +1,58 @@
-import React, { useEffect, useState } from "react";
-import Select from "react-select";
-
-export type Option = {
-  value: string;
-  label: string;
-};
-
-export interface SelectProps {
-  options: Option[];
-  defaultValue?: Option;
-  className?: string;
-  styles?: any;
-  onChange?: (option: Option | null) => void;
-}
-
-const CommonSelect: React.FC<SelectProps> = ({
-  options,
-  defaultValue,
-  className,
-  styles,
-  onChange,
-}) => {
-  const [selectedOption, setSelectedOption] = useState<Option | null>(defaultValue || null);
-
-  const handleChange = (option: Option | null) => {
-    setSelectedOption(option);
-    if (onChange) {
-      onChange(option); // Call the onChange prop
-    }
-  };
-
-  useEffect(() => {
-    setSelectedOption(defaultValue || null);
-  }, [defaultValue]);
-
-  return (
-    <Select
-      classNamePrefix="react-select"
-      className={className}
-      styles={styles}
-      options={options}
-      value={selectedOption}
-      onChange={handleChange}
-      placeholder="Select"
-    />
-  );
-};
-
-export default CommonSelect;
+Compiled with problems:
+×
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:104:16
+TS7006: Parameter '_' implicitly has an 'any' type.
+    102 |       title: "ID",
+    103 |       dataIndex: "id",
+  > 104 |       render: (_, record) => (
+        |                ^
+    105 |         <Link to="#" className="link-primary">{record.id}</Link>
+    106 |       ),
+    107 |     },
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:104:19
+TS7006: Parameter 'record' implicitly has an 'any' type.
+    102 |       title: "ID",
+    103 |       dataIndex: "id",
+  > 104 |       render: (_, record) => (
+        |                   ^^^^^^
+    105 |         <Link to="#" className="link-primary">{record.id}</Link>
+    106 |       ),
+    107 |     },
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:127:16
+TS7006: Parameter '_' implicitly has an 'any' type.
+    125 |       title: "Action",
+    126 |       dataIndex: "action",
+  > 127 |       render: (_, record) => (
+        |                ^
+    128 |         <div>
+    129 |           <Link to="#" onClick={() => handleOpenEditModal(record)} data-bs-toggle="modal" data-bs-target="#edit_exam">Edit</Link>
+    130 |           <Link to="#" onClick={() => setExamToDelete(record.id)} data-bs-toggle="modal" data-bs-target="#delete-modal">Delete</Link>
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:127:19
+TS7006: Parameter 'record' implicitly has an 'any' type.
+    125 |       title: "Action",
+    126 |       dataIndex: "action",
+  > 127 |       render: (_, record) => (
+        |                   ^^^^^^
+    128 |         <div>
+    129 |           <Link to="#" onClick={() => handleOpenEditModal(record)} data-bs-toggle="modal" data-bs-target="#edit_exam">Edit</Link>
+    130 |           <Link to="#" onClick={() => setExamToDelete(record.id)} data-bs-toggle="modal" data-bs-target="#delete-modal">Delete</Link>
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:335:76
+TS2322: Type '{ className: string; options: { value: string; label: string; }[]; value: string; onChange: (option: Option | null) => void; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
+  Property 'value' does not exist on type 'IntrinsicAttributes & SelectProps'.
+    333 |                     <div className="mb-3">
+    334 |                       <label className="form-label">Start Time</label>
+  > 335 |                       <CommonSelect className="select" options={startTime} value={newExam.startTime} onChange={(option) => setNewExam({ ...newExam, startTime: option ? option.value : "" })} />
+        |                                                                            ^^^^^
+    336 |                     </div>
+    337 |                     <div className="mb-0">
+    338 |                       <label className="form-label">End Time</label>
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:339:79
+TS2322: Type '{ className: string; options: { value: string; label: string; }[]; value: string; onChange: (option: Option | null) => void; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
+  Property 'value' does not exist on type 'IntrinsicAttributes & SelectProps'.
+    337 |                     <div className="mb-0">
+    338 |                       <label className="form-label">End Time</label>
+  > 339 |                       <CommonSelect className="select" options={startTimeOne} value={newExam.endTime} onChange={(option) => setNewExam({ ...newExam, endTime: option ? option.value : "" })} />
+        |                                                                               ^^^^^
+    340 |                     </div>
+    341 |                   </div>
+    342 |                 </div>
