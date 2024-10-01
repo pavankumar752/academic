@@ -1,11 +1,37 @@
-Compiled with problems:
-×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:146:34
-TS2552: Cannot find name 'handleEditExamChange'. Did you mean 'handleEndTimeChange'?
-    144 |                   data-bs-toggle="modal"
-    145 |                   data-bs-target="#edit_exam"
-  > 146 |                   onClick={() => handleEditExamChange(record)}
-        |                                  ^^^^^^^^^^^^^^^^^^^^
-    147 |                 >
-    148 |                   <i className="ti ti-edit-circle me-2" />
-    149 |                   Edit
+{
+  title: "Action",
+  dataIndex: "action",
+  render: (_, record) => (
+    <div className="d-flex align-items-center">
+      <div className="dropdown">
+        <Link
+          to="#"
+          className="btn btn-white btn-icon btn-sm"
+          data-bs-toggle="dropdown"
+        >
+          <i className="ti ti-dots-vertical fs-14" />
+        </Link>
+        <ul className="dropdown-menu dropdown-menu-right">
+          <li>
+            <Link
+              className="dropdown-item"
+              to="#"
+              onClick={() => openEditModal(record)} // Corrected this line
+              data-bs-toggle="modal"
+              data-bs-target="#edit_exam"
+            >
+              <i className="ti ti-edit-circle me-2" />
+              Edit
+            </Link>
+          </li>
+          <li>
+            <Link className="dropdown-item" to="#">
+              <i className="ti ti-trash-x me-2" />
+              Delete
+            </Link>
+          </li>
+        </ul>
+      </div>
+    </div>
+  ),
+},
