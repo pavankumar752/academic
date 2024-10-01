@@ -12,6 +12,7 @@ export interface SelectProps {
   className?: string;
   styles?: any; 
   onChange?: (option: Option | null) => void; // Ensure this matches
+  placeholder?: string; // Add placeholder prop
 }
 
 const CommonSelect: React.FC<SelectProps> = ({
@@ -20,6 +21,7 @@ const CommonSelect: React.FC<SelectProps> = ({
   className,
   styles,
   onChange,
+  placeholder = "Select", // Default placeholder
 }) => {
   const [selectedOption, setSelectedOption] = useState<Option | null>(defaultValue || null);
 
@@ -42,7 +44,7 @@ const CommonSelect: React.FC<SelectProps> = ({
       options={options}
       value={selectedOption}
       onChange={handleChange}
-      placeholder="Select"
+      placeholder={placeholder} // Use the placeholder prop
     />
   );
 };
