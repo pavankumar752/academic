@@ -1,3 +1,16 @@
+<>
+<div className="mb-2">
+                <Link
+                  to="#"
+                  className="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#add_exam_schedule"
+                >
+                  <i className="ti ti-square-rounded-plus-filled me-2" />
+                  Add Exam Schedule
+                </Link>
+              </div>
+</>
 <div className="modal fade" id="add_exam_schedule">
           <div className="modal-dialog modal-dialog-centered  modal-xl">
             <div className="modal-content">
