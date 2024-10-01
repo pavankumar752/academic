@@ -138,3 +138,7 @@ const ExamSchedule = () => {
   const removeContent = (index:any) => {
     setNewContents(newContents.filter((_, i) => i !== index));
   };
+
+
+
+Create a emptylist and take the data from the list not from the inbuilt data and use local storage to store.
