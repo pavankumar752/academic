@@ -1,7 +1,6 @@
-import React, { useRef,useState,useEffect  } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Table from "../../../../core/common/dataTable/index";
-//import { exam } from "../../../../core/data/json/exam";
 import {
   examOne,
   examtwo,
@@ -9,11 +8,12 @@ import {
   startTimeOne,
 } from "../../../../core/common/selectoption/selectoption";
 import PredefinedDateRanges from "../../../../core/common/datePicker";
-import CommonSelect,{ Option }  from "../../../../core/common/commonSelect";
+import CommonSelect, { Option } from "../../../../core/common/commonSelect";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
 import { all_routes } from "../../../router/all_routes";
 import TooltipOption from "../../../../core/common/tooltipOption";
+
 interface Exam1 {
   id: string;
   key: number;
@@ -28,139 +28,106 @@ const Exam = () => {
   const [data, setData] = useState<Exam1[]>([
     { id: "1", key: 1, examName: "Sample Exam", examDate: "01-01-2024", startTime: "10:00 AM", endTime: "12:00 PM" },
   ]);
+
   useEffect(() => {
     const storedExams = localStorage.getItem('exams');
-    
     if (storedExams) {
       setData(JSON.parse(storedExams));
     }
   }, []);
+
   const [newExam, setNewExam] = useState({
     examName: "",
     examDate: dayjs().format("DD-MM-YYYY"),
     startTime: "",
     endTime: "",
   });
+
+  const [editingExam, setEditingExam] = useState<Exam1 | null>(null);
+  const [examToDelete, setExamToDelete] = useState<string | null>(null);
   const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
-
-  const today = new Date();
-  const formattedDate = `${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}-${today.getFullYear()}`;
-  const defaultValue = dayjs(formattedDate);
-
-  // Handle dropdown menu close
-  const handleApplyClick = () => {
-    if (dropdownMenuRef.current) {
-      dropdownMenuRef.current.classList.remove("show");
-    }
-  };
-
-  // Get container for modal date picker
-  const getModalContainer = () => document.getElementById("modal-datepicker") || document.body;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setNewExam({ ...newExam, [name]: value });
   };
 
-  // Handle form submission for adding new exam
   const handleAddExam = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const examWithId: Exam1 = {
       id: String(data.length + 1),
       key: data.length + 1,
-        ...newExam,
-        
+      ...newExam,
     };
     const updatedData = [...data, examWithId];
-    console.log("Updated Data:", updatedData); // Debug log
     setData(updatedData);
     localStorage.setItem('exams', JSON.stringify(updatedData));
     setNewExam({ examName: "", examDate: dayjs().format("DD-MM-YYYY"), startTime: "", endTime: "" });
-};
-
-  const handleStartTimeChange = (option: Option | null) => {
-    setNewExam({ ...newExam, startTime: option ? option.value : "" });
   };
 
-  const handleEndTimeChange = (option: Option | null) => {
-    setNewExam({ ...newExam, endTime: option ? option.value : "" });
+  const handleEditExam = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (editingExam) {
+      const updatedData = data.map(exam =>
+        exam.id === editingExam.id ? { ...editingExam, ...newExam } : exam
+      );
+      setData(updatedData);
+      localStorage.setItem('exams', JSON.stringify(updatedData));
+      setEditingExam(null);
+      setNewExam({ examName: "", examDate: dayjs().format("DD-MM-YYYY"), startTime: "", endTime: "" });
+    }
   };
-  
 
-  // Define table columns
+  const handleOpenEditModal = (exam: Exam1) => {
+    setEditingExam(exam);
+    setNewExam({
+      examName: exam.examName,
+      examDate: exam.examDate,
+      startTime: exam.startTime,
+      endTime: exam.endTime,
+    });
+  };
+
+  const handleDeleteExam = () => {
+    if (examToDelete) {
+      const updatedData = data.filter(exam => exam.id !== examToDelete);
+      setData(updatedData);
+      localStorage.setItem('exams', JSON.stringify(updatedData));
+      setExamToDelete(null);
+    }
+  };
+
   const columns = [
     {
       title: "ID",
       dataIndex: "id",
-      render: (_: any, record: { id: string }) => (
-        <Link to="#" className="link-primary">
-          {record.id}
-        </Link>
+      render: (_, record) => (
+        <Link to="#" className="link-primary">{record.id}</Link>
       ),
-      sorter: (a: { id: string }, b: { id: string }) => a.id.length - b.id.length,
     },
     {
       title: "Exam Name",
       dataIndex: "examName",
-      sorter: (a: { examName: string }, b: { examName: string }) =>
-        a.examName.length - b.examName.length,
     },
     {
       title: "Exam Date",
       dataIndex: "examDate",
-      sorter: (a: { examDate: string }, b: { examDate: string }) =>
-        a.examDate.length - b.examDate.length,
     },
     {
       title: "Start Time",
       dataIndex: "startTime",
-      sorter: (a: { startTime: string }, b: { startTime: string }) =>
-        a.startTime.length - b.startTime.length,
     },
     {
       title: "End Time",
       dataIndex: "endTime",
-      sorter: (a: { endTime: string }, b: { endTime: string }) =>
-        a.endTime.length - b.endTime.length,
     },
     {
       title: "Action",
       dataIndex: "action",
-      render: () => (
-        <div className="d-flex align-items-center">
-          <div className="dropdown">
-            <Link
-              to="#"
-              className="btn btn-white btn-icon btn-sm d-flex align-items-center justify-content-center rounded-circle p-0"
-              data-bs-toggle="dropdown"
-            >
-              <i className="ti ti-dots-vertical fs-14" />
-            </Link>
-            <ul className="dropdown-menu dropdown-menu-right p-3">
-              <li>
-                <Link
-                  className="dropdown-item rounded-1"
-                  to="#"
-                  data-bs-toggle="modal"
-                  data-bs-target="#edit_exam"
-                >
-                  <i className="ti ti-edit-circle me-2" />
-                  Edit
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="dropdown-item rounded-1"
-                  to="#"
-                  data-bs-toggle="modal"
-                  data-bs-target="#delete-modal"
-                >
-                  <i className="ti ti-trash-x me-2" />
-                  Delete
-                </Link>
-              </li>
-            </ul>
-          </div>
+      render: (_, record) => (
+        <div>
+          <Link to="#" onClick={() => handleOpenEditModal(record)} data-bs-toggle="modal" data-bs-target="#edit_exam">Edit</Link>
+          <Link to="#" onClick={() => setExamToDelete(record.id)} data-bs-toggle="modal" data-bs-target="#delete-modal">Delete</Link>
         </div>
       ),
     },
@@ -242,16 +209,8 @@ const Exam = () => {
                         </div>
                       </div>
                       <div className="p-3 d-flex align-items-center justify-content-end">
-                        <Link to="#" className="btn btn-light me-3">
-                          Reset
-                        </Link>
-                        <Link
-                          to="#"
-                          className="btn btn-primary"
-                          onClick={handleApplyClick}
-                        >
-                          Apply
-                        </Link>
+                        <Link to="#" className="btn btn-light me-3">Reset</Link>
+                        <Link to="#" className="btn btn-primary" onClick={() => { /* apply filter logic */ }}>Apply</Link>
                       </div>
                     </form>
                   </div>
@@ -267,24 +226,16 @@ const Exam = () => {
                   </Link>
                   <ul className="dropdown-menu p-3">
                     <li>
-                      <Link to="#" className="dropdown-item rounded-1 active">
-                        Ascending
-                      </Link>
+                      <Link to="#" className="dropdown-item rounded-1 active">Ascending</Link>
                     </li>
                     <li>
-                      <Link to="#" className="dropdown-item rounded-1">
-                        Descending
-                      </Link>
+                      <Link to="#" className="dropdown-item rounded-1">Descending</Link>
                     </li>
                     <li>
-                      <Link to="#" className="dropdown-item rounded-1">
-                        Recently Viewed
-                      </Link>
+                      <Link to="#" className="dropdown-item rounded-1">Recently Viewed</Link>
                     </li>
                     <li>
-                      <Link to="#" className="dropdown-item rounded-1">
-                        Recently Added
-                      </Link>
+                      <Link to="#" className="dropdown-item rounded-1">Recently Added</Link>
                     </li>
                   </ul>
                 </div>
@@ -303,12 +254,7 @@ const Exam = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title">Add Exam</h4>
-              <button
-                type="button"
-                className="btn-close custom-btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              >
+              <button type="button" className="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
                 <i className="ti ti-x" />
               </button>
             </div>
@@ -318,14 +264,7 @@ const Exam = () => {
                   <div className="col-md-12">
                     <div className="mb-3">
                       <label className="form-label">Exam Name</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="examName"
-                        value={newExam.examName}
-                        onChange={handleInputChange}
-                        required
-                      />
+                      <input type="text" className="form-control" name="examName" value={newExam.examName} onChange={handleInputChange} required />
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Exam Date</label>
@@ -333,31 +272,20 @@ const Exam = () => {
                         <DatePicker
                           className="form-control datetimepicker"
                           format={"DD-MM-YYYY"}
-                          getPopupContainer={getModalContainer}
-                          defaultValue={dayjs(newExam.examDate, "DD-MM-YYYY")}
-                          placeholder="16 May 2024"
+                          getPopupContainer={() => document.body}
+                          value={dayjs(newExam.examDate, "DD-MM-YYYY")}
                           onChange={(date) => setNewExam({ ...newExam, examDate: dayjs(date).format("DD-MM-YYYY") })}
                         />
-                        <span className="cal-icon">
-                          <i className="ti ti-calendar" />
-                        </span>
+                        <span className="cal-icon"><i className="ti ti-calendar" /></span>
                       </div>
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Start Time</label>
-                      <CommonSelect
-                        className="select"
-                        options={startTime}
-                        onChange={handleStartTimeChange}
-                      />
+                      <CommonSelect className="select" options={startTime} onChange={(option) => setNewExam({ ...newExam, startTime: option ? option.value : "" })} />
                     </div>
                     <div className="mb-0">
                       <label className="form-label">End Time</label>
-                      <CommonSelect
-                        className="select"
-                        options={startTimeOne}
-                        onChange={handleEndTimeChange}
-                      />
+                      <CommonSelect className="select" options={startTimeOne} onChange={(option) => setNewExam({ ...newExam, endTime: option ? option.value : "" })} />
                     </div>
                   </div>
                 </div>
@@ -377,22 +305,17 @@ const Exam = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title">Edit Exam</h4>
-              <button
-                type="button"
-                className="btn-close custom-btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              >
+              <button type="button" className="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
                 <i className="ti ti-x" />
               </button>
             </div>
-            <form>
+            <form onSubmit={handleEditExam}>
               <div className="modal-body">
                 <div className="row">
                   <div className="col-md-12">
                     <div className="mb-3">
                       <label className="form-label">Exam Name</label>
-                      <input type="text" className="form-control" />
+                      <input type="text" className="form-control" name="examName" value={newExam.examName} onChange={handleInputChange} required />
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Exam Date</label>
@@ -400,33 +323,27 @@ const Exam = () => {
                         <DatePicker
                           className="form-control datetimepicker"
                           format={"DD-MM-YYYY"}
-                          getPopupContainer={getModalContainer}
-                          defaultValue={defaultValue}
-                          placeholder="16 May 2024"
+                          getPopupContainer={() => document.body}
+                          value={dayjs(newExam.examDate, "DD-MM-YYYY")}
+                          onChange={(date) => setNewExam({ ...newExam, examDate: dayjs(date).format("DD-MM-YYYY") })}
                         />
-                        <span className="cal-icon">
-                          <i className="ti ti-calendar" />
-                        </span>
+                        <span className="cal-icon"><i className="ti ti-calendar" /></span>
                       </div>
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Start Time</label>
-                      <CommonSelect className="select" options={startTime} />
+                      <CommonSelect className="select" options={startTime} value={newExam.startTime} onChange={(option) => setNewExam({ ...newExam, startTime: option ? option.value : "" })} />
                     </div>
                     <div className="mb-0">
                       <label className="form-label">End Time</label>
-                      <CommonSelect className="select" options={startTimeOne} />
+                      <CommonSelect className="select" options={startTimeOne} value={newExam.endTime} onChange={(option) => setNewExam({ ...newExam, endTime: option ? option.value : "" })} />
                     </div>
                   </div>
                 </div>
               </div>
               <div className="modal-footer">
-                <Link to="#" className="btn btn-light me-2" data-bs-dismiss="modal">
-                  Cancel
-                </Link>
-                <Link className="btn btn-primary" to="#" data-bs-dismiss="modal">
-                  Edit Exam
-                </Link>
+                <Link to="#" className="btn btn-light me-2" data-bs-dismiss="modal">Cancel</Link>
+                <button type="submit" className="btn btn-primary">Save Changes</button>
               </div>
             </form>
           </div>
@@ -441,12 +358,8 @@ const Exam = () => {
               <i className="ti ti-trash-x fs-50 my-3 text-danger" />
               <h4>Are you sure you want to delete this exam?</h4>
               <div className="d-flex justify-content-center">
-                <Link className="btn btn-light me-3" to="#" data-bs-dismiss="modal">
-                  Cancel
-                </Link>
-                <Link className="btn btn-primary" to="#" data-bs-dismiss="modal">
-                  Delete
-                </Link>
+                <Link className="btn btn-light me-3" to="#" data-bs-dismiss="modal">Cancel</Link>
+                <Link className="btn btn-primary" to="#" onClick={handleDeleteExam} data-bs-dismiss="modal">Delete</Link>
               </div>
             </div>
           </div>
