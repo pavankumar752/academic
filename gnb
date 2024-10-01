@@ -16,7 +16,9 @@ interface Exam1 {
   roomNo: Option | null;
   maxMarks: Option | null;
   minMarks: Option | null;
-  class: Option | null; // Ensure this is defined
+  class: Option | null;
+  section: Option | null;
+  examName: Option | null;
   key: number;
 }
 
@@ -31,6 +33,8 @@ const ExamSchedule: React.FC = () => {
     maxMarks: null,
     minMarks: null,
     class: null,
+    section: null,
+    examName: null,
     key: 0,
   });
 
@@ -47,6 +51,21 @@ const ExamSchedule: React.FC = () => {
     { label: "Class B", value: "classB" },
   ];
 
+  const examNames: Option[] = [
+    { label: "Midterm", value: "midterm" },
+    { label: "Final", value: "final" },
+  ];
+
+  const subjects: Option[] = [
+    { label: "Math", value: "math" },
+    { label: "Science", value: "science" },
+  ];
+
+  const roomNumbers: Option[] = [
+    { label: "Room 101", value: "room101" },
+    { label: "Room 102", value: "room102" },
+  ];
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     // Handle form submission
@@ -57,42 +76,194 @@ const ExamSchedule: React.FC = () => {
     <div>
       <h1>Exam Schedule</h1>
       <form onSubmit={handleSubmit}>
-        {/* Example Select for Subject */}
-        <select
-          className="form-control"
-          name="subject"
-          value={formValues.subject ? formValues.subject.value : ""}
-          onChange={(e) => {
-            const selectedOption = classSection.find(option => option.value === e.target.value) || null;
-            handleInputChange("subject", selectedOption);
-          }}
-        >
-          <option value="">Select Subject</option>
-          {classSection.map(option => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+        {/* Subject Select */}
+        <div>
+          <label>Subject</label>
+          <select
+            className="form-control"
+            name="subject"
+            value={formValues.subject ? formValues.subject.value : ""}
+            onChange={(e) => {
+              const selectedOption = subjects.find(option => option.value === e.target.value) || null;
+              handleInputChange("subject", selectedOption);
+            }}
+          >
+            <option value="">Select Subject</option>
+            {subjects.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
 
-        {/* Add similar select components for other fields */}
-        {/* Example for class */}
-        <select
-          className="form-control"
-          name="class"
-          value={formValues.class ? formValues.class.value : ""}
-          onChange={(e) => {
-            const selectedOption = classSection.find(option => option.value === e.target.value) || null;
-            handleInputChange("class", selectedOption);
-          }}
-        >
-          <option value="">Select Class</option>
-          {classSection.map(option => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+        {/* Class Select */}
+        <div>
+          <label>Class</label>
+          <select
+            className="form-control"
+            name="class"
+            value={formValues.class ? formValues.class.value : ""}
+            onChange={(e) => {
+              const selectedOption = classSection.find(option => option.value === e.target.value) || null;
+              handleInputChange("class", selectedOption);
+            }}
+          >
+            <option value="">Select Class</option>
+            {classSection.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Section Select */}
+        <div>
+          <label>Section</label>
+          <select
+            className="form-control"
+            name="section"
+            value={formValues.section ? formValues.section.value : ""}
+            onChange={(e) => {
+              const selectedOption = classSection.find(option => option.value === e.target.value) || null;
+              handleInputChange("section", selectedOption);
+            }}
+          >
+            <option value="">Select Section</option>
+            {classSection.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Exam Name Select */}
+        <div>
+          <label>Exam Name</label>
+          <select
+            className="form-control"
+            name="examName"
+            value={formValues.examName ? formValues.examName.value : ""}
+            onChange={(e) => {
+              const selectedOption = examNames.find(option => option.value === e.target.value) || null;
+              handleInputChange("examName", selectedOption);
+            }}
+          >
+            <option value="">Select Exam Name</option>
+            {examNames.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Exam Date Select */}
+        <div>
+          <label>Exam Date</label>
+          <input
+            type="date"
+            className="form-control"
+            name="examDate"
+            value={formValues.examDate ? formValues.examDate.value : ""}
+            onChange={(e) => {
+              handleInputChange("examDate", { label: e.target.value, value: e.target.value });
+            }}
+          />
+        </div>
+
+        {/* Start Time Select */}
+        <div>
+          <label>Start Time</label>
+          <input
+            type="time"
+            className="form-control"
+            name="startTime"
+            value={formValues.startTime ? formValues.startTime.value : ""}
+            onChange={(e) => {
+              handleInputChange("startTime", { label: e.target.value, value: e.target.value });
+            }}
+          />
+        </div>
+
+        {/* End Time Select */}
+        <div>
+          <label>End Time</label>
+          <input
+            type="time"
+            className="form-control"
+            name="endTime"
+            value={formValues.endTime ? formValues.endTime.value : ""}
+            onChange={(e) => {
+              handleInputChange("endTime", { label: e.target.value, value: e.target.value });
+            }}
+          />
+        </div>
+
+        {/* Duration Select */}
+        <div>
+          <label>Duration (in minutes)</label>
+          <input
+            type="number"
+            className="form-control"
+            name="duration"
+            value={formValues.duration ? formValues.duration.value : ""}
+            onChange={(e) => {
+              handleInputChange("duration", { label: e.target.value, value: e.target.value });
+            }}
+          />
+        </div>
+
+        {/* Room Number Select */}
+        <div>
+          <label>Room No</label>
+          <select
+            className="form-control"
+            name="roomNo"
+            value={formValues.roomNo ? formValues.roomNo.value : ""}
+            onChange={(e) => {
+              const selectedOption = roomNumbers.find(option => option.value === e.target.value) || null;
+              handleInputChange("roomNo", selectedOption);
+            }}
+          >
+            <option value="">Select Room No</option>
+            {roomNumbers.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Max Marks Select */}
+        <div>
+          <label>Max Marks</label>
+          <input
+            type="number"
+            className="form-control"
+            name="maxMarks"
+            value={formValues.maxMarks ? formValues.maxMarks.value : ""}
+            onChange={(e) => {
+              handleInputChange("maxMarks", { label: e.target.value, value: e.target.value });
+            }}
+          />
+        </div>
+
+        {/* Min Marks Select */}
+        <div>
+          <label>Min Marks</label>
+          <input
+            type="number"
+            className="form-control"
+            name="minMarks"
+            value={formValues.minMarks ? formValues.minMarks.value : ""}
+            onChange={(e) => {
+              handleInputChange("minMarks", { label: e.target.value, value: e.target.value });
+            }}
+          />
+        </div>
 
         <button type="submit">Submit</button>
       </form>
