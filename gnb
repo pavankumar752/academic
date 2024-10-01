@@ -1,50 +1,42 @@
-import React, { useEffect, useState } from "react";
-import Select from "react-select";
-
-export type Option = {
-  value: string;
-  label: string;
-};
-
-export interface SelectProps {
-  options: Option[];
-  defaultValue?: Option;
-  className?: string;
-  styles?: any; 
-  onChange?: (option: Option | null) => void;
-}
-
-const CommonSelect: React.FC<SelectProps> = ({
-  options,
-  defaultValue,
-  className,
-  styles,
-  onChange,
-}) => {
-  const [selectedOption, setSelectedOption] = useState<Option | null>(defaultValue || null);
-
-  const handleChange = (option: Option | null) => {
-    setSelectedOption(option);
-    if (onChange) {
-      onChange(option);
-    }
-  };
-
-  useEffect(() => {
-    setSelectedOption(defaultValue || null);
-  }, [defaultValue]);
-
-  return (
-    <Select
-      classNamePrefix="react-select"
-      className={className}
-      styles={styles}
-      options={options}
-      value={selectedOption}
-      onChange={handleChange}
-      placeholder="Select"
-    />
-  );
-};
-
-export default CommonSelect;
+Compiled with problems:
+×
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:165:100
+TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+    163 |                 <div className="mb-3">
+    164 |                   <label className="form-label">Start Time</label>
+  > 165 |                   <CommonSelect options={startTime} onChange={(option) => setNewExam({ ...newExam, startTime: option?.value })} />
+        |                                                                                                    ^^^^^^^^^
+    166 |                 </div>
+    167 |                 <div className="mb-3">
+    168 |                   <label className="form-label">End Time</label>
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:169:103
+TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+    167 |                 <div className="mb-3">
+    168 |                   <label className="form-label">End Time</label>
+  > 169 |                   <CommonSelect options={startTimeOne} onChange={(option) => setNewExam({ ...newExam, endTime: option?.value })} />
+        |                                                                                                       ^^^^^^^
+    170 |                 </div>
+    171 |               </div>
+    172 |               <div className="modal-footer">
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:201:100
+TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+    199 |                 <div className="mb-3">
+    200 |                   <label className="form-label">Start Time</label>
+  > 201 |                   <CommonSelect options={startTime} onChange={(option) => setNewExam({ ...newExam, startTime: option?.value })} />
+        |                                                                                                    ^^^^^^^^^
+    202 |                 </div>
+    203 |                 <div className="mb-3">
+    204 |                   <label className="form-label">End Time</label>
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:205:103
+TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+    203 |                 <div className="mb-3">
+    204 |                   <label className="form-label">End Time</label>
+  > 205 |                   <CommonSelect options={startTimeOne} onChange={(option) => setNewExam({ ...newExam, endTime: option?.value })} />
+        |                                                                                                       ^^^^^^^
+    206 |                 </div>
+    207 |               </div>
+    208 |               <div className="modal-footer">
