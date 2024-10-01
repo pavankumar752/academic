@@ -1,60 +1,108 @@
-<div className="modal fade" id="edit_exam">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title">Edit Exam</h4>
-              <button
-                type="button"
-                className="btn-close custom-btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              >
-                <i className="ti ti-x" />
-              </button>
-            </div>
-            <form>
-              <div className="modal-body">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="mb-3">
-                      <label className="form-label">Exam Name</label>
-                      <input type="text" className="form-control" />
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import DatePicker from 'react-datepicker'; // Ensure you have react-datepicker installed
+import CommonSelect from './CommonSelect'; // Adjust the import according to your file structure
+import 'react-datepicker/dist/react-datepicker.css'; // Import DatePicker styles
+
+const EditExamModal = ({ defaultValues, startTime, startTimeOne, getModalContainer }) => {
+  const [examName, setExamName] = useState(defaultValues.examName || '');
+  const [examDate, setExamDate] = useState(defaultValues.examDate || null);
+  const [startTimeSelected, setStartTimeSelected] = useState(defaultValues.startTime || '');
+  const [endTimeSelected, setEndTimeSelected] = useState(defaultValues.endTime || '');
+
+  const handleEditExam = (e) => {
+    e.preventDefault();
+    const updatedExamDetails = {
+      examName,
+      examDate,
+      startTime: startTimeSelected,
+      endTime: endTimeSelected,
+    };
+
+    // Implement logic to update exam details here
+    console.log('Updated Exam Details:', updatedExamDetails);
+
+    // Optionally close the modal or trigger other actions here
+  };
+
+  return (
+    <div className="modal fade" id="edit_exam">
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h4 className="modal-title">Edit Exam</h4>
+            <button
+              type="button"
+              className="btn-close custom-btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            >
+              <i className="ti ti-x" />
+            </button>
+          </div>
+          <form onSubmit={handleEditExam}>
+            <div className="modal-body">
+              <div className="row">
+                <div className="col-md-12">
+                  <div className="mb-3">
+                    <label className="form-label">Exam Name</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={examName} 
+                      onChange={(e) => setExamName(e.target.value)} 
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Exam Date</label>
+                    <div className="date-pic">
+                      <DatePicker
+                        className="form-control datetimepicker"
+                        selected={examDate}
+                        onChange={(date) => setExamDate(date)}
+                        dateFormat="dd-MM-yyyy"
+                        placeholderText="16 May 2024"
+                        getPopupContainer={getModalContainer}
+                      />
+                      <span className="cal-icon">
+                        <i className="ti ti-calendar" />
+                      </span>
                     </div>
-                    <div className="mb-3">
-                      <label className="form-label">Exam Date</label>
-                      <div className="date-pic">
-                        <DatePicker
-                          className="form-control datetimepicker"
-                          format={"DD-MM-YYYY"}
-                          getPopupContainer={getModalContainer}
-                          defaultValue={defaultValue}
-                          placeholder="16 May 2024"
-                        />
-                        <span className="cal-icon">
-                          <i className="ti ti-calendar" />
-                        </span>
-                      </div>
-                    </div>
-                    <div className="mb-3">
-                      <label className="form-label">Start Time</label>
-                      <CommonSelect className="select" options={startTime} />
-                    </div>
-                    <div className="mb-0">
-                      <label className="form-label">End Time</label>
-                      <CommonSelect className="select" options={startTimeOne} />
-                    </div>
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Start Time</label>
+                    <CommonSelect 
+                      className="select" 
+                      options={startTime} 
+                      value={startTimeSelected}
+                      onChange={(value) => setStartTimeSelected(value)} 
+                    />
+                  </div>
+                  <div className="mb-0">
+                    <label className="form-label">End Time</label>
+                    <CommonSelect 
+                      className="select" 
+                      options={startTimeOne} 
+                      value={endTimeSelected}
+                      onChange={(value) => setEndTimeSelected(value)} 
+                    />
                   </div>
                 </div>
               </div>
-              <div className="modal-footer">
-                <Link to="#" className="btn btn-light me-2" data-bs-dismiss="modal">
-                  Cancel
-                </Link>
-                <Link className="btn btn-primary" to="#" data-bs-dismiss="modal">
-                  Edit Exam
-                </Link>
-              </div>
-            </form>
-          </div>
+            </div>
+            <div className="modal-footer">
+              <Link to="#" className="btn btn-light me-2" data-bs-dismiss="modal">
+                Cancel
+              </Link>
+              <button type="submit" className="btn btn-primary">
+                Edit Exam
+              </button>
+            </div>
+          </form>
         </div>
       </div>
+    </div>
+  );
+};
+
+export default EditExamModal;
