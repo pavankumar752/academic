@@ -10,8 +10,8 @@ export interface SelectProps {
   options: Option[];
   defaultValue?: Option;
   className?: string;
-  styles?: any; 
-  onChange?: (option: Option | null) => void; // Ensure this matches
+  styles?: any;
+  onChange?: (option: Option | null) => void;
 }
 
 const CommonSelect: React.FC<SelectProps> = ({
