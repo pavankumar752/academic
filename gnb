@@ -1,3 +1,166 @@
+import React, { useRef, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import Table from "../../../../core/common/dataTable/index";
+import { examOne, examtwo, startTime, startTimeOne } from "../../../../core/common/selectoption/selectoption";
+import PredefinedDateRanges from "../../../../core/common/datePicker";
+import CommonSelect, { Option } from "../../../../core/common/commonSelect";
+import { DatePicker } from "antd";
+import dayjs from "dayjs";
+import { all_routes } from "../../../router/all_routes";
+import TooltipOption from "../../../../core/common/tooltipOption";
+
+interface Exam1 {
+  id: string;
+  key: number;
+  examName: string;
+  examDate: string;
+  startTime: string;
+  endTime: string;
+}
+
+const Exam = () => {
+  const routes = all_routes;
+  const [data, setData] = useState<Exam1[]>([
+    { id: "1", key: 1, examName: "Sample Exam", examDate: "01-01-2024", startTime: "10:00 AM", endTime: "12:00 PM" },
+  ]);
+  
+  useEffect(() => {
+    const storedExams = localStorage.getItem('exams');
+    
+    if (storedExams) {
+      setData(JSON.parse(storedExams));
+    }
+  }, []);
+
+  const [newExam, setNewExam] = useState({
+    examName: "",
+    examDate: dayjs().format("DD-MM-YYYY"),
+    startTime: "",
+    endTime: "",
+  });
+
+  const [editExam, setEditExam] = useState<Exam1 | null>(null);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [examToDelete, setExamToDelete] = useState<Exam1 | null>(null);
+  
+  const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setNewExam({ ...newExam, [name]: value });
+  };
+
+  const handleAddExam = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const examWithId: Exam1 = {
+      id: String(data.length + 1),
+      key: data.length + 1,
+      ...newExam,
+    };
+    const updatedData = [...data, examWithId];
+    setData(updatedData);
+    localStorage.setItem('exams', JSON.stringify(updatedData));
+    setNewExam({ examName: "", examDate: dayjs().format("DD-MM-YYYY"), startTime: "", endTime: "" });
+  };
+
+  const handleEditExam = (exam: Exam1) => {
+    setEditExam(exam);
+    setNewExam({
+      examName: exam.examName,
+      examDate: exam.examDate,
+      startTime: exam.startTime,
+      endTime: exam.endTime,
+    });
+  };
+
+  const handleUpdateExam = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (editExam) {
+      const updatedData = data.map((exam) =>
+        exam.id === editExam.id ? { ...exam, ...newExam } : exam
+      );
+      setData(updatedData);
+      localStorage.setItem('exams', JSON.stringify(updatedData));
+      setEditExam(null);
+      setNewExam({ examName: "", examDate: dayjs().format("DD-MM-YYYY"), startTime: "", endTime: "" });
+    }
+  };
+
+  const handleDeleteExam = (id: string) => {
+    const updatedData = data.filter((exam) => exam.id !== id);
+    setData(updatedData);
+    localStorage.setItem('exams', JSON.stringify(updatedData));
+    setIsDeleteModalVisible(false);
+    setExamToDelete(null);
+  };
+
+  const handleOpenDeleteModal = (exam: Exam1) => {
+    setExamToDelete(exam);
+    setIsDeleteModalVisible(true);
+  };
+
+  // Define table columns
+  const columns = [
+    {
+      title: "ID",
+      dataIndex: "id",
+      render: (_: any, record: { id: string }) => (
+        <Link to="#" className="link-primary">
+          {record.id}
+        </Link>
+      ),
+    },
+    {
+      title: "Exam Name",
+      dataIndex: "examName",
+    },
+    {
+      title: "Exam Date",
+      dataIndex: "examDate",
+    },
+    {
+      title: "Start Time",
+      dataIndex: "startTime",
+    },
+    {
+      title: "End Time",
+      dataIndex: "endTime",
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      render: (text: any, record: Exam1) => (
+        <div className="d-flex align-items-center">
+          <Link to="#" onClick={() => handleEditExam(record)} data-bs-toggle="modal" data-bs-target="#edit_exam">
+            Edit
+          </Link>
+          <Link to="#" onClick={() => handleOpenDeleteModal(record)}>Delete</Link>
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <div>
+      {/* Add Exam Modal */}
+      <div className="modal fade" id="add_exam">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">Add Exam</h4>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+            </div>
+            <form onSubmit={handleAddExam}>
+              <div className="modal-body">
+                <div className="mb-3">
+                  <label className="form-label">Exam Name</label>
+                  <input type="text" className="form-control" name="examName" value={newExam.examName} onChange={handleInputChange} required />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Exam Date</label>
+                  <DatePicker className="form-control" format={"DD-MM-YYYY"} onChange={(date) => setNewExam({ ...newExam, examDate: dayjs(date).format("DD-MM-YYYY") })} />
+                </div>
+                
 <div className="mb-3">
   <label className="form-label">Start Time</label>
   <CommonSelect
@@ -12,3 +175,84 @@
     onChange={(option) => setNewExam({ ...newExam, endTime: option ? option.value : "" })}
   />
 </div>
+
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" className="btn btn-primary">Add Exam</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {/* Edit Exam Modal */}
+      <div className="modal fade" id="edit_exam">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">Edit Exam</h4>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+            </div>
+            <form onSubmit={handleUpdateExam}>
+              <div className="modal-body">
+                <div className="mb-3">
+                  <label className="form-label">Exam Name</label>
+                  <input type="text" className="form-control" name="examName" value={newExam.examName} onChange={handleInputChange} required />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Exam Date</label>
+                  <DatePicker className="form-control" format={"DD-MM-YYYY"} onChange={(date) => setNewExam({ ...newExam, examDate: dayjs(date).format("DD-MM-YYYY") })} />
+                </div>
+              </div>
+<div className="mb-3">
+  <label className="form-label">Start Time</label>
+  <CommonSelect
+    options={startTime}
+    onChange={(option) => setNewExam({ ...newExam, startTime: option ? option.value : "" })}
+  />
+</div>
+<div className="mb-3">
+  <label className="form-label">End Time</label>
+  <CommonSelect
+    options={startTimeOne}
+    onChange={(option) => setNewExam({ ...newExam, endTime: option ? option.value : "" })}
+  />
+</div>
+
+              <div className="modal-footer">
+                <button type="button" className="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" className="btn btn-primary">Update Exam</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {/* Delete Exam Modal */}
+      {isDeleteModalVisible && (
+        <div className="modal fade show" style={{ display: 'block' }}>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">Delete Exam</h4>
+                <button type="button" className="btn-close" onClick={() => setIsDeleteModalVisible(false)} />
+              </div>
+              <div className="modal-body">
+                <p>Are you sure you want to delete the exam: <strong>{examToDelete?.examName}</strong>?</p>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-light" onClick={() => setIsDeleteModalVisible(false)}>Cancel</button>
+                <button type="button" className="btn btn-danger" onClick={() => handleDeleteExam(examToDelete?.id || "")}>Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <Table columns={columns} dataSource={data} />
+    </div>
+  );
+};
+
+export default Exam;
