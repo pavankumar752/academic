@@ -8,6 +8,7 @@ export type Option = {
 
 export interface SelectProps {
   options: Option[];
+  value?: Option; // Add this line
   defaultValue?: Option;
   className?: string;
   styles?: any; 
@@ -16,6 +17,7 @@ export interface SelectProps {
 
 const CommonSelect: React.FC<SelectProps> = ({
   options,
+  value, // Use value prop
   defaultValue,
   className,
   styles,
@@ -23,16 +25,17 @@ const CommonSelect: React.FC<SelectProps> = ({
 }) => {
   const [selectedOption, setSelectedOption] = useState<Option | null>(defaultValue || null);
 
+  useEffect(() => {
+    // Update local state when external value prop changes
+    setSelectedOption(value || null);
+  }, [value]);
+
   const handleChange = (option: Option | null) => {
     setSelectedOption(option);
     if (onChange) {
       onChange(option);
     }
   };
-
-  useEffect(() => {
-    setSelectedOption(defaultValue || null);
-  }, [defaultValue]);
 
   return (
     <Select
@@ -48,3 +51,25 @@ const CommonSelect: React.FC<SelectProps> = ({
 };
 
 export default CommonSelect;
+
+
+
+
+
+<CommonSelect
+  className="select"
+  options={startTime}
+  value={newExam.startTime ? { value: newExam.startTime, label: newExam.startTime } : null} // Create an option object if startTime exists
+  onChange={(option: Option | null) => {
+    setNewExam({ ...newExam, startTime: option?.value || "" });
+  }}
+/>
+
+<CommonSelect
+  className="select"
+  options={startTimeOne}
+  value={newExam.endTime ? { value: newExam.endTime, label: newExam.endTime } : null} // Create an option object if endTime exists
+  onChange={(option: Option | null) => {
+    setNewExam({ ...newExam, endTime: option?.value || "" });
+  }}
+/>
