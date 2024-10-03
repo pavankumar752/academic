@@ -1,52 +1,40 @@
 Compiled with problems:
 ×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:30:46
-TS2352: Conversion of type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }[]' to type 'Exam[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-  Type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }' is not comparable to type 'Exam'.
-    Types of property 'id' are incompatible.
-      Type 'string' is not comparable to type 'number'.
-    28 |   const routes = all_routes;
-    29 |
-  > 30 |   const [exams, setExams] = useState<Exam[]>(initialExams as Exam[]);
-       |                                              ^^^^^^^^^^^^^^^^^^^^^^
-    31 |   const [modalType, setModalType] = useState<"add" | "edit">("add");
-    32 |   const [currentExam, setCurrentExam] = useState<Exam | null>(null);
-    33 |   const [showModal, setShowModal] = useState(false);
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:151:60
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:155:60
 TS2304: Cannot find name 'record'.
-    149 |                     data-bs-toggle="modal"
-    150 |                     data-bs-target="#edit_exam"
-  > 151 |                     onClick={() => handleOpenModal("edit", record)}
+    153 |                     data-bs-toggle="modal"
+    154 |                     data-bs-target="#edit_exam"
+  > 155 |                     onClick={() => handleOpenModal("edit", record)}
         |                                                            ^^^^^^
-    152 |                   >
-    153 |                     <i className="ti ti-edit-circle me-2" />
-    154 |                     Edit
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:163:53
+    156 |                   >
+    157 |                     <i className="ti ti-edit-circle me-2" />
+    158 |                     Edit
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:167:53
 TS2304: Cannot find name 'record'.
-    161 |                     data-bs-toggle="modal"
-    162 |                     data-bs-target="#delete-modal"
-  > 163 |                     onClick={() => handleDeleteExam(record.id)}
+    165 |                     data-bs-toggle="modal"
+    166 |                     data-bs-target="#delete-modal"
+  > 167 |                     onClick={() => handleDeleteExam(record.id)}
         |                                                     ^^^^^^
-    164 |                   >
-    165 |                     <i className="ti ti-trash-x me-2" />
-    166 |                     Delete
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:367:27
+    168 |                   >
+    169 |                     <i className="ti ti-trash-x me-2" />
+    170 |                     Delete
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:371:27
 TS2322: Type 'string | { value: string; label: string; }' is not assignable to type 'Option | undefined'.
   Type 'string' is not assignable to type 'Option'.
-    365 |                           className="select"
-    366 |                           options={startTime}
-  > 367 |                           defaultValue={currentExam?.startTime || startTime[0]}
+    369 |                           className="select"
+    370 |                           options={startTime}
+  > 371 |                           defaultValue={currentExam?.startTime || startTime[0]}
         |                           ^^^^^^^^^^^^
-    368 |                           name="startTime"
-    369 |                         />
-    370 |                       </div>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:376:27
+    372 |                           name="startTime"
+    373 |                         />
+    374 |                       </div>
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:380:27
 TS2322: Type 'string | { value: string; label: string; }' is not assignable to type 'Option | undefined'.
   Type 'string' is not assignable to type 'Option'.
-    374 |                           className="select"
-    375 |                           options={startTimeOne}
-  > 376 |                           defaultValue={currentExam?.endTime || startTimeOne[0]}
+    378 |                           className="select"
+    379 |                           options={startTimeOne}
+  > 380 |                           defaultValue={currentExam?.endTime || startTimeOne[0]}
         |                           ^^^^^^^^^^^^
-    377 |                           name="endTime"
-    378 |                         />
-    379 |                       </div>
+    381 |                           name="endTime"
+    382 |                         />
+    383 |                       </div>
