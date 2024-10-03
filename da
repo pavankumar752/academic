@@ -36,12 +36,12 @@ const Exam = () => {
 
   const handleAddExam = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const updatedExams = [
       ...exams,
-      { 
-        ...newExam, 
-        id: exams.length + 1, 
+      {
+        ...newExam,
+        id: exams.length + 1,
         examDate: newExam.examDate.format('DD-MM-YYYY') // Ensure the date is formatted correctly
       }
     ];
@@ -74,8 +74,8 @@ const Exam = () => {
     {
       title: "Exam Date",
       dataIndex: "examDate",
-      render: (date: any) => dayjs(date).format('DD-MM-YYYY'),
-      sorter: (a: any, b: any) => dayjs(a.examDate).unix() - dayjs(b.examDate).unix(),
+      render: (date: any) => dayjs(date, 'DD-MM-YYYY').format('DD-MM-YYYY'), // Correctly parse and format the date
+      sorter: (a: any, b: any) => dayjs(a.examDate, 'DD-MM-YYYY').unix() - dayjs(b.examDate, 'DD-MM-YYYY').unix(),
     },
     {
       title: "Start Time",
