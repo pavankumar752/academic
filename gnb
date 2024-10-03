@@ -1,26 +1,5 @@
 Compiled with problems:
 ×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:54:14
-TS2322: Type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; } | { id: number; examName: string; examDate: string; startTime: string; endTime: string; key: number; }' is not assignable to type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
-  Type '{ id: number; examName: string; examDate: string; startTime: string; endTime: string; key: number; }' is not assignable to type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
-    Types of property 'id' are incompatible.
-      Type 'number' is not assignable to type 'string'.
-    52 |         key: data.length + 1, // Add this line to include the key
-    53 |     };
-  > 54 |     setData([...data, newExam]);
-       |              ^^^^^^^
-    55 |     setExamName("");
-    56 |     setExamDate(defaultValue);
-    57 |     setStartTimeValue("");
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:54:23
-TS2322: Type '{ id: number; examName: string; examDate: string; startTime: string; endTime: string; key: number; }' is not assignable to type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
-    52 |         key: data.length + 1, // Add this line to include the key
-    53 |     };
-  > 54 |     setData([...data, newExam]);
-       |                       ^^^^^^^
-    55 |     setExamName("");
-    56 |     setExamDate(defaultValue);
-    57 |     setStartTimeValue("");
 ERROR in src/feature-module/academic/examinations/exam/index.tsx:340:25
 TS2322: Type '{ className: string; options: { value: string; label: string; }[]; value: string; onChange: (option: any) => void; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
   Property 'value' does not exist on type 'IntrinsicAttributes & SelectProps'.
