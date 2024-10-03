@@ -1,26 +1,11 @@
-const handleAddExam = () => {
-  const newId = data.length ? (Math.max(...data.map(exam => Number(exam.id))) + 1).toString() : "1";
-  setData([...data, { ...newExam, id: newId, key: Number(newId) }]); // Ensure key is added
-  resetForm();
-};
-
-const handleEditExam = () => {
-  setData(data.map(exam => (exam.id === currentExamId ? { ...exam, ...newExam } : exam)));
-  resetForm();
-};
-
-const handleDeleteExam = (id: string) => { // Ensure id is a string
-  setData(data.filter(exam => exam.id !== id));
-};
-
-
-
-
-interface Exam {
-  id: string; // Ensure id is a string
-  examName: string;
-  examDate: string;
-  startTime: string;
-  endTime: string;
-  key: number; // If key is necessary
-}
+Compiled with problems:
+×
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:45:31
+TS2367: This comparison appears to be unintentional because the types 'string' and 'number | null' have no overlap.
+    43 |   
+    44 |   const handleEditExam = () => {
+  > 45 |     setData(data.map(exam => (exam.id === currentExamId ? { ...exam, ...newExam } : exam)));
+       |                               ^^^^^^^^^^^^^^^^^^^^^^^^^
+    46 |     resetForm();
+    47 |   };
+    48 |   
