@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
 import Table from "../../../../core/common/dataTable/index";
 import { exam } from "../../../../core/data/json/exam";
 import {
@@ -10,7 +9,6 @@ import {
   startTimeOne,
 } from "../../../../core/common/selectoption/selectoption";
 import PredefinedDateRanges from "../../../../core/common/datePicker";
-import { TableData } from "../../../../core/data/interface";
 import CommonSelect, { Option } from "../../../../core/common/commonSelect";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
@@ -19,25 +17,16 @@ import TooltipOption from "../../../../core/common/tooltipOption";
 
 const Exam = () => {
   const routes = all_routes;
-  
-  // Initial state setup
+
   const [data, setData] = useState(() => {
     const storedExams = localStorage.getItem("exams");
     return storedExams ? JSON.parse(storedExams) : exam;
   });
-  
+
   const [examName, setExamName] = useState("");
   const [examDate, setExamDate] = useState(dayjs());
   const [startTimeValue, setStartTimeValue] = useState<Option | null>(startTime[0]);
   const [endTimeValue, setEndTimeValue] = useState<Option | null>(startTimeOne[0]);
-
-  const handleStartTimeChange = (option: Option | null) => {
-    setStartTimeValue(option);
-  };
-  
-  const handleEndTimeChange = (option: Option | null) => {
-    setEndTimeValue(option);
-  };
 
   const handleAddExam = () => {
     const newExam = {
@@ -71,51 +60,27 @@ const Exam = () => {
           {record.id}
         </Link>
       ),
-      sorter: (a: any, b: any) => a.id.length - b.id.length,
     },
     {
       title: "Exam Name",
       dataIndex: "examName",
-      sorter: (a: TableData, b: TableData) => a.examName.length - b.examName.length,
     },
     {
       title: "Exam Date",
       dataIndex: "examDate",
-      sorter: (a: TableData, b: TableData) => a.examDate.length - b.examDate.length,
     },
     {
       title: "Start Time",
       dataIndex: "startTime",
-      sorter: (a: TableData, b: TableData) => a.startTime.length - b.startTime.length,
     },
     {
       title: "End Time",
       dataIndex: "endTime",
-      sorter: (a: TableData, b: TableData) => a.endTime.length - b.endTime.length,
     },
     {
       title: "Action",
-      dataIndex: "action",
       render: () => (
-        <div className="d-flex align-items-center">
-          <div className="dropdown">
-            <Link to="#" className="btn btn-white btn-icon btn-sm d-flex align-items-center justify-content-center rounded-circle p-0" data-bs-toggle="dropdown" aria-expanded="false">
-              <i className="ti ti-dots-vertical fs-14" />
-            </Link>
-            <ul className="dropdown-menu dropdown-menu-right p-3">
-              <li>
-                <Link className="dropdown-item rounded-1" to="#" data-bs-toggle="modal" data-bs-target="#edit_exam">
-                  <i className="ti ti-edit-circle me-2" /> Edit
-                </Link>
-              </li>
-              <li>
-                <Link className="dropdown-item rounded-1" to="#" data-bs-toggle="modal" data-bs-target="#delete-modal">
-                  <i className="ti ti-trash-x me-2" /> Delete
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
+        <Link to="#" className="btn btn-danger btn-sm">Delete</Link>
       ),
     },
   ];
@@ -125,38 +90,13 @@ const Exam = () => {
       <div className="page-wrapper">
         <div className="content">
           <div className="d-md-flex d-block align-items-center justify-content-between mb-3">
-            <div className="my-auto mb-2">
-              <h3 className="page-title mb-1">Exam</h3>
-              <nav>
-                <ol className="breadcrumb mb-0">
-                  <li className="breadcrumb-item">
-                    <Link to={routes.adminDashboard}>Dashboard</Link>
-                  </li>
-                  <li className="breadcrumb-item">
-                    <Link to="#">Academic</Link>
-                  </li>
-                  <li className="breadcrumb-item active" aria-current="page">Exam</li>
-                </ol>
-              </nav>
-            </div>
-            <div className="d-flex my-xl-auto right-content align-items-center flex-wrap">
-              <TooltipOption />
-              <div className="mb-2">
-                <Link to="#" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_exam">
-                  <i className="ti ti-square-rounded-plus-filled me-2" /> Add Exam
-                </Link>
-              </div>
-            </div>
+            <h3 className="page-title mb-1">Exam</h3>
+            <Link to="#" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_exam">
+              Add Exam
+            </Link>
           </div>
 
           <div className="card">
-            <div className="card-header d-flex align-items-center justify-content-between flex-wrap pb-0">
-              <h4 className="mb-3">Exam List</h4>
-              <div className="d-flex align-items-center flex-wrap">
-                <PredefinedDateRanges />
-                {/* Filter and Sort Controls Here */}
-              </div>
-            </div>
             <div className="card-body p-0 py-3">
               <Table columns={columns} dataSource={data} />
             </div>
@@ -170,52 +110,43 @@ const Exam = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title">Add Exam</h4>
-              <button type="button" className="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                <i className="ti ti-x" />
-              </button>
+              <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form onSubmit={(e) => {
               e.preventDefault();
               handleAddExam();
             }}>
               <div className="modal-body">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="mb-3">
-                      <label className="form-label">Exam Name</label>
-                      <input type="text" className="form-control" value={examName} onChange={(e) => setExamName(e.target.value)} required />
-                    </div>
-                    <div className="mb-3">
-                      <label className="form-label">Exam Date</label>
-                      <DatePicker
-                        className="form-control datetimepicker"
-                        format="DD-MM-YYYY"
-                        value={examDate}
-                        onChange={(date) => setExamDate(date)}
-                        placeholder="16 May 2024"
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label className="form-label">Start Time</label>
-                      <CommonSelect className="select" options={startTime} value={startTimeValue?.value} onChange={handleStartTimeChange} />
-                    </div>
-                    <div className="mb-0">
-                      <label className="form-label">End Time</label>
-                      <CommonSelect className="select" options={startTimeOne} value={endTimeValue?.value} onChange={handleEndTimeChange} />
-                    </div>
-                  </div>
+                <div className="mb-3">
+                  <label className="form-label">Exam Name</label>
+                  <input type="text" className="form-control" value={examName} onChange={(e) => setExamName(e.target.value)} required />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Exam Date</label>
+                  <DatePicker
+                    className="form-control"
+                    format="DD-MM-YYYY"
+                    value={examDate}
+                    onChange={(date) => setExamDate(date)}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Start Time</label>
+                  <CommonSelect className="select" options={startTime} value={startTimeValue?.value} onChange={handleStartTimeChange} />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">End Time</label>
+                  <CommonSelect className="select" options={startTimeOne} value={endTimeValue?.value} onChange={handleEndTimeChange} />
                 </div>
               </div>
               <div className="modal-footer">
-                <Link to="#" className="btn btn-light me-2" data-bs-dismiss="modal">Cancel</Link>
-                <button className="btn btn-primary" type="submit" data-bs-dismiss="modal">Add Exam</button>
+                <button type="button" className="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">Add Exam</button>
               </div>
             </form>
           </div>
         </div>
       </div>
-
-      {/* Other Modals (Edit, Delete) Here */}
     </div>
   );
 };
