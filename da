@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Table from "../../../../core/common/dataTable/index";
 import { exam } from "../../../../core/data/json/exam";
@@ -20,11 +20,10 @@ const Exam = () => {
 
   const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
   const today = dayjs();
-  const defaultValue = today;
-
+  
   const [newExam, setNewExam] = useState({
     examName: '',
-    examDate: defaultValue,
+    examDate: today,
     startTime: '',
     endTime: ''
   });
@@ -34,25 +33,26 @@ const Exam = () => {
     setNewExam(prevState => ({ ...prevState, [name]: value }));
   };
 
+  const handleDateChange = (date: dayjs.Dayjs | null) => {
+    setNewExam(prev => ({ ...prev, examDate: date || today }));
+  };
+
   const handleAddExam = (e: React.FormEvent) => {
     e.preventDefault();
+    
     const updatedExams = [
       ...exams,
       { 
         ...newExam, 
         id: exams.length + 1, 
-        examDate: newExam.examDate.format('DD-MM-YYYY') // Ensure the date is formatted correctly
+        examDate: newExam.examDate.format('DD-MM-YYYY') 
       }
     ];
-    
-    console.log("Updated Exams:", updatedExams);
-  
+
     setExams(updatedExams);
     localStorage.setItem('exams', JSON.stringify(updatedExams));
-    setNewExam({ examName: '', examDate: defaultValue, startTime: '', endTime: '' });
+    setNewExam({ examName: '', examDate: today, startTime: '', endTime: '' });
   };
-  
-  
 
   const handleApplyClick = () => {
     if (dropdownMenuRef.current) {
@@ -77,8 +77,8 @@ const Exam = () => {
     {
       title: "Exam Date",
       dataIndex: "examDate",
-      render: (date: any) => dayjs(date).format('DD-MM-YYYY'),
-      sorter: (a: any, b: any) => dayjs(a.examDate).unix() - dayjs(b.examDate).unix(),
+      render: (date: any) => dayjs(date, 'DD-MM-YYYY').format('DD-MM-YYYY'),
+      sorter: (a: any, b: any) => dayjs(a.examDate, 'DD-MM-YYYY').unix() - dayjs(b.examDate, 'DD-MM-YYYY').unix(),
     },
     {
       title: "Start Time",
@@ -217,6 +217,7 @@ const Exam = () => {
                         name="examName"
                         value={newExam.examName}
                         onChange={handleInputChange}
+                        required
                       />
                     </div>
                     <div className="mb-3">
@@ -225,7 +226,8 @@ const Exam = () => {
                         className="form-control"
                         format="DD-MM-YYYY"
                         value={newExam.examDate}
-                        onChange={date => setNewExam(prev => ({ ...prev, examDate: date }))}
+                        onChange={handleDateChange}
+                        required
                       />
                     </div>
                     <div className="mb-3">
@@ -236,6 +238,7 @@ const Exam = () => {
                         onChange={(selectedValue) => {
                           setNewExam(prev => ({ ...prev, startTime: selectedValue?.value || '' }));
                         }}
+                        required
                       />
                     </div>
                     <div className="mb-0">
@@ -246,6 +249,7 @@ const Exam = () => {
                         onChange={(selectedValue) => {
                           setNewExam(prev => ({ ...prev, endTime: selectedValue?.value || '' }));
                         }}
+                        required
                       />
                     </div>
                   </div>
@@ -260,74 +264,7 @@ const Exam = () => {
         </div>
       </div>
 
-      {/* Edit Exam Modal */}
-      <div className="modal fade" id="edit_exam">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title">Edit Exam</h4>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-            </div>
-            <form>
-              <div className="modal-body">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="mb-3">
-                      <label className="form-label">Exam Name</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue="Week Test"
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label className="form-label">Exam Date</label>
-                      <DatePicker
-                        className="form-control"
-                        format="DD-MM-YYYY"
-                        defaultValue={defaultValue}
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label className="form-label">Start Time</label>
-                      <CommonSelect className="select" options={startTime} defaultValue={startTime[1]} />
-                    </div>
-                    <div className="mb-0">
-                      <label className="form-label">End Time</label>
-                      <CommonSelect className="select" options={startTimeOne} defaultValue={startTimeOne[1]} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="modal-footer">
-                <Link to="#" className="btn btn-light me-2" data-bs-dismiss="modal">Cancel</Link>
-                <Link className="btn btn-primary" to="#" data-bs-dismiss="modal">Save Changes</Link>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      {/* Delete Modal */}
-      <div className="modal fade" id="delete-modal">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <form>
-              <div className="modal-body text-center">
-                <span className="delete-icon">
-                  <i className="ti ti-trash-x" />
-                </span>
-                <h4>Confirm Deletion</h4>
-                <p>You want to delete all the marked items, this can't be undone once you delete.</p>
-                <div className="d-flex justify-content-center">
-                  <Link to="#" className="btn btn-light me-3" data-bs-dismiss="modal">Cancel</Link>
-                  <Link to="#" data-bs-dismiss="modal" className="btn btn-danger">Yes, Delete</Link>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+      {/* Other modals for editing and deleting exams can go here */}
     </div>
   );
 };
