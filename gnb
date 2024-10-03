@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-
 import Table from "../../../../core/common/dataTable/index";
 import { exam } from "../../../../core/data/json/exam";
 import {
@@ -11,7 +10,7 @@ import {
 } from "../../../../core/common/selectoption/selectoption";
 import PredefinedDateRanges from "../../../../core/common/datePicker";
 import { TableData } from "../../../../core/data/interface";
-import CommonSelect, {Option} from "../../../../core/common/commonSelect";
+import CommonSelect, { Option } from "../../../../core/common/commonSelect";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
 import { all_routes } from "../../../router/all_routes";
@@ -19,31 +18,27 @@ import TooltipOption from "../../../../core/common/tooltipOption";
 
 const Exam = () => {
   const routes = all_routes;
+  
   useEffect(() => {
     const storedExams = localStorage.getItem("exams");
     if (storedExams) {
       setData(JSON.parse(storedExams));
     }
   }, []);
+
   const [data, setData] = useState(exam);
   const [examName, setExamName] = useState("");
   const [examDate, setExamDate] = useState(dayjs());
   const [startTimeValue, setStartTimeValue] = useState<Option | null>(startTime[0]);
-const [endTimeValue, setEndTimeValue] = useState<Option | null>(startTimeOne[0]);
-  const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0"); // Month is zero-based, so we add 1
-  const day = String(today.getDate()).padStart(2, "0");
-  const formattedDate = `${month}-${day}-${year}`;
-  const defaultValue = dayjs(formattedDate);
-
-  const handleStartTimeChange = (option: Option | null) => {
-    setStartTimeValue(option);
-  };
+  const [endTimeValue, setEndTimeValue] = useState<Option | null>(startTimeOne[0]);
   
-  const handleEndTimeChange = (option: Option | null) => {
-    setEndTimeValue(option);
+  const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
+  
+  const resetForm = () => {
+    setExamName("");
+    setExamDate(dayjs());
+    setStartTimeValue(startTime[0]);
+    setEndTimeValue(startTimeOne[0]);
   };
 
   const handleAddExam = () => {
@@ -62,118 +57,83 @@ const [endTimeValue, setEndTimeValue] = useState<Option | null>(startTimeOne[0])
     resetForm();
   };
 
-  
-
-  const resetForm = () => {
-    setExamName("");
-    setExamDate(dayjs());
-    setStartTimeValue(startTime[0]);
-    setEndTimeValue(startTimeOne[0]);
-  };
-
-  useEffect(() => {
-    const storedExams = localStorage.getItem("exams");
-    if (storedExams) {
-      setData(JSON.parse(storedExams));
-    }
-  }, []);
-
-  const handleApplyClick = () => {
-    if (dropdownMenuRef.current) {
-      dropdownMenuRef.current.classList.remove("show");
-    }
-  };
-  const getModalContainer = () => {
-    const modalElement = document.getElementById("modal-datepicker");
-    return modalElement ? modalElement : document.body; // Fallback to document.body if modalElement is null
-  };
   const columns = [
     {
       title: "ID",
       dataIndex: "id",
-      render: (text: string, record: any, index: number) => (
-        <>
-          <Link to="#" className="link-primary">
-            {record.id}
-          </Link>
-        </>
+      render: (text: string, record: any) => (
+        <Link to="#" className="link-primary">{record.id}</Link>
       ),
       sorter: (a: any, b: any) => a.id.length - b.id.length,
     },
     {
       title: "Exam Name",
       dataIndex: "examName",
-      sorter: (a: TableData, b: TableData) =>
-        a.examName.length - b.examName.length,
+      sorter: (a: TableData, b: TableData) => a.examName.length - b.examName.length,
     },
     {
       title: "Exam Date",
       dataIndex: "examDate",
-      sorter: (a: TableData, b: TableData) =>
-        a.examDate.length - b.examDate.length,
+      sorter: (a: TableData, b: TableData) => a.examDate.length - b.examDate.length,
     },
     {
       title: "Start Time",
       dataIndex: "startTime",
-      sorter: (a: TableData, b: TableData) =>
-        a.startTime.length - b.startTime.length,
+      sorter: (a: TableData, b: TableData) => a.startTime.length - b.startTime.length,
     },
     {
       title: "End Time",
       dataIndex: "endTime",
-      sorter: (a: TableData, b: TableData) =>
-        a.endTime.length - b.endTime.length,
+      sorter: (a: TableData, b: TableData) => a.endTime.length - b.endTime.length,
     },
     {
       title: "Action",
       dataIndex: "action",
       render: () => (
-        <>
-          <div className="d-flex align-items-center">
-            <div className="dropdown">
-              <Link
-                to="#"
-                className="btn btn-white btn-icon btn-sm d-flex align-items-center justify-content-center rounded-circle p-0"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <i className="ti ti-dots-vertical fs-14" />
-              </Link>
-              <ul className="dropdown-menu dropdown-menu-right p-3">
-                <li>
-                  <Link
-                    className="dropdown-item rounded-1"
-                    to="#"
-                    data-bs-toggle="modal"
-                    data-bs-target="#edit_exam"
-                  >
-                    <i className="ti ti-edit-circle me-2" />
-                    Edit
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="dropdown-item rounded-1"
-                    to="#"
-                    data-bs-toggle="modal"
-                    data-bs-target="#delete-modal"
-                  >
-                    <i className="ti ti-trash-x me-2" />
-                    Delete
-                  </Link>
-                </li>
-              </ul>
-            </div>
+        <div className="d-flex align-items-center">
+          <div className="dropdown">
+            <Link
+              to="#"
+              className="btn btn-white btn-icon btn-sm d-flex align-items-center justify-content-center rounded-circle p-0"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i className="ti ti-dots-vertical fs-14" />
+            </Link>
+            <ul className="dropdown-menu dropdown-menu-right p-3">
+              <li>
+                <Link
+                  className="dropdown-item rounded-1"
+                  to="#"
+                  data-bs-toggle="modal"
+                  data-bs-target="#edit_exam"
+                >
+                  <i className="ti ti-edit-circle me-2" />
+                  Edit
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className="dropdown-item rounded-1"
+                  to="#"
+                  data-bs-toggle="modal"
+                  data-bs-target="#delete-modal"
+                >
+                  <i className="ti ti-trash-x me-2" />
+                  Delete
+                </Link>
+              </li>
+            </ul>
           </div>
-        </>
+        </div>
       ),
     },
   ];
+
   return (
     <div>
       <div className="page-wrapper">
         <div className="content">
-          {/* Page Header */}
           <div className="d-md-flex d-block align-items-center justify-content-between mb-3">
             <div className="my-auto mb-2">
               <h3 className="page-title mb-1">Exam</h3>
@@ -192,7 +152,7 @@ const [endTimeValue, setEndTimeValue] = useState<Option | null>(startTimeOne[0])
               </nav>
             </div>
             <div className="d-flex my-xl-auto right-content align-items-center flex-wrap">
-            <TooltipOption />
+              <TooltipOption />
               <div className="mb-2">
                 <Link
                   to="#"
@@ -206,8 +166,6 @@ const [endTimeValue, setEndTimeValue] = useState<Option | null>(startTimeOne[0])
               </div>
             </div>
           </div>
-          {/* /Page Header */}
-          {/* Guardians List */}
           <div className="card">
             <div className="card-header d-flex align-items-center justify-content-between flex-wrap pb-0">
               <h4 className="mb-3">Exam List</h4>
@@ -225,10 +183,7 @@ const [endTimeValue, setEndTimeValue] = useState<Option | null>(startTimeOne[0])
                     <i className="ti ti-filter me-2" />
                     Filter
                   </Link>
-                  <div
-                    className="dropdown-menu drop-width"
-                    ref={dropdownMenuRef}
-                  >
+                  <div className="dropdown-menu drop-width" ref={dropdownMenuRef}>
                     <form>
                       <div className="d-flex align-items-center border-bottom p-3">
                         <h4>Filter</h4>
@@ -305,211 +260,92 @@ const [endTimeValue, setEndTimeValue] = useState<Option | null>(startTimeOne[0])
               </div>
             </div>
             <div className="card-body p-0 py-3">
-              {/* Guardians List */}
               <Table columns={columns} dataSource={data} Selection={true} />
-
-              {/* /Guardians List */}
             </div>
           </div>
-          {/* /Guardians List */}
         </div>
       </div>
-      <>
-        {/* Add Exam */}
-        <div className="modal fade" id="add_exam">
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h4 className="modal-title">Add Exam</h4>
-                <button
-                  type="button"
-                  className="btn-close custom-btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <i className="ti ti-x" />
-                </button>
-              </div>
-              <form onSubmit={(e) => {
+
+      {/* Add Exam Modal */}
+      <div className="modal fade" id="add_exam">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">Add Exam</h4>
+              <button
+                type="button"
+                className="btn-close custom-btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              >
+                <i className="ti ti-x" />
+              </button>
+            </div>
+            <form onSubmit={(e) => {
               e.preventDefault();
               handleAddExam();
             }}>
-                <div className="modal-body">
-                  <div className="row">
-                    <div className="col-md-12">
-                      <div className="mb-3">
-                        <label className="form-label">Exam Name</label>
-                        <input type="text" className="form-control" value={examName} onChange={(e) => setExamName(e.target.value)}/>
-                      </div>
-                      <div className="mb-3">
-                        <label className="form-label">Exam Date</label>
-                        <div className="date-pic">
-                          <DatePicker
-                            className="form-control datetimepicker"
-                            format={{
-                              format: "DD-MM-YYYY",
-                              type: "mask",
-                            }}
-                            value={examDate}
-                            onChange={(date) => setExamDate(date)}
-                            getPopupContainer={getModalContainer}
-                            defaultValue={defaultValue}
-                            placeholder="16 May 2024"
-                          />
-                          <span className="cal-icon">
-                            <i className="ti ti-calendar" />
-                          </span>
-                        </div>
-                      </div>
-                      <div className="mb-3">
-                        <label className="form-label">Start Time</label>
-                        <CommonSelect className="select" options={startTime} value={startTimeValue ? startTimeValue.value : undefined}
-                        onChange={handleStartTimeChange} />
-                      </div>
-                      <div className="mb-0">
-                        <label className="form-label">End Time</label>
-                        <CommonSelect
-                          className="select"
-                          options={startTimeOne}
-                          value={endTimeValue ? endTimeValue.value : undefined}
-                        onChange={handleEndTimeChange}
+              <div className="modal-body">
+                <div className="row">
+                  <div className="col-md-12">
+                    <div className="mb-3">
+                      <label className="form-label">Exam Name</label>
+                      <input type="text" className="form-control" value={examName} onChange={(e) => setExamName(e.target.value)} />
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Exam Date</label>
+                      <div className="date-pic">
+                        <DatePicker
+                          className="form-control datetimepicker"
+                          format={{ format: "DD-MM-YYYY", type: "mask" }}
+                          value={examDate}
+                          onChange={(date) => setExamDate(date)}
+                          getPopupContainer={getModalContainer}
+                          placeholder="16 May 2024"
                         />
+                        <span className="cal-icon">
+                          <i className="ti ti-calendar" />
+                        </span>
                       </div>
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Start Time</label>
+                      <CommonSelect
+                        className="select"
+                        options={startTime}
+                        value={startTimeValue ? startTimeValue.value : undefined}
+                        onChange={handleStartTimeChange}
+                      />
+                    </div>
+                    <div className="mb-0">
+                      <label className="form-label">End Time</label>
+                      <CommonSelect
+                        className="select"
+                        options={startTimeOne}
+                        value={endTimeValue ? endTimeValue.value : undefined}
+                        onChange={handleEndTimeChange}
+                      />
                     </div>
                   </div>
                 </div>
-                <div className="modal-footer">
-                  <Link
-                    to="#"
-                    className="btn btn-light me-2"
-                    data-bs-dismiss="modal"
-                  >
-                    Cancel
-                  </Link>
-                  <button  className="btn btn-primary"  type="submit"  data-bs-dismiss="modal">
-                    Add Exam
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-        {/* Add Exam */}
-        {/* Edit Exam */}
-        <div className="modal fade" id="edit_exam">
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h4 className="modal-title">Edit Exam</h4>
-                <button
-                  type="button"
-                  className="btn-close custom-btn-close"
+              </div>
+              <div className="modal-footer">
+                <Link
+                  to="#"
+                  className="btn btn-light me-2"
                   data-bs-dismiss="modal"
-                  aria-label="Close"
                 >
-                  <i className="ti ti-x" />
+                  Cancel
+                </Link>
+                <button className="btn btn-primary" type="submit">
+                  Add Exam
                 </button>
               </div>
-              <form >
-                <div className="modal-body">
-                  <div className="row">
-                    <div className="col-md-12">
-                      <div className="mb-3">
-                        <label className="form-label">Exam Name</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Enter Exam Name"
-                          defaultValue="Week Test"
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label className="form-label">Exam Date</label>
-                        <div className="date-pic">
-                          <DatePicker
-                            className="form-control datetimepicker"
-                            format={{
-                              format: "DD-MM-YYYY",
-                              type: "mask",
-                            }}
-                            getPopupContainer={getModalContainer}
-                            defaultValue={defaultValue}
-                            placeholder="16 May 2024"
-                          />
-                          <span className="cal-icon">
-                            <i className="ti ti-calendar" />
-                          </span>
-                        </div>
-                      </div>
-                      <div className="mb-3">
-                        <label className="form-label">Start Time</label>
-                        <CommonSelect
-                          className="select"
-                          options={startTime}
-                          defaultValue={startTime[1]}
-                        />
-                      </div>
-                      <div className="mb-0">
-                        <label className="form-label">End Time</label>
-                        <CommonSelect
-                          className="select"
-                          options={startTimeOne}
-                          defaultValue={startTimeOne[1]}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="modal-footer">
-                  <Link
-                    to="#"
-                    className="btn btn-light me-2"
-                    data-bs-dismiss="modal"
-                  >
-                    Cancel
-                  </Link>
-                  <Link  className="btn btn-primary" to="#"  data-bs-dismiss="modal">
-                    Save Changes
-                  </Link>
-                </div>
-              </form>
-            </div>
+            </form>
           </div>
         </div>
-        {/* Edit Exam */}
-        {/* Delete Modal */}
-        <div className="modal fade" id="delete-modal">
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <form >
-                <div className="modal-body text-center">
-                  <span className="delete-icon">
-                    <i className="ti ti-trash-x" />
-                  </span>
-                  <h4>Confirm Deletion</h4>
-                  <p>
-                    You want to delete all the marked items, this cant be undone
-                    once you delete.
-                  </p>
-                  <div className="d-flex justify-content-center">
-                    <Link
-                      to="#"
-                      className="btn btn-light me-3"
-                      data-bs-dismiss="modal"
-                    >
-                      Cancel
-                    </Link>
-                    <Link to="#"  data-bs-dismiss="modal" className="btn btn-danger">
-                      Yes, Delete
-                    </Link>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-        {/* /Delete Modal */}
-      </>
+      </div>
+      {/* Add Exam Modal */}
     </div>
   );
 };
