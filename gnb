@@ -27,10 +27,11 @@ const Exam = () => {
   const [examDate, setExamDate] = useState(dayjs());
   const [startTimeValue, setStartTimeValue] = useState<Option | null>(startTime[0]);
   const [endTimeValue, setEndTimeValue] = useState<Option | null>(startTimeOne[0]);
+  const [editingExamId, setEditingExamId] = useState<string | null>(null); // State to track the exam being edited
 
-  const handleAddExam = () => {
+  const handleAddOrUpdateExam = () => {
     const newExam = {
-      id: Math.random().toString(36).substr(2, 9),
+      id: editingExamId || Math.random().toString(36).substr(2, 9),
       examName,
       examDate: examDate.format("DD-MM-YYYY"),
       startTime: startTimeValue ? startTimeValue.value : "",
@@ -38,8 +39,16 @@ const Exam = () => {
       key: Date.now(),
     };
 
-    const updatedExams = [...data, newExam];
-    setData(updatedExams);
+    if (editingExamId) {
+      // Update existing exam
+      const updatedExams = data.map((exam) => (exam.id === editingExamId ? newExam : exam));
+      setData(updatedExams);
+    } else {
+      // Add new exam
+      const updatedExams = [...data, newExam];
+      setData(updatedExams);
+    }
+
     localStorage.setItem("exams", JSON.stringify(updatedExams));
     resetForm();
   };
@@ -49,6 +58,15 @@ const Exam = () => {
     setExamDate(dayjs());
     setStartTimeValue(startTime[0]);
     setEndTimeValue(startTimeOne[0]);
+    setEditingExamId(null); // Reset the editing ID
+  };
+
+  const handleEditExam = (examToEdit: any) => {
+    setExamName(examToEdit.examName);
+    setExamDate(dayjs(examToEdit.examDate, "DD-MM-YYYY"));
+    setStartTimeValue(startTime.find(option => option.value === examToEdit.startTime) || startTime[0]);
+    setEndTimeValue(startTimeOne.find(option => option.value === examToEdit.endTime) || startTimeOne[0]);
+    setEditingExamId(examToEdit.id); // Set the ID of the exam being edited
   };
 
   const columns = [
@@ -79,8 +97,10 @@ const Exam = () => {
     },
     {
       title: "Action",
-      render: () => (
-        <Link to="#" className="btn btn-danger btn-sm">Delete</Link>
+      render: (text: string, record: any) => (
+        <Link to="#" className="btn btn-info btn-sm" onClick={() => handleEditExam(record)}>
+          Edit
+        </Link>
       ),
     },
   ];
@@ -104,17 +124,17 @@ const Exam = () => {
         </div>
       </div>
 
-      {/* Add Exam Modal */}
+      {/* Add/Edit Exam Modal */}
       <div className="modal fade" id="add_exam">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h4 className="modal-title">Add Exam</h4>
+              <h4 className="modal-title">{editingExamId ? "Edit Exam" : "Add Exam"}</h4>
               <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form onSubmit={(e) => {
               e.preventDefault();
-              handleAddExam();
+              handleAddOrUpdateExam();
             }}>
               <div className="modal-body">
                 <div className="mb-3">
@@ -132,16 +152,18 @@ const Exam = () => {
                 </div>
                 <div className="mb-3">
                   <label className="form-label">Start Time</label>
-                  <CommonSelect className="select" options={startTime} value={startTimeValue?.value} onChange={handleStartTimeChange} />
+                  <CommonSelect className="select" options={startTime} value={startTimeValue?.value} onChange={setStartTimeValue} />
                 </div>
                 <div className="mb-3">
                   <label className="form-label">End Time</label>
-                  <CommonSelect className="select" options={startTimeOne} value={endTimeValue?.value} onChange={handleEndTimeChange} />
+                  <CommonSelect className="select" options={startTimeOne} value={endTimeValue?.value} onChange={setEndTimeValue} />
                 </div>
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">Add Exam</button>
+                <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">
+                  {editingExamId ? "Update Exam" : "Add Exam"}
+                </button>
               </div>
             </form>
           </div>
