@@ -1,41 +1,16 @@
-Compiled with problems:
-×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:53:14
-TS2322: Type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; } | { id: number; examName: string; examDate: string; startTime: string; endTime: string; }' is not assignable to type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
-  Property 'key' is missing in type '{ id: number; examName: string; examDate: string; startTime: string; endTime: string; }' but required in type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
-    51 |       endTime: endTimeValue,
-    52 |     };
-  > 53 |     setData([...data, newExam]);
-       |              ^^^^^^^
-    54 |     setExamName("");
-    55 |     setExamDate(defaultValue);
-    56 |     setStartTimeValue("");
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:53:23
-TS2322: Type '{ id: number; examName: string; examDate: string; startTime: string; endTime: string; }' is not assignable to type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
-    51 |       endTime: endTimeValue,
-    52 |     };
-  > 53 |     setData([...data, newExam]);
-       |                       ^^^^^^^
-    54 |     setExamName("");
-    55 |     setExamDate(defaultValue);
-    56 |     setStartTimeValue("");
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:339:25
-TS2322: Type '{ className: string; options: { value: string; label: string; }[]; value: string; onChange: Dispatch<SetStateAction<string>>; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
-  Property 'value' does not exist on type 'IntrinsicAttributes & SelectProps'.
-    337 |                         className="select"
-    338 |                         options={startTime}
-  > 339 |                         value={startTimeValue}
-        |                         ^^^^^
-    340 |                         onChange={setStartTimeValue}
-    341 |                       />
-    342 |                     </div>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:348:25
-TS2322: Type '{ className: string; options: { value: string; label: string; }[]; value: string; onChange: Dispatch<SetStateAction<string>>; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
-  Property 'value' does not exist on type 'IntrinsicAttributes & SelectProps'.
-    346 |                         className="select"
-    347 |                         options={startTimeOne}
-  > 348 |                         value={endTimeValue}
-        |                         ^^^^^
-    349 |                         onChange={setEndTimeValue}
-    350 |                       />
-    351 |                     </div>
+const handleAddExam = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newExam = {
+        id: data.length + 1, // or a more unique ID
+        examName,
+        examDate: examDate.format("DD-MM-YYYY"),
+        startTime: startTimeValue,
+        endTime: endTimeValue,
+        key: data.length + 1, // Add this line to include the key
+    };
+    setData([...data, newExam]);
+    setExamName("");
+    setExamDate(defaultValue);
+    setStartTimeValue("");
+    setEndTimeValue("");
+};
