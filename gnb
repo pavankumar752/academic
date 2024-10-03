@@ -11,36 +11,27 @@ export interface SelectProps {
   defaultValue?: Option;
   className?: string;
   styles?: any; 
+  onChange?: (option: Option | null) => void; // Added onChange prop
 }
 
-const CommonSelect: React.FC<SelectProps> = ({ options, defaultValue, className }) => {
+const CommonSelect: React.FC<SelectProps> = ({ options, defaultValue, className, onChange }) => {
   const [selectedOption, setSelectedOption] = useState<Option | undefined>(defaultValue);
-
-  // const customStyles = {
-  //   option: (base: any, state: any) => ({
-  //     ...base,
-  //     color: "#6A7287",
-  //     backgroundColor: state.isSelected ? "#ddd" : "white",
-  //     cursor: "pointer",
-  //     "&:hover": {
-  //       backgroundColor: state.isFocused ? "#3D5EE1" : "blue",
-  //       color: state.isFocused ? "#fff" : "#6A7287",
-  //     },
-  //   }),
-  // };
 
   const handleChange = (option: Option | null) => {
     setSelectedOption(option || undefined);
+    if (onChange) {
+      onChange(option); // Call the onChange prop if provided
+    }
   };
+
   useEffect(() => {
     setSelectedOption(defaultValue || undefined);
-  }, [defaultValue])
-  
+  }, [defaultValue]);
+
   return (
     <Select
-     classNamePrefix="react-select"
+      classNamePrefix="react-select"
       className={className}
-      // styles={customStyles}
       options={options}
       value={selectedOption}
       onChange={handleChange}
@@ -50,3 +41,200 @@ const CommonSelect: React.FC<SelectProps> = ({ options, defaultValue, className 
 };
 
 export default CommonSelect;
+
+
+
+
+
+
+
+
+import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import Table from "../../../../core/common/dataTable/index";
+import { exam } from "../../../../core/data/json/exam";
+import { startTime, startTimeOne } from "../../../../core/common/selectoption/selectoption";
+import PredefinedDateRanges from "../../../../core/common/datePicker";
+import { TableData } from "../../../../core/data/interface";
+import CommonSelect from "../../../../core/common/commonSelect";
+import { DatePicker } from "antd";
+import dayjs from "dayjs";
+import { all_routes } from "../../../router/all_routes";
+import TooltipOption from "../../../../core/common/tooltipOption";
+
+const Exam = () => {
+  const routes = all_routes;
+  const [data, setData] = useState(exam);
+  const [examName, setExamName] = useState("");
+  const [examDate, setExamDate] = useState(dayjs());
+  const [startTimeValue, setStartTimeValue] = useState(startTime[0]);
+  const [endTimeValue, setEndTimeValue] = useState(startTimeOne[0]);
+  const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
+
+  const handleAddExam = () => {
+    const newExam = {
+      id: Math.random().toString(36).substr(2, 9), // Random ID
+      examName,
+      examDate: examDate.format("DD-MM-YYYY"),
+      startTime: startTimeValue.value,
+      endTime: endTimeValue.value,
+    };
+
+    const updatedExams = [...data, newExam];
+    setData(updatedExams);
+    localStorage.setItem("exams", JSON.stringify(updatedExams));
+    resetForm();
+  };
+
+  const resetForm = () => {
+    setExamName("");
+    setExamDate(dayjs());
+    setStartTimeValue(startTime[0]);
+    setEndTimeValue(startTimeOne[0]);
+  };
+
+  useEffect(() => {
+    const storedExams = localStorage.getItem("exams");
+    if (storedExams) {
+      setData(JSON.parse(storedExams));
+    }
+  }, []);
+
+  const columns = [
+    {
+      title: "ID",
+      dataIndex: "id",
+      render: (text: string, record: any) => (
+        <Link to="#" className="link-primary">{record.id}</Link>
+      ),
+    },
+    {
+      title: "Exam Name",
+      dataIndex: "examName",
+    },
+    {
+      title: "Exam Date",
+      dataIndex: "examDate",
+    },
+    {
+      title: "Start Time",
+      dataIndex: "startTime",
+    },
+    {
+      title: "End Time",
+      dataIndex: "endTime",
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      render: () => (
+        <div className="d-flex align-items-center">
+          <div className="dropdown">
+            <Link to="#" className="btn btn-white btn-icon btn-sm" data-bs-toggle="dropdown">
+              <i className="ti ti-dots-vertical fs-14" />
+            </Link>
+            <ul className="dropdown-menu dropdown-menu-right p-3">
+              <li>
+                <Link className="dropdown-item" to="#" data-bs-toggle="modal" data-bs-target="#edit_exam">Edit</Link>
+              </li>
+              <li>
+                <Link className="dropdown-item" to="#" data-bs-toggle="modal" data-bs-target="#delete-modal">Delete</Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <div>
+      <div className="page-wrapper">
+        <div className="content">
+          <div className="d-md-flex d-block align-items-center justify-content-between mb-3">
+            <h3 className="page-title mb-1">Exam</h3>
+            <div className="d-flex my-xl-auto right-content align-items-center flex-wrap">
+              <TooltipOption />
+              <div className="mb-2">
+                <Link to="#" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_exam">
+                  Add Exam
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="card">
+            <div className="card-body p-0 py-3">
+              <Table columns={columns} dataSource={data} Selection={true} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Add Exam Modal */}
+      <div className="modal fade" id="add_exam">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">Add Exam</h4>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+            </div>
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              handleAddExam();
+            }}>
+              <div className="modal-body">
+                <div className="row">
+                  <div className="col-md-12">
+                    <div className="mb-3">
+                      <label className="form-label">Exam Name</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={examName}
+                        onChange={(e) => setExamName(e.target.value)}
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Exam Date</label>
+                      <DatePicker
+                        className="form-control"
+                        format="DD-MM-YYYY"
+                        value={examDate}
+                        onChange={(date) => setExamDate(date)}
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Start Time</label>
+                      <CommonSelect
+                        className="select"
+                        options={startTime}
+                        defaultValue={startTimeValue}
+                        onChange={setStartTimeValue}
+                      />
+                    </div>
+                    <div className="mb-0">
+                      <label className="form-label">End Time</label>
+                      <CommonSelect
+                        className="select"
+                        options={startTimeOne}
+                        defaultValue={endTimeValue}
+                        onChange={setEndTimeValue}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <Link to="#" className="btn btn-light me-2" data-bs-dismiss="modal">Cancel</Link>
+                <button type="submit" className="btn btn-primary">Add Exam</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      {/* Add Exam Modal */}
+    </div>
+  );
+};
+
+export default Exam;
