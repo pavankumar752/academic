@@ -1,59 +1,61 @@
-import React, { useEffect, useState } from "react";
-import Select from "react-select";
-
-export type Option = {
-  value: string;
-  label: string;
-};
-
-export interface SelectProps {
-  options: Option[];
-  value?: Option; // Make value prop optional
-  onChange: (option: Option | null) => void; // Add onChange prop
-  defaultValue?: Option;
-  className?: string;
-  styles?: any; 
-}
-
-const CommonSelect: React.FC<SelectProps> = ({
-  options,
-  value,
-  onChange,
-  defaultValue,
-  className,
-}) => {
-  const [selectedOption, setSelectedOption] = useState<Option | undefined>(defaultValue);
-
-  useEffect(() => {
-    setSelectedOption(value || defaultValue || undefined);
-  }, [value, defaultValue]);
-  
-  const handleChange = (option: Option | null) => {
-    setSelectedOption(option || undefined);
-    onChange(option); // Call the onChange prop
-  };
-
-  return (
-    <Select
-      classNamePrefix="react-select"
-      className={className}
-      options={options}
-      value={selectedOption}
-      onChange={handleChange}
-      placeholder="Select"
-    />
-  );
-};
-
-export default CommonSelect;
-
-
-
-
-<CommonSelect
-  className="select"
-  options={startTime}
-  value={startTimeValue}
-  onChange={(option) => setStartTimeValue(option ? option.value : '')}
-/>
-
+Compiled with problems:
+×
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:54:14
+TS2322: Type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; } | { id: number; examName: string; examDate: string; startTime: string; endTime: string; key: number; }' is not assignable to type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
+  Type '{ id: number; examName: string; examDate: string; startTime: string; endTime: string; key: number; }' is not assignable to type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
+    Types of property 'id' are incompatible.
+      Type 'number' is not assignable to type 'string'.
+    52 |         key: data.length + 1, // Add this line to include the key
+    53 |     };
+  > 54 |     setData([...data, newExam]);
+       |              ^^^^^^^
+    55 |     setExamName("");
+    56 |     setExamDate(defaultValue);
+    57 |     setStartTimeValue("");
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:54:23
+TS2322: Type '{ id: number; examName: string; examDate: string; startTime: string; endTime: string; key: number; }' is not assignable to type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
+    52 |         key: data.length + 1, // Add this line to include the key
+    53 |     };
+  > 54 |     setData([...data, newExam]);
+       |                       ^^^^^^^
+    55 |     setExamName("");
+    56 |     setExamDate(defaultValue);
+    57 |     setStartTimeValue("");
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:340:25
+TS2322: Type '{ className: string; options: { value: string; label: string; }[]; value: string; onChange: (option: any) => void; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
+  Property 'value' does not exist on type 'IntrinsicAttributes & SelectProps'.
+    338 |                         className="select"
+    339 |                         options={startTime}
+  > 340 |                         value={startTimeValue}
+        |                         ^^^^^
+    341 |                         onChange={(option) => setStartTimeValue(option ? option.value : '')}
+    342 |                       />
+    343 |                     </div>
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:341:36
+TS7006: Parameter 'option' implicitly has an 'any' type.
+    339 |                         options={startTime}
+    340 |                         value={startTimeValue}
+  > 341 |                         onChange={(option) => setStartTimeValue(option ? option.value : '')}
+        |                                    ^^^^^^
+    342 |                       />
+    343 |                     </div>
+    344 |                     <div className="mb-0">
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:349:25
+TS2322: Type '{ className: string; options: { value: string; label: string; }[]; value: string; onChange: (option: any) => void; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
+  Property 'value' does not exist on type 'IntrinsicAttributes & SelectProps'.
+    347 |                         className="select"
+    348 |                         options={startTimeOne}
+  > 349 |                         value={endTimeValue}
+        |                         ^^^^^
+    350 |                         onChange={(option) => setEndTimeValue(option ? option.value : '')}
+    351 |                       />
+    352 |                     </div>
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:350:36
+TS7006: Parameter 'option' implicitly has an 'any' type.
+    348 |                         options={startTimeOne}
+    349 |                         value={endTimeValue}
+  > 350 |                         onChange={(option) => setEndTimeValue(option ? option.value : '')}
+        |                                    ^^^^^^
+    351 |                       />
+    352 |                     </div>
+    353 |                   </div>
