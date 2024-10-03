@@ -8,39 +8,35 @@ export type Option = {
 
 export interface SelectProps {
   options: Option[];
+  value?: Option; // Make value prop optional
+  onChange: (option: Option | null) => void; // Add onChange prop
   defaultValue?: Option;
   className?: string;
   styles?: any; 
 }
 
-const CommonSelect: React.FC<SelectProps> = ({ options, defaultValue, className }) => {
+const CommonSelect: React.FC<SelectProps> = ({
+  options,
+  value,
+  onChange,
+  defaultValue,
+  className,
+}) => {
   const [selectedOption, setSelectedOption] = useState<Option | undefined>(defaultValue);
 
-  // const customStyles = {
-  //   option: (base: any, state: any) => ({
-  //     ...base,
-  //     color: "#6A7287",
-  //     backgroundColor: state.isSelected ? "#ddd" : "white",
-  //     cursor: "pointer",
-  //     "&:hover": {
-  //       backgroundColor: state.isFocused ? "#3D5EE1" : "blue",
-  //       color: state.isFocused ? "#fff" : "#6A7287",
-  //     },
-  //   }),
-  // };
-
+  useEffect(() => {
+    setSelectedOption(value || defaultValue || undefined);
+  }, [value, defaultValue]);
+  
   const handleChange = (option: Option | null) => {
     setSelectedOption(option || undefined);
+    onChange(option); // Call the onChange prop
   };
-  useEffect(() => {
-    setSelectedOption(defaultValue || undefined);
-  }, [defaultValue])
-  
+
   return (
     <Select
-     classNamePrefix="react-select"
+      classNamePrefix="react-select"
       className={className}
-      // styles={customStyles}
       options={options}
       value={selectedOption}
       onChange={handleChange}
@@ -50,3 +46,14 @@ const CommonSelect: React.FC<SelectProps> = ({ options, defaultValue, className 
 };
 
 export default CommonSelect;
+
+
+
+
+<CommonSelect
+  className="select"
+  options={startTime}
+  value={startTimeValue}
+  onChange={(option) => setStartTimeValue(option ? option.value : '')}
+/>
+
