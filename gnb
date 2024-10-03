@@ -1,47 +1,10 @@
-Compiled with problems:
-×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:46:13
-TS2345: Argument of type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; }[]' is not assignable to parameter of type 'SetStateAction<{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }[]>'.
-  Type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; }[]' is not assignable to type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }[]'.
-    Property 'key' is missing in type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; }' but required in type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
-    44 |
-    45 |     const updatedExams = [...data, newExam];
-  > 46 |     setData(updatedExams);
-       |             ^^^^^^^^^^^^
-    47 |     localStorage.setItem("exams", JSON.stringify(updatedExams));
-    48 |     resetForm();
-    49 |   };
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:52:23
-TS2345: Argument of type 'Option | undefined' is not assignable to parameter of type 'SetStateAction<{ value: string; label: string; }>'.
-  Type 'undefined' is not assignable to type 'SetStateAction<{ value: string; label: string; }>'.
-    50 |
-    51 |    const handleStartTimeChange = (option: Option | null) => {
-  > 52 |     setStartTimeValue(option || undefined);
-       |                       ^^^^^^^^^^^^^^^^^^^
-    53 |   };
-    54 |   
-    55 |
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:356:25
-TS2322: Type 'Dispatch<SetStateAction<{ value: string; label: string; }>>' is not assignable to type '(option: Option | null) => void'.
-  Types of parameters 'value' and 'option' are incompatible.
-    Type 'Option | null' is not assignable to type 'SetStateAction<{ value: string; label: string; }>'.
-      Type 'null' is not assignable to type 'SetStateAction<{ value: string; label: string; }>'.
-    354 |                         <label className="form-label">Start Time</label>
-    355 |                         <CommonSelect className="select" options={startTime} defaultValue={startTimeValue}
-  > 356 |                         onChange={setStartTimeValue} />
-        |                         ^^^^^^^^
-    357 |                       </div>
-    358 |                       <div className="mb-0">
-    359 |                         <label className="form-label">End Time</label>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:364:25
-TS2322: Type 'Dispatch<SetStateAction<{ value: string; label: string; }>>' is not assignable to type '(option: Option | null) => void'.
-  Types of parameters 'value' and 'option' are incompatible.
-    Type 'Option | null' is not assignable to type 'SetStateAction<{ value: string; label: string; }>'.
-      Type 'null' is not assignable to type 'SetStateAction<{ value: string; label: string; }>'.
-    362 |                           options={startTimeOne}
-    363 |                           defaultValue={endTimeValue}
-  > 364 |                         onChange={setEndTimeValue}
-        |                         ^^^^^^^^
-    365 |                         />
-    366 |                       </div>
-    367 |                     </div>
+const [startTimeValue, setStartTimeValue] = useState<Option | null>(startTime[0]);
+const [endTimeValue, setEndTimeValue] = useState<Option | null>(startTimeOne[0]);
+
+const handleStartTimeChange = (option: Option | null) => {
+  setStartTimeValue(option);
+};
+
+const handleEndTimeChange = (option: Option | null) => {
+  setEndTimeValue(option);
+};
