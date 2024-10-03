@@ -1,48 +1,26 @@
-Compiled with problems:
-×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:31:42
-TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-    29 |
-    30 |   const handleAddExam = () => {
-  > 31 |     const newId = data.length ? Math.max(...data.map(exam => exam.id)) + 1 : 1;
-       |                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    32 |     setData([...data, { ...newExam, id: newId }]);
-    33 |     resetForm();
-    34 |   };
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:32:14
-TS2322: Type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; } | { id: number; examName: string; examDate: string; startTime: string; endTime: string; }' is not assignable to type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
-  Property 'key' is missing in type '{ id: number; examName: string; examDate: string; startTime: string; endTime: string; }' but required in type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
-    30 |   const handleAddExam = () => {
-    31 |     const newId = data.length ? Math.max(...data.map(exam => exam.id)) + 1 : 1;
-  > 32 |     setData([...data, { ...newExam, id: newId }]);
-       |              ^^^^^^^
-    33 |     resetForm();
-    34 |   };
-    35 |
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:32:37
-TS2322: Type 'number' is not assignable to type 'string'.
-    30 |   const handleAddExam = () => {
-    31 |     const newId = data.length ? Math.max(...data.map(exam => exam.id)) + 1 : 1;
-  > 32 |     setData([...data, { ...newExam, id: newId }]);
-       |                                     ^^
-    33 |     resetForm();
-    34 |   };
-    35 |
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:37:31
-TS2367: This comparison appears to be unintentional because the types 'string' and 'number | null' have no overlap.
-    35 |
-    36 |   const handleEditExam = () => {
-  > 37 |     setData(data.map(exam => (exam.id === currentExamId ? { ...exam, ...newExam } : exam)));
-       |                               ^^^^^^^^^^^^^^^^^^^^^^^^^
-    38 |     resetForm();
-    39 |   };
-    40 |
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:42:33
-TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
-    40 |
-    41 |   const handleDeleteExam = (id: number) => {
-  > 42 |     setData(data.filter(exam => exam.id !== id));
-       |                                 ^^^^^^^^^^^^^^
-    43 |   };
-    44 |
-    45 |   const resetForm = () => {
+const handleAddExam = () => {
+  const newId = data.length ? (Math.max(...data.map(exam => Number(exam.id))) + 1).toString() : "1";
+  setData([...data, { ...newExam, id: newId, key: Number(newId) }]); // Ensure key is added
+  resetForm();
+};
+
+const handleEditExam = () => {
+  setData(data.map(exam => (exam.id === currentExamId ? { ...exam, ...newExam } : exam)));
+  resetForm();
+};
+
+const handleDeleteExam = (id: string) => { // Ensure id is a string
+  setData(data.filter(exam => exam.id !== id));
+};
+
+
+
+
+interface Exam {
+  id: string; // Ensure id is a string
+  examName: string;
+  examDate: string;
+  startTime: string;
+  endTime: string;
+  key: number; // If key is necessary
+}
