@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DatePicker } from 'some-date-picker-library'; // Replace with your actual date picker
 import CommonSelect from './CommonSelect'; // Ensure this component is correctly imported
 import { Link } from 'react-router-dom'; // Ensure react-router-dom is installed
@@ -8,6 +8,13 @@ const ExamForm = () => {
   const [examDate, setExamDate] = useState(null);
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
+  const [exams, setExams] = useState([]);
+
+  useEffect(() => {
+    // Load existing exams from local storage on component mount
+    const storedExams = JSON.parse(localStorage.getItem('exams')) || [];
+    setExams(storedExams);
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,89 +33,105 @@ const ExamForm = () => {
       endTime,
     };
 
-    // Retrieve existing exams from local storage
-    const existingExams = JSON.parse(localStorage.getItem('exams')) || [];
-
     // Add new exam to existing exams
-    existingExams.push(examData);
+    const updatedExams = [...exams, examData];
 
     // Save updated exams back to local storage
-    localStorage.setItem('exams', JSON.stringify(existingExams));
+    localStorage.setItem('exams', JSON.stringify(updatedExams));
 
-    // Optionally reset form fields after submission
+    // Update state and reset form fields
+    setExams(updatedExams);
     setExamName('');
     setExamDate(null);
     setStartTime(null);
     setEndTime(null);
     
-    // Optionally close modal or give feedback
+    // Optionally give feedback
     alert("Exam added successfully!");
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="modal-body">
-        <div className="row">
-          <div className="col-md-12">
-            <div className="mb-3">
-              <label className="form-label">Exam Name</label>
-              <input
-                type="text"
-                className="form-control"
-                value={examName}
-                onChange={(e) => setExamName(e.target.value)}
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Exam Date</label>
-              <div className="date-pic">
-                <DatePicker
-                  className="form-control datetimepicker"
-                  format={{
-                    format: "DD-MM-YYYY",
-                    type: "mask",
-                  }}
-                  getPopupContainer={getModalContainer}
-                  onChange={(date) => setExamDate(date)}
-                  placeholder="16 May 2024"
+    <div>
+      <form onSubmit={handleSubmit}>
+        <div className="modal-body">
+          <div className="row">
+            <div className="col-md-12">
+              <div className="mb-3">
+                <label className="form-label">Exam Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={examName}
+                  onChange={(e) => setExamName(e.target.value)}
                 />
-                <span className="cal-icon">
-                  <i className="ti ti-calendar" />
-                </span>
               </div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Start Time</label>
-              <CommonSelect
-                className="select"
-                options={startTimeOptions} // Ensure this variable is defined
-                onChange={(option) => setStartTime(option.value)}
-              />
-            </div>
-            <div className="mb-0">
-              <label className="form-label">End Time</label>
-              <CommonSelect
-                className="select"
-                options={endTimeOptions} // Ensure this variable is defined
-                onChange={(option) => setEndTime(option.value)}
-              />
+              <div className="mb-3">
+                <label className="form-label">Exam Date</label>
+                <div className="date-pic">
+                  <DatePicker
+                    className="form-control datetimepicker"
+                    format={{
+                      format: "DD-MM-YYYY",
+                      type: "mask",
+                    }}
+                    getPopupContainer={getModalContainer}
+                    onChange={(date) => setExamDate(date)}
+                    placeholder="16 May 2024"
+                  />
+                  <span className="cal-icon">
+                    <i className="ti ti-calendar" />
+                  </span>
+                </div>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Start Time</label>
+                <CommonSelect
+                  className="select"
+                  options={startTimeOptions} // Ensure this variable is defined
+                  onChange={(option) => setStartTime(option.value)}
+                />
+              </div>
+              <div className="mb-0">
+                <label className="form-label">End Time</label>
+                <CommonSelect
+                  className="select"
+                  options={endTimeOptions} // Ensure this variable is defined
+                  onChange={(option) => setEndTime(option.value)}
+                />
+              </div>
             </div>
           </div>
         </div>
+        <div className="modal-footer">
+          <Link
+            to="#"
+            className="btn btn-light me-2"
+            data-bs-dismiss="modal"
+          >
+            Cancel
+          </Link>
+          <button type="submit" className="btn btn-primary">
+            Add Exam
+          </button>
+        </div>
+      </form>
+
+      {/* Displaying the list of exams */}
+      <div className="exam-list mt-4">
+        <h4>Saved Exams</h4>
+        {exams.length > 0 ? (
+          <ul className="list-group">
+            {exams.map((exam, index) => (
+              <li key={index} className="list-group-item">
+                <strong>{exam.name}</strong> - {exam.date} | {exam.startTime} - {exam.endTime}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No exams added yet.</p>
+        )}
       </div>
-      <div className="modal-footer">
-        <Link
-          to="#"
-          className="btn btn-light me-2"
-          data-bs-dismiss="modal"
-        >
-          Cancel
-        </Link>
-        <button type="submit" className="btn btn-primary">
-          Add Exam
-        </button>
-      </div>
-    </form>
+    </div>
   );
 };
 
