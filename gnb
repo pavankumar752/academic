@@ -1,310 +1,52 @@
-import React, { useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import Table from "../../../../core/common/dataTable/index";
-import { exam as initialExams } from "../../../../core/data/json/exam"; // Ensure `id` is number
-import {
-  examOne,
-  examtwo,
-  startTime,
-  startTimeOne,
-} from "../../../../core/common/selectoption/selectoption";
-import PredefinedDateRanges from "../../../../core/common/datePicker";
-import { TableData } from "../../../../core/data/interface";
-import CommonSelect from "../../../../core/common/commonSelect";
-import { DatePicker } from "antd";
-import dayjs, { Dayjs } from "dayjs";
-import { all_routes } from "../../../router/all_routes";
-import TooltipOption from "../../../../core/common/tooltipOption";
-
-// Define the Exam type
-interface Exam {
-  id: number; // Ensure this is a number
-  examName: string;
-  examDate: string;
-  startTime: string;
-  endTime: string;
-}
-
-const Exam: React.FC = () => {
-  const routes = all_routes;
-
-  const [exams, setExams] = useState<Exam[]>(initialExams as Exam[]); // Cast to Exam[]
-  const [modalType, setModalType] = useState<"add" | "edit">("add");
-  const [currentExam, setCurrentExam] = useState<Exam | null>(null);
-  const [showModal, setShowModal] = useState(false);
-  const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
-
-  const today = new Date();
-  const formattedDate = dayjs(today).format("DD-MM-YYYY");
-  const defaultValue = dayjs(formattedDate);
-
-  const handleApplyClick = () => {
-    if (dropdownMenuRef.current) {
-      dropdownMenuRef.current.classList.remove("show");
-    }
-  };
-
-  const getModalContainer = () => {
-    const modalElement = document.getElementById("modal-datepicker");
-    return modalElement ? modalElement : document.body; 
-  };
-
-  const handleOpenModal = (type: "add" | "edit", exam: Exam | null = null) => {
-    setModalType(type);
-    setCurrentExam(exam);
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setCurrentExam(null);
-  };
-
-  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const form = event.target as HTMLFormElement;
-    const examName = form.examName.value;
-    const examDate = form.examDate.value;
-    const startTimeValue = form.startTime.value;
-    const endTimeValue = form.endTime.value;
-
-    if (modalType === "add") {
-      const newExam: Exam = {
-        id: exams.length + 1,
-        examName,
-        examDate,
-        startTime: startTimeValue,
-        endTime: endTimeValue,
-      };
-      setExams([...exams, newExam]);
-    } else if (modalType === "edit" && currentExam) {
-      const updatedExams = exams.map(exam => 
-        exam.id === currentExam.id 
-          ? { ...exam, examName, examDate, startTime: startTimeValue, endTime: endTimeValue } 
-          : exam
-      );
-      setExams(updatedExams);
-    }
-    handleCloseModal();
-  };
-
-  const handleDeleteExam = (id: number) => {
-    setExams(exams.filter(exam => exam.id !== id));
-  };
-
-  const columns = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      render: (text: any, record: Exam) => (
-        <Link to="#" className="link-primary">
-          {record.id}
-        </Link>
-      ),
-      sorter: (a: Exam, b: Exam) => a.id - b.id,
-    },
-    {
-      title: "Exam Name",
-      dataIndex: "examName",
-      sorter: (a: Exam, b: Exam) => a.examName.localeCompare(b.examName),
-    },
-    {
-      title: "Exam Date",
-      dataIndex: "examDate",
-      sorter: (a: Exam, b: Exam) => a.examDate.localeCompare(b.examDate),
-    },
-    {
-      title: "Start Time",
-      dataIndex: "startTime",
-      sorter: (a: Exam, b: Exam) => a.startTime.localeCompare(b.startTime),
-    },
-    {
-      title: "End Time",
-      dataIndex: "endTime",
-      sorter: (a: Exam, b: Exam) => a.endTime.localeCompare(b.endTime),
-    },
-    {
-      title: "Action",
-      dataIndex: "action",
-      render: (text: any, record: Exam) => (
-        <div className="d-flex align-items-center">
-          <div className="dropdown">
-            <Link to="#" className="btn btn-white btn-icon btn-sm" data-bs-toggle="dropdown">
-              <i className="ti ti-dots-vertical fs-14" />
-            </Link>
-            <ul className="dropdown-menu dropdown-menu-right p-3">
-              <li>
-                <Link
-                  className="dropdown-item rounded-1"
-                  to="#"
-                  onClick={() => handleOpenModal("edit", record)}
-                >
-                  <i className="ti ti-edit-circle me-2" />
-                  Edit
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="dropdown-item rounded-1"
-                  to="#"
-                  onClick={() => handleDeleteExam(record.id)}
-                >
-                  <i className="ti ti-trash-x me-2" />
-                  Delete
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      ),
-    },
-  ];
-
-  return (
-    <div>
-      <div className="page-wrapper">
-        <div className="content">
-          <div className="d-md-flex d-block align-items-center justify-content-between mb-3">
-            <div className="my-auto mb-2">
-              <h3 className="page-title mb-1">Exam</h3>
-              <nav>
-                <ol className="breadcrumb mb-0">
-                  <li className="breadcrumb-item">
-                    <Link to={routes.adminDashboard}>Dashboard</Link>
-                  </li>
-                  <li className="breadcrumb-item">
-                    <Link to="#">Academic </Link>
-                  </li>
-                  <li className="breadcrumb-item active" aria-current="page">
-                    Exam
-                  </li>
-                </ol>
-              </nav>
-            </div>
-            <div className="d-flex my-xl-auto right-content align-items-center flex-wrap">
-              <TooltipOption />
-              <div className="mb-2">
-                <Link
-                  to="#"
-                  className="btn btn-primary"
-                  onClick={() => handleOpenModal("add")}
-                >
-                  <i className="ti ti-square-rounded-plus-filled me-2" />
-                  Add Exam
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="card-header d-flex align-items-center justify-content-between flex-wrap pb-0">
-              <h4 className="mb-3">Exam List</h4>
-              <div className="d-flex align-items-center flex-wrap">
-                <div className="input-icon-start mb-3 me-2 position-relative">
-                  <PredefinedDateRanges />
-                </div>
-                <div className="dropdown mb-3 me-2">
-                  <Link
-                    to="#"
-                    className="btn btn-outline-light bg-white dropdown-toggle"
-                    data-bs-toggle="dropdown"
-                  >
-                    <i className="ti ti-filter me-2" />
-                    Filter
-                  </Link>
-                  <div className="dropdown-menu drop-width" ref={dropdownMenuRef}>
-                    {/* Filter form can be implemented here */}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="card-body p-0 py-3">
-              <Table columns={columns} dataSource={exams} />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Add/Edit Exam Modal */}
-      {showModal && (
-        <div className="modal fade show" style={{ display: 'block' }}>
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h4 className="modal-title">{modalType === "add" ? "Add Exam" : "Edit Exam"}</h4>
-                <button
-                  type="button"
-                  className="btn-close custom-btn-close"
-                  onClick={handleCloseModal}
-                >
-                  <i className="ti ti-x" />
-                </button>
-              </div>
-              <form onSubmit={handleFormSubmit}>
-                <div className="modal-body">
-                  <div className="row">
-                    <div className="col-12">
-                      <div className="mb-3">
-                        <label className="form-label">Exam Name</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="examName"
-                          defaultValue={currentExam?.examName || ""}
-                          required
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label className="form-label">Exam Date</label>
-                        <DatePicker
-                          defaultValue={currentExam ? dayjs(currentExam.examDate) : defaultValue}
-                          format="DD-MM-YYYY"
-                          name="examDate"
-                          placeholder="16 May 2024"
-                          getPopupContainer={getModalContainer}
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label className="form-label">Start Time</label>
-                        <CommonSelect
-                          className="select"
-                          options={startTime}
-                          defaultValue={currentExam?.startTime || startTime[0].value}
-                          name="startTime"
-                        />
-                      </div>
-                      <div className="mb-0">
-                        <label className="form-label">End Time</label>
-                        <CommonSelect
-                          className="select"
-                          options={startTimeOne}
-                          defaultValue={currentExam?.endTime || startTimeOne[0].value}
-                          name="endTime"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="modal-footer">
-                  <Link
-                    to="#"
-                    className="btn btn-light me-2"
-                    onClick={handleCloseModal}
-                  >
-                    Cancel
-                  </Link>
-                  <button type="submit" className="btn btn-primary">
-                    {modalType === "add" ? "Add Exam" : "Save Changes"}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
-      {/* /Add/Edit Exam Modal */}
-    </div>
-  );
-};
-
-export default Exam;
+Compiled with problems:
+×
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:30:46
+TS2352: Conversion of type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }[]' to type 'Exam[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }' is not comparable to type 'Exam'.
+    Types of property 'id' are incompatible.
+      Type 'string' is not comparable to type 'number'.
+    28 |   const routes = all_routes;
+    29 |
+  > 30 |   const [exams, setExams] = useState<Exam[]>(initialExams as Exam[]);
+       |                                              ^^^^^^^^^^^^^^^^^^^^^^
+    31 |   const [modalType, setModalType] = useState<"add" | "edit">("add");
+    32 |   const [currentExam, setCurrentExam] = useState<Exam | null>(null);
+    33 |   const [showModal, setShowModal] = useState(false);
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:151:60
+TS2304: Cannot find name 'record'.
+    149 |                     data-bs-toggle="modal"
+    150 |                     data-bs-target="#edit_exam"
+  > 151 |                     onClick={() => handleOpenModal("edit", record)}
+        |                                                            ^^^^^^
+    152 |                   >
+    153 |                     <i className="ti ti-edit-circle me-2" />
+    154 |                     Edit
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:163:53
+TS2304: Cannot find name 'record'.
+    161 |                     data-bs-toggle="modal"
+    162 |                     data-bs-target="#delete-modal"
+  > 163 |                     onClick={() => handleDeleteExam(record.id)}
+        |                                                     ^^^^^^
+    164 |                   >
+    165 |                     <i className="ti ti-trash-x me-2" />
+    166 |                     Delete
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:367:27
+TS2322: Type 'string | { value: string; label: string; }' is not assignable to type 'Option | undefined'.
+  Type 'string' is not assignable to type 'Option'.
+    365 |                           className="select"
+    366 |                           options={startTime}
+  > 367 |                           defaultValue={currentExam?.startTime || startTime[0]}
+        |                           ^^^^^^^^^^^^
+    368 |                           name="startTime"
+    369 |                         />
+    370 |                       </div>
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:376:27
+TS2322: Type 'string | { value: string; label: string; }' is not assignable to type 'Option | undefined'.
+  Type 'string' is not assignable to type 'Option'.
+    374 |                           className="select"
+    375 |                           options={startTimeOne}
+  > 376 |                           defaultValue={currentExam?.endTime || startTimeOne[0]}
+        |                           ^^^^^^^^^^^^
+    377 |                           name="endTime"
+    378 |                         />
+    379 |                       </div>
