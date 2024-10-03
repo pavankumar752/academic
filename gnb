@@ -1,86 +1,223 @@
-Compiled with problems:
-×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:31:42
-TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-    29 |
-    30 |   const handleAddExam = () => {
-  > 31 |     const newId = data.length ? Math.max(...data.map(exam => exam.id)) + 1 : 1;
-       |                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    32 |     setData([...data, { ...newExam, id: newId }]);
-    33 |     resetForm();
-    34 |   };
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:32:14
-TS2322: Type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; } | { id: number; examName: string; examDate: string; startTime: string; endTime: string; }' is not assignable to type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
-  Property 'key' is missing in type '{ id: number; examName: string; examDate: string; startTime: string; endTime: string; }' but required in type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
-    30 |   const handleAddExam = () => {
-    31 |     const newId = data.length ? Math.max(...data.map(exam => exam.id)) + 1 : 1;
-  > 32 |     setData([...data, { ...newExam, id: newId }]);
-       |              ^^^^^^^
-    33 |     resetForm();
-    34 |   };
-    35 |
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:32:37
-TS2322: Type 'number' is not assignable to type 'string'.
-    30 |   const handleAddExam = () => {
-    31 |     const newId = data.length ? Math.max(...data.map(exam => exam.id)) + 1 : 1;
-  > 32 |     setData([...data, { ...newExam, id: newId }]);
-       |                                     ^^
-    33 |     resetForm();
-    34 |   };
-    35 |
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:37:31
-TS2367: This comparison appears to be unintentional because the types 'string' and 'number | null' have no overlap.
-    35 |
-    36 |   const handleEditExam = () => {
-  > 37 |     setData(data.map(exam => (exam.id === currentExamId ? { ...exam, ...newExam } : exam)));
-       |                               ^^^^^^^^^^^^^^^^^^^^^^^^^
-    38 |     resetForm();
-    39 |   };
-    40 |
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:42:33
-TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
-    40 |
-    41 |   const handleDeleteExam = (id: number) => {
-  > 42 |     setData(data.filter(exam => exam.id !== id));
-       |                                 ^^^^^^^^^^^^^^
-    43 |   };
-    44 |
-    45 |   const resetForm = () => {
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:198:21
-TS2322: Type '{ className: string; options: { value: string; label: string; }[]; defaultValue: { value: string; label: string; } | undefined; onChange: (option: any) => void; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
-  Property 'onChange' does not exist on type 'IntrinsicAttributes & SelectProps'.
-    196 |                     options={startTime}
-    197 |                     defaultValue={startTime.find(option => option.value === newExam.startTime)}
-  > 198 |                     onChange={option => setNewExam({ ...newExam, startTime: option?.value || "" })}
-        |                     ^^^^^^^^
-    199 |                   />
-    200 |                 </div>
-    201 |                 <div className="mb-0">
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:198:31
-TS7006: Parameter 'option' implicitly has an 'any' type.
-    196 |                     options={startTime}
-    197 |                     defaultValue={startTime.find(option => option.value === newExam.startTime)}
-  > 198 |                     onChange={option => setNewExam({ ...newExam, startTime: option?.value || "" })}
-        |                               ^^^^^^
-    199 |                   />
-    200 |                 </div>
-    201 |                 <div className="mb-0">
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:207:21
-TS2322: Type '{ className: string; options: { value: string; label: string; }[]; defaultValue: { value: string; label: string; } | undefined; onChange: (option: any) => void; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
-  Property 'onChange' does not exist on type 'IntrinsicAttributes & SelectProps'.
-    205 |                     options={startTimeOne}
-    206 |                     defaultValue={startTimeOne.find(option => option.value === newExam.endTime)}
-  > 207 |                     onChange={option => setNewExam({ ...newExam, endTime: option?.value || "" })}
-        |                     ^^^^^^^^
-    208 |                   />
-    209 |                 </div>
-    210 |               </div>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:207:31
-TS7006: Parameter 'option' implicitly has an 'any' type.
-    205 |                     options={startTimeOne}
-    206 |                     defaultValue={startTimeOne.find(option => option.value === newExam.endTime)}
-  > 207 |                     onChange={option => setNewExam({ ...newExam, endTime: option?.value || "" })}
-        |                               ^^^^^^
-    208 |                   />
-    209 |                 </div>
-    210 |               </div>
+import React, { useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import Table from "../../../../core/common/dataTable/index";
+import { exam as initialExamData } from "../../../../core/data/json/exam"; // Original exam data
+import {
+  examOne,
+  examtwo,
+  startTime,
+  startTimeOne,
+} from "../../../../core/common/selectoption/selectoption";
+import PredefinedDateRanges from "../../../../core/common/datePicker";
+import { TableData } from "../../../../core/data/interface";
+import CommonSelect from "../../../../core/common/commonSelect";
+import { DatePicker } from "antd";
+import dayjs from "dayjs";
+import { all_routes } from "../../../router/all_routes";
+import TooltipOption from "../../../../core/common/tooltipOption";
+
+const Exam = () => {
+  const routes = all_routes;
+  const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
+  const today = new Date();
+  const formattedDate = dayjs(today).format("DD-MM-YYYY");
+  
+  const [data, setData] = useState(initialExamData);
+  const [newExam, setNewExam] = useState({ examName: "", examDate: "", startTime: "", endTime: "" });
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentExamId, setCurrentExamId] = useState<string | null>(null); // Use string to match exam ID type
+
+  const handleAddExam = () => {
+    const newId = data.length ? (Math.max(...data.map(exam => parseInt(exam.id))) + 1).toString() : "1"; // Ensure ID is a string
+    setData([...data, { ...newExam, id: newId, key: newId }]); // Add key for the table
+    resetForm();
+  };
+
+  const handleEditExam = () => {
+    setData(data.map(exam => (exam.id === currentExamId ? { ...exam, ...newExam } : exam)));
+    resetForm();
+  };
+
+  const handleDeleteExam = (id: string) => {
+    setData(data.filter(exam => exam.id !== id));
+  };
+
+  const resetForm = () => {
+    setNewExam({ examName: "", examDate: "", startTime: "", endTime: "" });
+    setIsEditing(false);
+    setCurrentExamId(null);
+  };
+
+  const openEditModal = (exam: TableData) => {
+    setNewExam({ examName: exam.examName, examDate: exam.examDate, startTime: exam.startTime, endTime: exam.endTime });
+    setCurrentExamId(exam.id);
+    setIsEditing(true);
+  };
+
+  const columns = [
+    {
+      title: "ID",
+      dataIndex: "id",
+      render: (text: string, record: any) => <Link to="#" className="link-primary">{record.id}</Link>,
+    },
+    {
+      title: "Exam Name",
+      dataIndex: "examName",
+      sorter: (a: TableData, b: TableData) => a.examName.length - b.examName.length,
+    },
+    {
+      title: "Exam Date",
+      dataIndex: "examDate",
+      sorter: (a: TableData, b: TableData) => a.examDate.length - b.examDate.length,
+    },
+    {
+      title: "Start Time",
+      dataIndex: "startTime",
+      sorter: (a: TableData, b: TableData) => a.startTime.length - b.startTime.length,
+    },
+    {
+      title: "End Time",
+      dataIndex: "endTime",
+      sorter: (a: TableData, b: TableData) => a.endTime.length - b.endTime.length,
+    },
+    {
+      title: "Action",
+      render: (text: string, record: any) => (
+        <div className="d-flex align-items-center">
+          <div className="dropdown">
+            <Link to="#" className="btn btn-white btn-icon btn-sm" data-bs-toggle="dropdown">
+              <i className="ti ti-dots-vertical fs-14" />
+            </Link>
+            <ul className="dropdown-menu dropdown-menu-right p-3">
+              <li>
+                <Link className="dropdown-item" to="#" onClick={() => openEditModal(record)}>
+                  <i className="ti ti-edit-circle me-2" /> Edit
+                </Link>
+              </li>
+              <li>
+                <Link className="dropdown-item" to="#" onClick={() => handleDeleteExam(record.id)}>
+                  <i className="ti ti-trash-x me-2" /> Delete
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <div>
+      <div className="page-wrapper">
+        <div className="content">
+          {/* Page Header */}
+          <div className="d-md-flex d-block align-items-center justify-content-between mb-3">
+            <div className="my-auto mb-2">
+              <h3 className="page-title mb-1">Exam</h3>
+              <nav>
+                <ol className="breadcrumb mb-0">
+                  <li className="breadcrumb-item">
+                    <Link to={routes.adminDashboard}>Dashboard</Link>
+                  </li>
+                  <li className="breadcrumb-item">
+                    <Link to="#">Academic</Link>
+                  </li>
+                  <li className="breadcrumb-item active" aria-current="page">
+                    Exam
+                  </li>
+                </ol>
+              </nav>
+            </div>
+            <div className="d-flex my-xl-auto right-content align-items-center flex-wrap">
+              <TooltipOption />
+              <div className="mb-2">
+                <Link
+                  to="#"
+                  className="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#add_exam"
+                  onClick={() => resetForm()} // Reset the form when opening the modal
+                >
+                  <i className="ti ti-square-rounded-plus-filled me-2" />
+                  Add Exam
+                </Link>
+              </div>
+            </div>
+          </div>
+          {/* /Page Header */}
+          <div className="card">
+            <div className="card-header d-flex align-items-center justify-content-between flex-wrap pb-0">
+              <h4 className="mb-3">Exam List</h4>
+              <div className="d-flex align-items-center flex-wrap">
+                <div className="input-icon-start mb-3 me-2 position-relative">
+                  <PredefinedDateRanges />
+                </div>
+              </div>
+            </div>
+            <div className="card-body p-0 py-3">
+              <Table columns={columns} dataSource={data} Selection={true} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Add/Edit Modal */}
+      <div className="modal fade" id="add_exam">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">{isEditing ? "Edit Exam" : "Add Exam"}</h4>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form onSubmit={e => { e.preventDefault(); isEditing ? handleEditExam() : handleAddExam(); }}>
+              <div className="modal-body">
+                <div className="mb-3">
+                  <label className="form-label">Exam Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={newExam.examName}
+                    onChange={e => setNewExam({ ...newExam, examName: e.target.value })}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Exam Date</label>
+                  <DatePicker
+                    className="form-control"
+                    format="DD-MM-YYYY"
+                    value={newExam.examDate ? dayjs(newExam.examDate) : null}
+                    onChange={date => setNewExam({ ...newExam, examDate: date ? date.format("DD-MM-YYYY") : "" })}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Start Time</label>
+                  <CommonSelect
+                    className="select"
+                    options={startTime}
+                    defaultValue={startTime.find(option => option.value === newExam.startTime)}
+                    onChange={(option: { value: string }) => setNewExam({ ...newExam, startTime: option.value })}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">End Time</label>
+                  <CommonSelect
+                    className="select"
+                    options={startTimeOne}
+                    defaultValue={startTimeOne.find(option => option.value === newExam.endTime)}
+                    onChange={(option: { value: string }) => setNewExam({ ...newExam, endTime: option.value })}
+                  />
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" className="btn btn-primary">{isEditing ? "Update Exam" : "Add Exam"}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Exam;
