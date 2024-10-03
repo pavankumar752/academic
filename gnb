@@ -1,13 +1,16 @@
-
-
-
-
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
+
 import Table from "../../../../core/common/dataTable/index";
 import { exam } from "../../../../core/data/json/exam";
-import { examOne, examtwo, startTime, startTimeOne } from "../../../../core/common/selectoption/selectoption";
+import {
+  examOne,
+  examtwo,
+  startTime,
+  startTimeOne,
+} from "../../../../core/common/selectoption/selectoption";
 import PredefinedDateRanges from "../../../../core/common/datePicker";
+import { TableData } from "../../../../core/data/interface";
 import CommonSelect from "../../../../core/common/commonSelect";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
@@ -17,265 +20,88 @@ import TooltipOption from "../../../../core/common/tooltipOption";
 const Exam = () => {
   const routes = all_routes;
 
-  const [exams, setExams] = useState(() => {
-    const storedExams = localStorage.getItem('exams');
-    return storedExams ? JSON.parse(storedExams) : exam;
-  });
-
+  const data = exam;
   const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
-  const today = dayjs();
-  const defaultValue = today;
-
-  const [newExam, setNewExam] = useState({
-    examName: '',
-    examDate: defaultValue,
-    startTime: '',
-    endTime: ''
-  });
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setNewExam(prevState => ({ ...prevState, [name]: value }));
-  };
-
-  const handleAddExam = (e: React.FormEvent) => {
-    e.preventDefault();
-    const updatedExams = [
-      ...exams,
-      { ...newExam, id: exams.length + 1, examDate: newExam.examDate.format('DD-MM-YYYY') }
-    ];
-
-    setExams(updatedExams);
-    localStorage.setItem('exams', JSON.stringify(updatedExams));
-    setNewExam({ examName: '', examDate: defaultValue, startTime: '', endTime: '' });
-  };
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0"); // Month is zero-based, so we add 1
+  const day = String(today.getDate()).padStart(2, "0");
+  const formattedDate = `${month}-${day}-${year}`;
+  const defaultValue = dayjs(formattedDate);
 
   const handleApplyClick = () => {
     if (dropdownMenuRef.current) {
       dropdownMenuRef.current.classList.remove("show");
     }
   };
+  const getModalContainer = () => {
+    const modalElement = document.getElementById("modal-datepicker");
+    return modalElement ? modalElement : document.body; // Fallback to document.body if modalElement is null
+  };
 
-  const columns = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      render: (text: string, record: any) => (
-        <Link to="#" className="link-primary">{record.id}</Link>
-      ),
-      sorter: (a: any, b: any) => a.id - b.id,
-    },
-    {
-      title: "Exam Name",
-      dataIndex: "examName",
-      sorter: (a: any, b: any) => a.examName.localeCompare(b.examName),
-    },
-    {
-      title: "Exam Date",
-      dataIndex: "examDate",
-      render: (date: any) => dayjs(date).format('DD-MM-YYYY'),
-      sorter: (a: any, b: any) => dayjs(a.examDate).unix() - dayjs(b.examDate).unix(),
-    },
-    {
-      title: "Start Time",
-      dataIndex: "startTime",
-      sorter: (a: any, b: any) => a.startTime.localeCompare(b.startTime),
-    },
-    {
-      title: "End Time",
-      dataIndex: "endTime",
-      sorter: (a: any, b: any) => a.endTime.localeCompare(b.endTime),
-    },
-    {
-      title: "Action",
-      dataIndex: "action",
-      render: () => (
-        <div className="d-flex align-items-center">
-          <div className="dropdown">
-            <Link to="#" className="btn btn-white btn-icon btn-sm" data-bs-toggle="dropdown">
-              <i className="ti ti-dots-vertical fs-14" />
-            </Link>
-            <ul className="dropdown-menu dropdown-menu-right p-3">
-              <li>
-                <Link className="dropdown-item rounded-1" to="#" data-bs-toggle="modal" data-bs-target="#edit_exam">
-                  <i className="ti ti-edit-circle me-2" /> Edit
-                </Link>
-              </li>
-              <li>
-                <Link className="dropdown-item rounded-1" to="#" data-bs-toggle="modal" data-bs-target="#delete-modal">
-                  <i className="ti ti-trash-x me-2" /> Delete
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      ),
-    },
-  ];
 
-  return (
-    <div>
-      <div className="page-wrapper">
-        <div className="content">
-          <div className="d-md-flex d-block align-items-center justify-content-between mb-3">
-            <div className="my-auto mb-2">
-              <h3 className="page-title mb-1">Exam</h3>
-              <nav>
-                <ol className="breadcrumb mb-0">
-                  <li className="breadcrumb-item"><Link to={routes.adminDashboard}>Dashboard</Link></li>
-                  <li className="breadcrumb-item"><Link to="#">Academic</Link></li>
-                  <li className="breadcrumb-item active" aria-current="page">Exam</li>
-                </ol>
-              </nav>
-            </div>
-            <div className="d-flex my-xl-auto right-content align-items-center flex-wrap">
-              <TooltipOption />
-              <div className="mb-2">
-                <Link to="#" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_exam">
-                  <i className="ti ti-square-rounded-plus-filled me-2" /> Add Exam
-                </Link>
-              </div>
-            </div>
-          </div>
 
-          <div className="card">
-            <div className="card-header d-flex align-items-center justify-content-between flex-wrap pb-0">
-              <h4 className="mb-3">Exam List</h4>
-              <div className="d-flex align-items-center flex-wrap">
-                <div className="input-icon-start mb-3 me-2 position-relative">
-                  <PredefinedDateRanges />
-                </div>
-                <div className="dropdown mb-3 me-2">
-                  <Link to="#" className="btn btn-outline-light bg-white dropdown-toggle" data-bs-toggle="dropdown">
-                    <i className="ti ti-filter me-2" /> Filter
-                  </Link>
-                  <div className="dropdown-menu drop-width" ref={dropdownMenuRef}>
-                    <form>
-                      <div className="d-flex align-items-center border-bottom p-3">
-                        <h4>Filter</h4>
+
+
+
+
+
+
+
+
+<form >
+                <div className="modal-body">
+                  <div className="row">
+                    <div className="col-md-12">
+                      <div className="mb-3">
+                        <label className="form-label">Exam Name</label>
+                        <input type="text" className="form-control" />
                       </div>
-                      <div className="p-3 border-bottom pb-0">
-                        <div className="row">
-                          <div className="col-md-12 mb-3">
-                            <label className="form-label">Exam Name</label>
-                            <CommonSelect className="select" options={examtwo} />
-                          </div>
-                          <div className="col-md-12 mb-3">
-                            <label className="form-label">Exam Date</label>
-                            <CommonSelect className="select" options={examOne} />
-                          </div>
+                      <div className="mb-3">
+                        <label className="form-label">Exam Date</label>
+                        <div className="date-pic">
+                          <DatePicker
+                            className="form-control datetimepicker"
+                            format={{
+                              format: "DD-MM-YYYY",
+                              type: "mask",
+                            }}
+                            getPopupContainer={getModalContainer}
+                            defaultValue={defaultValue}
+                            placeholder="16 May 2024"
+                          />
+                          <span className="cal-icon">
+                            <i className="ti ti-calendar" />
+                          </span>
                         </div>
                       </div>
-                      <div className="p-3 d-flex align-items-center justify-content-end">
-                        <Link to="#" className="btn btn-light me-3">Reset</Link>
-                        <Link to="#" className="btn btn-primary" onClick={handleApplyClick}>Apply</Link>
+                      <div className="mb-3">
+                        <label className="form-label">Start Time</label>
+                        <CommonSelect className="select" options={startTime} />
                       </div>
-                    </form>
+                      <div className="mb-0">
+                        <label className="form-label">End Time</label>
+                        <CommonSelect
+                          className="select"
+                          options={startTimeOne}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div className="dropdown mb-3">
-                  <Link to="#" className="btn btn-outline-light bg-white dropdown-toggle" data-bs-toggle="dropdown">
-                    <i className="ti ti-sort-ascending-2 me-2" /> Sort by A-Z
+                <div className="modal-footer">
+                  <Link
+                    to="#"
+                    className="btn btn-light me-2"
+                    data-bs-dismiss="modal"
+                  >
+                    Cancel
                   </Link>
-                  <ul className="dropdown-menu p-3">
-                    <li><Link to="#" className="dropdown-item rounded-1 active">Ascending</Link></li>
-                    <li><Link to="#" className="dropdown-item rounded-1">Descending</Link></li>
-                    <li><Link to="#" className="dropdown-item rounded-1">Recently Viewed</Link></li>
-                    <li><Link to="#" className="dropdown-item rounded-1">Recently Added</Link></li>
-                  </ul>
+                  <Link  className="btn btn-primary"  to="#"  data-bs-dismiss="modal">
+                    Add Exam
+                  </Link>
                 </div>
-              </div>
-            </div>
-            <div className="card-body p-0 py-3">
-              <Table columns={columns} dataSource={exams} Selection={true} />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Add Exam Modal */}
-      <div className="modal fade" id="add_exam">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title">Add Exam</h4>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-            </div>
-            <form onSubmit={handleAddExam}>
-              <div className="modal-body">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="mb-3">
-                      <label className="form-label">Exam Name</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="examName"
-                        value={newExam.examName}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-12">
-                    <div className="mb-3">
-                      <label className="form-label">Exam Date</label>
-                      <DatePicker
-                        className="form-control"
-                        value={newExam.examDate}
-                        onChange={(date) => setNewExam(prevState => ({ ...prevState, examDate: date }))}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <label className="form-label">Start Time</label>
-                      <input
-                        type="time"
-                        className="form-control"
-                        name="startTime"
-                        value={newExam.startTime}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <label className="form-label">End Time</label>
-                      <input
-                        type="time"
-                        className="form-control"
-                        name="endTime"
-                        value={newExam.endTime}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-light" data-bs-dismiss="modal">Close</button>
-                <button type="submit" className="btn btn-primary">Add Exam</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default Exam;
-
-
-
-
-
-
-
+              </form>
 
 
 
@@ -311,27 +137,36 @@ export interface SelectProps {
   defaultValue?: Option;
   className?: string;
   styles?: any; 
-  onChange?: (value: Option | null) => void; 
 }
 
-const CommonSelect: React.FC<SelectProps> = ({ options, defaultValue, className, onChange }) => {
-  const [selectedOption, setSelectedOption] = useState<Option | null>(defaultValue || null);
+const CommonSelect: React.FC<SelectProps> = ({ options, defaultValue, className }) => {
+  const [selectedOption, setSelectedOption] = useState<Option | undefined>(defaultValue);
 
-  useEffect(() => {
-    setSelectedOption(defaultValue || null);
-  }, [defaultValue]);
+  // const customStyles = {
+  //   option: (base: any, state: any) => ({
+  //     ...base,
+  //     color: "#6A7287",
+  //     backgroundColor: state.isSelected ? "#ddd" : "white",
+  //     cursor: "pointer",
+  //     "&:hover": {
+  //       backgroundColor: state.isFocused ? "#3D5EE1" : "blue",
+  //       color: state.isFocused ? "#fff" : "#6A7287",
+  //     },
+  //   }),
+  // };
 
   const handleChange = (option: Option | null) => {
-    setSelectedOption(option);
-    if (onChange) {
-      onChange(option); // Pass the selected option back to the parent
-    }
+    setSelectedOption(option || undefined);
   };
-
+  useEffect(() => {
+    setSelectedOption(defaultValue || undefined);
+  }, [defaultValue])
+  
   return (
     <Select
-      classNamePrefix="react-select"
+     classNamePrefix="react-select"
       className={className}
+      // styles={customStyles}
       options={options}
       value={selectedOption}
       onChange={handleChange}
@@ -341,3 +176,6 @@ const CommonSelect: React.FC<SelectProps> = ({ options, defaultValue, className,
 };
 
 export default CommonSelect;
+
+
+Add the logic of the Add exam
