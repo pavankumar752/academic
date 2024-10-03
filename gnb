@@ -458,3 +458,5 @@ const Exam = () => {
 };
 
 export default Exam;
+
+Add the add Exam Login and display on table with random data using local storage full code
