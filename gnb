@@ -1,10 +1,39 @@
-const [startTimeValue, setStartTimeValue] = useState<Option | null>(startTime[0]);
-const [endTimeValue, setEndTimeValue] = useState<Option | null>(startTimeOne[0]);
-
-const handleStartTimeChange = (option: Option | null) => {
-  setStartTimeValue(option);
-};
-
-const handleEndTimeChange = (option: Option | null) => {
-  setEndTimeValue(option);
-};
+Compiled with problems:
+×
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:49:18
+TS18047: 'startTimeValue' is possibly 'null'.
+    47 |       examName,
+    48 |       examDate: examDate.format("DD-MM-YYYY"),
+  > 49 |       startTime: startTimeValue.value,
+       |                  ^^^^^^^^^^^^^^
+    50 |       endTime: endTimeValue.value,
+    51 |       key: Date.now(),
+    52 |     };
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:50:16
+TS18047: 'endTimeValue' is possibly 'null'.
+    48 |       examDate: examDate.format("DD-MM-YYYY"),
+    49 |       startTime: startTimeValue.value,
+  > 50 |       endTime: endTimeValue.value,
+       |                ^^^^^^^^^^^^
+    51 |       key: Date.now(),
+    52 |     };
+    53 |
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:361:78
+TS2322: Type 'Option | null' is not assignable to type 'Option | undefined'.
+  Type 'null' is not assignable to type 'Option | undefined'.
+    359 |                       <div className="mb-3">
+    360 |                         <label className="form-label">Start Time</label>
+  > 361 |                         <CommonSelect className="select" options={startTime} defaultValue={startTimeValue}
+        |                                                                              ^^^^^^^^^^^^
+    362 |                         onChange={setStartTimeValue} />
+    363 |                       </div>
+    364 |                       <div className="mb-0">
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:369:27
+TS2322: Type 'Option | null' is not assignable to type 'Option | undefined'.
+    367 |                           className="select"
+    368 |                           options={startTimeOne}
+  > 369 |                           defaultValue={endTimeValue}
+        |                           ^^^^^^^^^^^^
+    370 |                         onChange={setEndTimeValue}
+    371 |                         />
+    372 |                       </div>
