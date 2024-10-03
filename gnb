@@ -1,10 +1,53 @@
-Uncaught runtime errors:
-×
-ERROR
-Cannot read properties of undefined (reading 'backdrop')
-TypeError: Cannot read properties of undefined (reading 'backdrop')
-    at On._initializeBackDrop (http://10.30.31.129:3000/react/template/static/js/bundle.js:506553:41)
-    at new On (http://10.30.31.129:3000/react/template/static/js/bundle.js:506523:100)
-    at On.getOrCreateInstance (http://10.30.31.129:3000/react/template/static/js/bundle.js:504554:37)
-    at HTMLAnchorElement.<anonymous> (http://10.30.31.129:3000/react/template/static/js/bundle.js:506634:39)
-    at HTMLDocument.n (http://10.30.31.129:3000/react/template/static/js/bundle.js:504395:53)
+<form >
+                <div className="modal-body">
+                  <div className="row">
+                    <div className="col-md-12">
+                      <div className="mb-3">
+                        <label className="form-label">Exam Name</label>
+                        <input type="text" className="form-control" />
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label">Exam Date</label>
+                        <div className="date-pic">
+                          <DatePicker
+                            className="form-control datetimepicker"
+                            format={{
+                              format: "DD-MM-YYYY",
+                              type: "mask",
+                            }}
+                            getPopupContainer={getModalContainer}
+                            defaultValue={defaultValue}
+                            placeholder="16 May 2024"
+                          />
+                          <span className="cal-icon">
+                            <i className="ti ti-calendar" />
+                          </span>
+                        </div>
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label">Start Time</label>
+                        <CommonSelect className="select" options={startTime} />
+                      </div>
+                      <div className="mb-0">
+                        <label className="form-label">End Time</label>
+                        <CommonSelect
+                          className="select"
+                          options={startTimeOne}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <Link
+                    to="#"
+                    className="btn btn-light me-2"
+                    data-bs-dismiss="modal"
+                  >
+                    Cancel
+                  </Link>
+                  <Link  className="btn btn-primary"  to="#"  data-bs-dismiss="modal">
+                    Add Exam
+                  </Link>
+                </div>
+              </form>
