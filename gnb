@@ -1,55 +1,189 @@
-Compiled with problems:
-×
-ERROR in src/core/common/commonSelect.tsx:35:9
-TS2552: Cannot find name 'onChange'. Did you mean 'onchange'?
-    33 |   const handleChange = (option: Option | null) => {
-    34 |     setSelectedOption(option || undefined);
-  > 35 |     if (onChange) {
-       |         ^^^^^^^^
-    36 |       onChange(option); // Call the onChange prop if provided
-    37 |     }
-    38 |   };
-ERROR in src/core/common/commonSelect.tsx:36:7
-TS2552: Cannot find name 'onChange'. Did you mean 'onchange'?
-    34 |     setSelectedOption(option || undefined);
-    35 |     if (onChange) {
-  > 36 |       onChange(option); // Call the onChange prop if provided
-       |       ^^^^^^^^
-    37 |     }
-    38 |   };
-    39 |   useEffect(() => {
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:46:13
-TS2345: Argument of type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; }[]' is not assignable to parameter of type 'SetStateAction<{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }[]>'.
-  Type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; }[]' is not assignable to type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }[]'.
-    Property 'key' is missing in type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; }' but required in type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
-    44 |
-    45 |     const updatedExams = [...data, newExam];
-  > 46 |     setData(updatedExams);
-       |             ^^^^^^^^^^^^
-    47 |     localStorage.setItem("exams", JSON.stringify(updatedExams));
-    48 |     resetForm();
-    49 |   };
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:351:25
-TS2322: Type 'Dispatch<SetStateAction<{ value: string; label: string; }>>' is not assignable to type '(option: Option | null) => void'.
-  Types of parameters 'value' and 'option' are incompatible.
-    Type 'Option | null' is not assignable to type 'SetStateAction<{ value: string; label: string; }>'.
-      Type 'null' is not assignable to type 'SetStateAction<{ value: string; label: string; }>'.
-    349 |                         <label className="form-label">Start Time</label>
-    350 |                         <CommonSelect className="select" options={startTime} defaultValue={startTimeValue}
-  > 351 |                         onChange={setStartTimeValue} />
-        |                         ^^^^^^^^
-    352 |                       </div>
-    353 |                       <div className="mb-0">
-    354 |                         <label className="form-label">End Time</label>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:359:25
-TS2322: Type 'Dispatch<SetStateAction<{ value: string; label: string; }>>' is not assignable to type '(option: Option | null) => void'.
-  Types of parameters 'value' and 'option' are incompatible.
-    Type 'Option | null' is not assignable to type 'SetStateAction<{ value: string; label: string; }>'.
-      Type 'null' is not assignable to type 'SetStateAction<{ value: string; label: string; }>'.
-    357 |                           options={startTimeOne}
-    358 |                           defaultValue={endTimeValue}
-  > 359 |                         onChange={setEndTimeValue}
-        |                         ^^^^^^^^
-    360 |                         />
-    361 |                       </div>
-    362 |                     </div>
+import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import Table from "../../../../core/common/dataTable/index";
+import { exam } from "../../../../core/data/json/exam";
+import { startTime, startTimeOne } from "../../../../core/common/selectoption/selectoption";
+import PredefinedDateRanges from "../../../../core/common/datePicker";
+import { TableData } from "../../../../core/data/interface";
+import CommonSelect, { Option } from "../../../../core/common/commonSelect"; // Import Option type
+import { DatePicker } from "antd";
+import dayjs from "dayjs";
+import { all_routes } from "../../../router/all_routes";
+import TooltipOption from "../../../../core/common/tooltipOption";
+
+const Exam = () => {
+  const routes = all_routes;
+  const [data, setData] = useState(exam);
+  const [examName, setExamName] = useState("");
+  const [examDate, setExamDate] = useState(dayjs());
+  const [startTimeValue, setStartTimeValue] = useState<Option | null>(startTime[0]);
+  const [endTimeValue, setEndTimeValue] = useState<Option | null>(startTimeOne[0]);
+  const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
+
+  const handleAddExam = () => {
+    const newExam = {
+      id: Math.random().toString(36).substr(2, 9), // Random ID
+      examName,
+      examDate: examDate.format("DD-MM-YYYY"),
+      startTime: startTimeValue?.value,
+      endTime: endTimeValue?.value,
+    };
+
+    const updatedExams = [...data, newExam];
+    setData(updatedExams);
+    localStorage.setItem("exams", JSON.stringify(updatedExams));
+    resetForm();
+  };
+
+  const resetForm = () => {
+    setExamName("");
+    setExamDate(dayjs());
+    setStartTimeValue(startTime[0]);
+    setEndTimeValue(startTimeOne[0]);
+  };
+
+  useEffect(() => {
+    const storedExams = localStorage.getItem("exams");
+    if (storedExams) {
+      setData(JSON.parse(storedExams));
+    }
+  }, []);
+
+  const columns = [
+    {
+      title: "ID",
+      dataIndex: "id",
+      render: (text: string, record: any) => (
+        <Link to="#" className="link-primary">{record.id}</Link>
+      ),
+    },
+    {
+      title: "Exam Name",
+      dataIndex: "examName",
+    },
+    {
+      title: "Exam Date",
+      dataIndex: "examDate",
+    },
+    {
+      title: "Start Time",
+      dataIndex: "startTime",
+    },
+    {
+      title: "End Time",
+      dataIndex: "endTime",
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      render: () => (
+        <div className="d-flex align-items-center">
+          <div className="dropdown">
+            <Link to="#" className="btn btn-white btn-icon btn-sm" data-bs-toggle="dropdown">
+              <i className="ti ti-dots-vertical fs-14" />
+            </Link>
+            <ul className="dropdown-menu dropdown-menu-right p-3">
+              <li>
+                <Link className="dropdown-item" to="#" data-bs-toggle="modal" data-bs-target="#edit_exam">Edit</Link>
+              </li>
+              <li>
+                <Link className="dropdown-item" to="#" data-bs-toggle="modal" data-bs-target="#delete-modal">Delete</Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <div>
+      <div className="page-wrapper">
+        <div className="content">
+          <div className="d-md-flex d-block align-items-center justify-content-between mb-3">
+            <h3 className="page-title mb-1">Exam</h3>
+            <div className="d-flex my-xl-auto right-content align-items-center flex-wrap">
+              <TooltipOption />
+              <div className="mb-2">
+                <Link to="#" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_exam">
+                  Add Exam
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="card">
+            <div className="card-body p-0 py-3">
+              <Table columns={columns} dataSource={data} Selection={true} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Add Exam Modal */}
+      <div className="modal fade" id="add_exam">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">Add Exam</h4>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+            </div>
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              handleAddExam();
+            }}>
+              <div className="modal-body">
+                <div className="row">
+                  <div className="col-md-12">
+                    <div className="mb-3">
+                      <label className="form-label">Exam Name</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={examName}
+                        onChange={(e) => setExamName(e.target.value)}
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Exam Date</label>
+                      <DatePicker
+                        className="form-control"
+                        format="DD-MM-YYYY"
+                        value={examDate}
+                        onChange={(date) => setExamDate(date)}
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Start Time</label>
+                      <CommonSelect
+                        className="select"
+                        options={startTime}
+                        defaultValue={startTimeValue}
+                        onChange={setStartTimeValue} // Correct usage
+                      />
+                    </div>
+                    <div className="mb-0">
+                      <label className="form-label">End Time</label>
+                      <CommonSelect
+                        className="select"
+                        options={startTimeOne}
+                        defaultValue={endTimeValue}
+                        onChange={setEndTimeValue} // Correct usage
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <Link to="#" className="btn btn-light me-2" data-bs-dismiss="modal">Cancel</Link>
+                <button type="submit" className="btn btn-primary">Add Exam</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      {/* Add Exam Modal */}
+    </div>
+  );
+};
+
+export default Exam;
