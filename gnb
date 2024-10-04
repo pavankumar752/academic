@@ -1,276 +1,121 @@
 Compiled with problems:
 ×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:27:26
-TS7006: Parameter 'examData' implicitly has an 'any' type.
-    25 |   const defaultValue = dayjs(today);
-    26 |
-  > 27 |   const handleAddExam = (examData) => {
-       |                          ^^^^^^^^
-    28 |     setData((prevData) => [...prevData, { id: Date.now(), ...examData }]);
-    29 |   };
-    30 |
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:31:27
-TS7006: Parameter 'updatedExam' implicitly has an 'any' type.
-    29 |   };
-    30 |
-  > 31 |   const handleEditExam = (updatedExam) => {
-       |                           ^^^^^^^^^^^
-    32 |     setData((prevData) =>
-    33 |       prevData.map((exam) => (exam.id === updatedExam.id ? updatedExam : exam))
-    34 |     );
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:38:29
-TS7006: Parameter 'id' implicitly has an 'any' type.
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:28:44
+TS2345: Argument of type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }[]' is not assignable to parameter of type 'Exam[] | (() => Exam[])'.
+  Type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }[]' is not assignable to type 'Exam[]'.
+    Type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }' is not assignable to type 'Exam'.
+      Types of property 'id' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    26 |   const routes = all_routes;
+    27 |
+  > 28 |   const [data, setData] = useState<Exam[]>(exam); // Initialize state with sample data
+       |                                            ^^^^
+    29 |   const [editingExam, setEditingExam] = useState<Exam | null>(null);
+    30 |   const dropdownMenuRef = useRef(null);
+    31 |   const today = new Date();
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:35:43
+TS2783: 'id' is specified more than once, so this usage will be overwritten.
+    33 |
+    34 |   const handleAddExam = (examData:Exam) => {
+  > 35 |     setData((prevData) => [...prevData, { id: Date.now(), ...examData }]);
+       |                                           ^^^^^^^^^^^^^^
     36 |   };
     37 |
-  > 38 |   const handleDeleteExam = (id) => {
-       |                             ^^
-    39 |     setData((prevData) => prevData.filter((exam) => exam.id !== id));
-    40 |   };
-    41 |
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:44:31
+    38 |   const handleEditExam = (updatedExam:Exam) => {
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:51:31
 TS2339: Property 'classList' does not exist on type 'never'.
-    42 |   const handleApplyClick = () => {
-    43 |     if (dropdownMenuRef.current) {
-  > 44 |       dropdownMenuRef.current.classList.remove("show");
+    49 |   const handleApplyClick = () => {
+    50 |     if (dropdownMenuRef.current) {
+  > 51 |       dropdownMenuRef.current.classList.remove("show");
        |                               ^^^^^^^^^
-    45 |     }
-    46 |   };
-    47 |
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:57:16
-TS7006: Parameter 'text' implicitly has an 'any' type.
-    55 |       title: "ID",
-    56 |       dataIndex: "id",
-  > 57 |       render: (text, record) => (
-       |                ^^^^
-    58 |         <Link to="#" className="link-primary">
-    59 |           {record.id}
-    60 |         </Link>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:57:22
-TS7006: Parameter 'record' implicitly has an 'any' type.
-    55 |       title: "ID",
-    56 |       dataIndex: "id",
-  > 57 |       render: (text, record) => (
-       |                      ^^^^^^
-    58 |         <Link to="#" className="link-primary">
-    59 |           {record.id}
-    60 |         </Link>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:62:16
-TS7006: Parameter 'a' implicitly has an 'any' type.
-    60 |         </Link>
-    61 |       ),
-  > 62 |       sorter: (a, b) => a.id - b.id,
-       |                ^
-    63 |     },
-    64 |     {
-    65 |       title: "Exam Name",
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:62:19
-TS7006: Parameter 'b' implicitly has an 'any' type.
-    60 |         </Link>
-    61 |       ),
-  > 62 |       sorter: (a, b) => a.id - b.id,
-       |                   ^
-    63 |     },
-    64 |     {
-    65 |       title: "Exam Name",
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:67:16
-TS7006: Parameter 'a' implicitly has an 'any' type.
-    65 |       title: "Exam Name",
-    66 |       dataIndex: "examName",
-  > 67 |       sorter: (a, b) => a.examName.length - b.examName.length,
-       |                ^
-    68 |     },
-    69 |     {
-    70 |       title: "Exam Date",
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:67:19
-TS7006: Parameter 'b' implicitly has an 'any' type.
-    65 |       title: "Exam Name",
-    66 |       dataIndex: "examName",
-  > 67 |       sorter: (a, b) => a.examName.length - b.examName.length,
-       |                   ^
-    68 |     },
-    69 |     {
-    70 |       title: "Exam Date",
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:72:16
-TS7006: Parameter 'a' implicitly has an 'any' type.
-    70 |       title: "Exam Date",
-    71 |       dataIndex: "examDate",
-  > 72 |       sorter: (a, b) => a.examDate.length - b.examDate.length,
-       |                ^
-    73 |     },
-    74 |     {
-    75 |       title: "Start Time",
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:72:19
-TS7006: Parameter 'b' implicitly has an 'any' type.
-    70 |       title: "Exam Date",
-    71 |       dataIndex: "examDate",
-  > 72 |       sorter: (a, b) => a.examDate.length - b.examDate.length,
-       |                   ^
-    73 |     },
-    74 |     {
-    75 |       title: "Start Time",
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:77:16
-TS7006: Parameter 'a' implicitly has an 'any' type.
-    75 |       title: "Start Time",
-    76 |       dataIndex: "startTime",
-  > 77 |       sorter: (a, b) => a.startTime.length - b.startTime.length,
-       |                ^
-    78 |     },
-    79 |     {
-    80 |       title: "End Time",
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:77:19
-TS7006: Parameter 'b' implicitly has an 'any' type.
-    75 |       title: "Start Time",
-    76 |       dataIndex: "startTime",
-  > 77 |       sorter: (a, b) => a.startTime.length - b.startTime.length,
-       |                   ^
-    78 |     },
-    79 |     {
-    80 |       title: "End Time",
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:82:16
-TS7006: Parameter 'a' implicitly has an 'any' type.
-    80 |       title: "End Time",
-    81 |       dataIndex: "endTime",
-  > 82 |       sorter: (a, b) => a.endTime.length - b.endTime.length,
-       |                ^
-    83 |     },
-    84 |     {
-    85 |       title: "Action",
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:82:19
-TS7006: Parameter 'b' implicitly has an 'any' type.
-    80 |       title: "End Time",
-    81 |       dataIndex: "endTime",
-  > 82 |       sorter: (a, b) => a.endTime.length - b.endTime.length,
-       |                   ^
-    83 |     },
-    84 |     {
-    85 |       title: "Action",
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:87:16
+    52 |     }
+    53 |   };
+    54 |
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:94:16
 TS7006: Parameter '_' implicitly has an 'any' type.
-    85 |       title: "Action",
-    86 |       dataIndex: "action",
-  > 87 |       render: (_, record) => (
+    92 |       title: "Action",
+    93 |       dataIndex: "action",
+  > 94 |       render: (_, record) => (
        |                ^
-    88 |         <div className="d-flex align-items-center">
-    89 |           <div className="dropdown">
-    90 |             <Link
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:87:19
+    95 |         <div className="d-flex align-items-center">
+    96 |           <div className="dropdown">
+    97 |             <Link
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:94:19
 TS7006: Parameter 'record' implicitly has an 'any' type.
-    85 |       title: "Action",
-    86 |       dataIndex: "action",
-  > 87 |       render: (_, record) => (
+    92 |       title: "Action",
+    93 |       dataIndex: "action",
+  > 94 |       render: (_, record) => (
        |                   ^^^^^^
-    88 |         <div className="d-flex align-items-center">
-    89 |           <div className="dropdown">
-    90 |             <Link
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:130:32
-TS7006: Parameter 'event' implicitly has an 'any' type.
-    128 |   ];
-    129 |
-  > 130 |   const handleSubmitAddExam = (event) => {
-        |                                ^^^^^
-    131 |     event.preventDefault();
-    132 |     const form = event.target;
-    133 |     const newExam = {
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:143:33
-TS7006: Parameter 'event' implicitly has an 'any' type.
-    141 |   };
-    142 |
-  > 143 |   const handleSubmitEditExam = (event) => {
-        |                                 ^^^^^
-    144 |     event.preventDefault();
-    145 |     const form = event.target;
-    146 |     const updatedExam = {
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:147:7
-TS2698: Spread types may only be created from object types.
-    145 |     const form = event.target;
-    146 |     const updatedExam = {
-  > 147 |       ...editingExam,
-        |       ^^^^^^^^^^^^^^
-    148 |       examName: form.examName.value,
-    149 |       examDate: form.examDate.value,
-    150 |       startTime: form.startTime.value,
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:334:76
+    95 |         <div className="d-flex align-items-center">
+    96 |           <div className="dropdown">
+    97 |             <Link
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:146:19
+TS2345: Argument of type '{ examName: any; examDate: any; startTime: any; endTime: any; }' is not assignable to parameter of type 'Exam'.
+  Property 'id' is missing in type '{ examName: any; examDate: any; startTime: any; endTime: any; }' but required in type 'Exam'.
+    144 |       endTime: form.endTime.value,
+    145 |     };
+  > 146 |     handleAddExam(newExam);
+        |                   ^^^^^^^
+    147 |     form.reset();
+    148 |   };
+    149 |
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:160:20
+TS2345: Argument of type '{ examName: any; examDate: any; startTime: any; endTime: any; id?: number | undefined; }' is not assignable to parameter of type 'Exam'.
+  Types of property 'id' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+    158 |       endTime: form.endTime.value,
+    159 |     };
+  > 160 |     handleEditExam(updatedExam);
+        |                    ^^^^^^^^^^^
+    161 |   };
+    162 |
+    163 |   return (
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:341:76
 TS2322: Type '{ className: string; options: { value: string; label: string; }[]; name: string; required: true; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
   Property 'name' does not exist on type 'IntrinsicAttributes & SelectProps'.
-    332 |                     <div className="mb-3">
-    333 |                       <label className="form-label">Start Time</label>
-  > 334 |                       <CommonSelect className="select" options={startTime} name="startTime" required />
+    339 |                     <div className="mb-3">
+    340 |                       <label className="form-label">Start Time</label>
+  > 341 |                       <CommonSelect className="select" options={startTime} name="startTime" required />
         |                                                                            ^^^^
-    335 |                     </div>
-    336 |                     <div className="mb-0">
-    337 |                       <label className="form-label">End Time</label>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:338:79
+    342 |                     </div>
+    343 |                     <div className="mb-0">
+    344 |                       <label className="form-label">End Time</label>
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:345:79
 TS2322: Type '{ className: string; options: { value: string; label: string; }[]; name: string; required: true; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
   Property 'name' does not exist on type 'IntrinsicAttributes & SelectProps'.
-    336 |                     <div className="mb-0">
-    337 |                       <label className="form-label">End Time</label>
-  > 338 |                       <CommonSelect className="select" options={startTimeOne} name="endTime" required />
+    343 |                     <div className="mb-0">
+    344 |                       <label className="form-label">End Time</label>
+  > 345 |                       <CommonSelect className="select" options={startTimeOne} name="endTime" required />
         |                                                                               ^^^^
-    339 |                     </div>
-    340 |                   </div>
-    341 |                 </div>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:386:52
-TS2339: Property 'examName' does not exist on type 'never'.
-    384 |                         className="form-control"
-    385 |                         placeholder="Enter Exam Name"
-  > 386 |                         defaultValue={editingExam?.examName || ""}
-        |                                                    ^^^^^^^^
-    387 |                         required
-    388 |                       />
-    389 |                     </div>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:398:73
-TS2339: Property 'examDate' does not exist on type 'never'.
-    396 |                           format="DD-MM-YYYY"
-    397 |                           getPopupContainer={getModalContainer}
-  > 398 |                           defaultValue={editingExam ? dayjs(editingExam.examDate) : defaultValue}
-        |                                                                         ^^^^^^^^
-    399 |                           placeholder="16 May 2024"
-    400 |                           required
-    401 |                         />
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:412:25
-TS2322: Type '{ className: string; options: { value: string; label: string; }[]; name: string; defaultValue: any; required: true; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
-  Property 'name' does not exist on type 'IntrinsicAttributes & SelectProps'.
-    410 |                         className="select"
-    411 |                         options={startTime}
-  > 412 |                         name="startTime"
-        |                         ^^^^
-    413 |                         defaultValue={editingExam?.startTime}
-    414 |                         required
-    415 |                       />
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:413:52
-TS2339: Property 'startTime' does not exist on type 'never'.
-    411 |                         options={startTime}
-    412 |                         name="startTime"
-  > 413 |                         defaultValue={editingExam?.startTime}
-        |                                                    ^^^^^^^^^
-    414 |                         required
-    415 |                       />
-    416 |                     </div>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:422:25
-TS2322: Type '{ className: string; options: { value: string; label: string; }[]; name: string; defaultValue: any; required: true; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
-  Property 'name' does not exist on type 'IntrinsicAttributes & SelectProps'.
-    420 |                         className="select"
-    421 |                         options={startTimeOne}
-  > 422 |                         name="endTime"
-        |                         ^^^^
-    423 |                         defaultValue={editingExam?.endTime}
-    424 |                         required
-    425 |                       />
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:423:52
-TS2339: Property 'endTime' does not exist on type 'never'.
-    421 |                         options={startTimeOne}
-    422 |                         name="endTime"
-  > 423 |                         defaultValue={editingExam?.endTime}
-        |                                                    ^^^^^^^
-    424 |                         required
-    425 |                       />
-    426 |                     </div>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:468:91
+    346 |                     </div>
+    347 |                   </div>
+    348 |                 </div>
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:420:25
+TS2322: Type 'string | undefined' is not assignable to type 'Option | undefined'.
+  Type 'string' is not assignable to type 'Option'.
+    418 |                         options={startTime}
+    419 |                         name="startTime"
+  > 420 |                         defaultValue={editingExam?.startTime}
+        |                         ^^^^^^^^^^^^
+    421 |                         required
+    422 |                       />
+    423 |                     </div>
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:430:25
+TS2322: Type 'string | undefined' is not assignable to type 'Option | undefined'.
+    428 |                         options={startTimeOne}
+    429 |                         name="endTime"
+  > 430 |                         defaultValue={editingExam?.endTime}
+        |                         ^^^^^^^^^^^^
+    431 |                         required
+    432 |                       />
+    433 |                     </div>
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:475:91
 TS18047: 'editingExam' is possibly 'null'.
-    466 |                     Cancel
-    467 |                   </Link>
-  > 468 |                   <Link to="#" className="btn btn-danger" onClick={() => handleDeleteExam(editingExam.id)}>
+    473 |                     Cancel
+    474 |                   </Link>
+  > 475 |                   <Link to="#" className="btn btn-danger" onClick={() => handleDeleteExam(editingExam.id)}>
         |                                                                                           ^^^^^^^^^^^
-    469 |                     Yes, Delete
-    470 |                   </Link>
-    471 |                 </div>
+    476 |                     Yes, Delete
+    477 |                   </Link>
+    478 |                 </div>
