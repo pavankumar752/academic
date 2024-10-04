@@ -458,3 +458,6 @@ const Exam = () => {
 };
 
 export default Exam;
+
+
+In this data came from sample now we have to fetch the data from the API and initialize the data to the empty list and add the logic to add new exam modal, edit exam modal and delete exam moda. Add the logic to the same code and write functions separately and give me the full updated code.
