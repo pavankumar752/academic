@@ -1,18 +1,9 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Table from "../../../../core/common/dataTable/index";
-import {
-  examOne,
-  examtwo,
-  startTime,
-  startTimeOne,
-} from "../../../../core/common/selectoption/selectoption";
-import PredefinedDateRanges from "../../../../core/common/datePicker";
-import CommonSelect, { Option } from "../../../../core/common/commonSelect";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
-import { all_routes } from "../../../router/all_routes";
-import TooltipOption from "../../../../core/common/tooltipOption";
+import CommonSelect, { Option } from "../../../../core/common/commonSelect";
 
 interface Exam1 {
   id: string;
@@ -24,10 +15,7 @@ interface Exam1 {
 }
 
 const Exam = () => {
-  const routes = all_routes;
-  const [data, setData] = useState<Exam1[]>([
-    { id: "1", key: 1, examName: "Sample Exam", examDate: "01-01-2024", startTime: "10:00 AM", endTime: "12:00 PM" },
-  ]);
+  const [data, setData] = useState<Exam1[]>([]);
   const [newExam, setNewExam] = useState({
     examName: "",
     examDate: dayjs().format("DD-MM-YYYY"),
@@ -46,13 +34,6 @@ const Exam = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setNewExam({ ...newExam, [name]: value });
-  };
-
-  const handleEditInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    if (editExam) {
-      setEditExam({ ...editExam, [name]: value });
-    }
   };
 
   const handleAddExam = (e: React.FormEvent<HTMLFormElement>) => {
@@ -80,92 +61,49 @@ const Exam = () => {
     }
   };
 
-  const handleStartTimeChange = (option: Option | null) => {
-    if (editExam) {
-      setEditExam({ ...editExam, startTime: option ? option.value : "" });
-    }
-  };
-
-  const handleEndTimeChange = (option: Option | null) => {
-    if (editExam) {
-      setEditExam({ ...editExam, endTime: option ? option.value : "" });
-    }
-  };
-
   const openEditModal = (exam: Exam1) => {
     setEditExam(exam);
   };
 
-  // Define table columns
   const columns = [
     {
       title: "ID",
       dataIndex: "id",
-      render: (_: any, record: { id: string }) => (
-        <Link to="#" className="link-primary">
-          {record.id}
-        </Link>
+      render: (text: string) => (
+        <Link to="#" className="link-primary">{text}</Link>
       ),
-      sorter: (a: { id: string }, b: { id: string }) => a.id.length - b.id.length,
+      sorter: (a: Exam1, b: Exam1) => a.id.localeCompare(b.id),
     },
     {
       title: "Exam Name",
       dataIndex: "examName",
-      sorter: (a: { examName: string }, b: { examName: string }) =>
-        a.examName.length - b.examName.length,
+      sorter: (a: Exam1, b: Exam1) => a.examName.localeCompare(b.examName),
     },
     {
       title: "Exam Date",
       dataIndex: "examDate",
-      sorter: (a: { examDate: string }, b: { examDate: string }) =>
-        a.examDate.length - b.examDate.length,
+      sorter: (a: Exam1, b: Exam1) => dayjs(a.examDate, "DD-MM-YYYY").diff(dayjs(b.examDate, "DD-MM-YYYY")),
     },
     {
       title: "Start Time",
       dataIndex: "startTime",
-      sorter: (a: { startTime: string }, b: { startTime: string }) =>
-        a.startTime.length - b.startTime.length,
     },
     {
       title: "End Time",
       dataIndex: "endTime",
-      sorter: (a: { endTime: string }, b: { endTime: string }) =>
-        a.endTime.length - b.endTime.length,
     },
     {
       title: "Action",
-      dataIndex: "action",
-      render: (_: any, record: Exam1) => (  // Define 'record' as Exam1 type
+      render: (_: any, record: Exam1) => (
         <div className="d-flex align-items-center">
-          <div className="dropdown">
-            <Link
-              to="#"
-              className="btn btn-white btn-icon btn-sm"
-              data-bs-toggle="dropdown"
-            >
-              <i className="ti ti-dots-vertical fs-14" />
-            </Link>
-            <ul className="dropdown-menu dropdown-menu-right">
-              <li>
-                <Link
-                  className="dropdown-item"
-                  to="#"
-                  onClick={() => openEditModal(record)}
-                  data-bs-toggle="modal"
-                  data-bs-target="#edit_exam"
-                >
-                  <i className="ti ti-edit-circle me-2" />
-                  Edit
-                </Link>
-              </li>
-              <li>
-                <Link className="dropdown-item" to="#">
-                  <i className="ti ti-trash-x me-2" />
-                  Delete
-                </Link>
-              </li>
-            </ul>
-          </div>
+          <Link
+            to="#"
+            className="btn btn-white btn-icon btn-sm"
+            onClick={() => openEditModal(record)}
+          >
+            Edit
+          </Link>
+          {/* Add delete functionality here if needed */}
         </div>
       ),
     },
@@ -173,36 +111,8 @@ const Exam = () => {
 
   return (
     <div>
-      <div className="page-wrapper">
-        <div className="content">
-          <div className="d-md-flex d-block align-items-center justify-content-between mb-3">
-            <h3 className="page-title mb-1">Exam</h3>
-            <div className="d-flex my-xl-auto right-content align-items-center flex-wrap">
-              <TooltipOption />
-              <div className="mb-2">
-                <Link
-                  to="#"
-                  className="btn btn-primary"
-                  data-bs-toggle="modal"
-                  data-bs-target="#add_exam"
-                >
-                  <i className="ti ti-square-rounded-plus-filled me-2" />
-                  Add Exam
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="card-header">
-              <h4 className="mb-3">Exam List</h4>
-            </div>
-            <div className="card-body p-0 py-3">
-              <Table columns={columns} dataSource={data} Selection={true} />
-            </div>
-          </div>
-        </div>
-      </div>
+      <h3 className="page-title mb-1">Exam</h3>
+      <Table columns={columns} dataSource={data} />
 
       {/* Add Exam Modal */}
       <div className="modal fade" id="add_exam">
@@ -210,14 +120,7 @@ const Exam = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title">Add Exam</h4>
-              <button
-                type="button"
-                className="btn-close custom-btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              >
-                <i className="ti ti-x" />
-              </button>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form onSubmit={handleAddExam}>
               <div className="modal-body">
@@ -234,37 +137,30 @@ const Exam = () => {
                 </div>
                 <div className="mb-3">
                   <label className="form-label">Exam Date</label>
-                  <div className="date-pic">
-                    <DatePicker
-                      className="form-control datetimepicker"
-                      format={"DD-MM-YYYY"}
-                      placeholder="16 May 2024"
-                      onChange={(date) => setNewExam({ ...newExam, examDate: dayjs(date).format("DD-MM-YYYY") })}
-                    />
-                    <span className="cal-icon">
-                      <i className="ti ti-calendar" />
-                    </span>
-                  </div>
+                  <DatePicker
+                    className="form-control"
+                    format={"DD-MM-YYYY"}
+                    value={dayjs(newExam.examDate, "DD-MM-YYYY")}
+                    onChange={(date) => setNewExam({ ...newExam, examDate: dayjs(date).format("DD-MM-YYYY") })}
+                  />
                 </div>
                 <div className="mb-3">
                   <label className="form-label">Start Time</label>
                   <CommonSelect
-                    className="select"
-                    options={startTime}
-                    onChange={handleStartTimeChange}
+                    options={startTime} // Ensure 'startTime' is defined
+                    onChange={(option: Option | null) => setNewExam({ ...newExam, startTime: option ? option.value : "" })}
                   />
                 </div>
                 <div className="mb-0">
                   <label className="form-label">End Time</label>
                   <CommonSelect
-                    className="select"
-                    options={startTimeOne}
-                    onChange={handleEndTimeChange}
+                    options={startTimeOne} // Ensure 'startTimeOne' is defined
+                    onChange={(option: Option | null) => setNewExam({ ...newExam, endTime: option ? option.value : "" })}
                   />
                 </div>
               </div>
               <div className="modal-footer">
-                <Link to="#" className="btn btn-light me-2" data-bs-dismiss="modal">Cancel</Link>
+                <Link to="#" className="btn btn-light" data-bs-dismiss="modal">Cancel</Link>
                 <button type="submit" className="btn btn-primary">Add Exam</button>
               </div>
             </form>
@@ -278,13 +174,7 @@ const Exam = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title">Edit Exam</h4>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-              >
-                <i className="ti ti-x" />
-              </button>
+              <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form onSubmit={handleEditExamSubmit}>
               <div className="modal-body">
@@ -297,7 +187,7 @@ const Exam = () => {
                         className="form-control"
                         name="examName"
                         value={editExam.examName}
-                        onChange={handleEditInputChange}
+                        onChange={(e) => setEditExam({ ...editExam, examName: e.target.value })}
                         required
                       />
                     </div>
@@ -313,17 +203,15 @@ const Exam = () => {
                     <div className="mb-3">
                       <label className="form-label">Start Time</label>
                       <CommonSelect
-                        className="select"
                         options={startTime}
-                        onChange={handleStartTimeChange}
+                        onChange={(option: Option | null) => setEditExam({ ...editExam, startTime: option ? option.value : "" })}
                       />
                     </div>
                     <div className="mb-0">
                       <label className="form-label">End Time</label>
                       <CommonSelect
-                        className="select"
                         options={startTimeOne}
-                        onChange={handleEndTimeChange}
+                        onChange={(option: Option | null) => setEditExam({ ...editExam, endTime: option ? option.value : "" })}
                       />
                     </div>
                   </>
