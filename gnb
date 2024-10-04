@@ -1,11 +1,11 @@
 Compiled with problems:
 ×
 ERROR in src/feature-module/academic/examinations/exam/index.tsx:75:21
-TS2552: Cannot find name 'index1'. Did you mean 'index'?
+TS2345: Argument of type 'number' is not assignable to parameter of type 'SetStateAction<null>'.
     73 |   const editExam = (exam: ExamType, index: number) => {
     74 |     setNewExam(exam);
-  > 75 |     setEditingIndex(index1);
-       |                     ^^^^^^
+  > 75 |     setEditingIndex(index);
+       |                     ^^^^^
     76 |     openModal();
     77 |   };
     78 |
