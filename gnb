@@ -1,26 +1,29 @@
 Compiled with problems:
 ×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:55:7
-TS2322: Type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: string; }' is not assignable to type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
-  Types of property 'key' are incompatible.
-    Type 'string' is not assignable to type 'number'.
-    53 |       // Update existing student
-    54 |       const updatedExams = [...exams];
-  > 55 |       updatedExams[editingIndex] = newExam;
-       |       ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    56 |       setExams(updatedExams);
-    57 |     } else {
-    58 |       // Add new student
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:59:16
-TS2345: Argument of type '(prev: { id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }[]) => ({ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; } | { ...; })[]' is not assignable to parameter of type 'SetStateAction<{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }[]>'.
-  Type '(prev: { id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }[]) => ({ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; } | { ...; })[]' is not assignable to type '(prevState: { id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }[]) => { id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }[]'.
-    Type '({ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; } | { id: string; examName: string; examDate: string; startTime: string; endTime: string; key: string; })[]' is not assignable to type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }[]'.
-      Type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; } | { id: string; examName: string; examDate: string; startTime: string; endTime: string; key: string; }' is not assignable to type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
-        Type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: string; }' is not assignable to type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; key: number; }'.
-    57 |     } else {
-    58 |       // Add new student
-  > 59 |       setExams((prev) => [...prev, newExam]);
-       |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    60 |     }
-    61 |     closeModal();
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:64:21
+TS7006: Parameter 'exam' implicitly has an 'any' type.
     62 |   };
+    63 |
+  > 64 |   const editExam = (exam, index) => {
+       |                     ^^^^
+    65 |     setNewExam(student);
+    66 |     setEditingIndex(index);
+    67 |     openModal();
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:64:27
+TS7006: Parameter 'index' implicitly has an 'any' type.
+    62 |   };
+    63 |
+  > 64 |   const editExam = (exam, index) => {
+       |                           ^^^^^
+    65 |     setNewExam(student);
+    66 |     setEditingIndex(index);
+    67 |     openModal();
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:65:16
+TS2304: Cannot find name 'student'.
+    63 |
+    64 |   const editExam = (exam, index) => {
+  > 65 |     setNewExam(student);
+       |                ^^^^^^^
+    66 |     setEditingIndex(index);
+    67 |     openModal();
+    68 |   };
