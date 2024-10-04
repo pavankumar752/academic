@@ -1,11 +1,14 @@
 Compiled with problems:
 ×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:75:21
-TS2345: Argument of type 'number' is not assignable to parameter of type 'SetStateAction<null>'.
-    73 |   const editExam = (exam: ExamType, index: number) => {
-    74 |     setNewExam(exam);
-  > 75 |     setEditingIndex(index);
-       |                     ^^^^^
-    76 |     openModal();
-    77 |   };
-    78 |
+ERROR in src/feature-module/academic/examinations/exam/index.tsx:362:78
+TS2322: Type '(e: React.ChangeEvent<HTMLInputElement>) => void' is not assignable to type '(option: Option | null) => void'.
+  Types of parameters 'e' and 'option' are incompatible.
+    Type 'Option | null' is not assignable to type 'ChangeEvent<HTMLInputElement>'.
+      Type 'null' is not assignable to type 'ChangeEvent<HTMLInputElement>'.
+    360 |                       <div className="mb-3">
+    361 |                         <label className="form-label">Start Time</label>
+  > 362 |                         <CommonSelect className="select" options={startTime} onChange={handleChange}/>
+        |                                                                              ^^^^^^^^
+    363 |                       </div>
+    364 |                       <div className="mb-0">
+    365 |                         <label className="form-label">End Time</label>
