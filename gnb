@@ -1,8 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
 import Table from "../../../../core/common/dataTable/index";
-import { exam } from "../../../../core/data/json/exam"; // This will be replaced with a dynamic fetch later.
+import { exam } from "../../../../core/data/json/exam"; // Assuming this is the sample data.
 import {
   examOne,
   examtwo,
@@ -10,7 +9,6 @@ import {
   startTimeOne,
 } from "../../../../core/common/selectoption/selectoption";
 import PredefinedDateRanges from "../../../../core/common/datePicker";
-import { TableData } from "../../../../core/data/interface";
 import CommonSelect from "../../../../core/common/commonSelect";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
@@ -20,39 +18,24 @@ import TooltipOption from "../../../../core/common/tooltipOption";
 const Exam = () => {
   const routes = all_routes;
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(exam); // Initialize state with sample data
   const [editingExam, setEditingExam] = useState(null);
-  const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
+  const dropdownMenuRef = useRef(null);
   const today = new Date();
   const defaultValue = dayjs(today);
 
-  useEffect(() => {
-    fetchExams();
-  }, []);
-
-  const fetchExams = async () => {
-    // Replace with actual API call
-    const fetchedData = await new Promise(resolve => {
-      setTimeout(() => resolve(exam), 1000); // Simulate API call
-    });
-    setData(fetchedData);
-  };
-
-  const handleAddExam = async (examData) => {
-    // Simulate adding exam (replace with API call)
+  const handleAddExam = (examData) => {
     setData((prevData) => [...prevData, { id: Date.now(), ...examData }]);
   };
 
-  const handleEditExam = async (updatedExam) => {
-    // Simulate editing exam (replace with API call)
+  const handleEditExam = (updatedExam) => {
     setData((prevData) =>
       prevData.map((exam) => (exam.id === updatedExam.id ? updatedExam : exam))
     );
     setEditingExam(null); // Reset editing state
   };
 
-  const handleDeleteExam = async (id) => {
-    // Simulate deleting exam (replace with API call)
+  const handleDeleteExam = (id) => {
     setData((prevData) => prevData.filter((exam) => exam.id !== id));
   };
 
@@ -472,8 +455,7 @@ const Exam = () => {
                 </span>
                 <h4>Confirm Deletion</h4>
                 <p>
-                  You want to delete all the marked items; this can't be undone
-                  once you delete.
+                  You want to delete this exam; this can't be undone once you delete.
                 </p>
                 <div className="d-flex justify-content-center">
                   <Link
@@ -483,7 +465,7 @@ const Exam = () => {
                   >
                     Cancel
                   </Link>
-                  <Link to="#" className="btn btn-danger" onClick={() => handleDeleteExam()}>
+                  <Link to="#" className="btn btn-danger" onClick={() => handleDeleteExam(editingExam.id)}>
                     Yes, Delete
                   </Link>
                 </div>
