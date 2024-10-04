@@ -34,7 +34,7 @@ const Exam = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const openModal = () => setModalIsOpen(true);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [newExam, setNewExam] = useState({id: "", examName: '', examDate:'', startTime:'', endTime:'', key:1})
+  const [newExam, setNewExam] = useState({id: "", examName: '', examDate:'', startTime:'', endTime:'', key:111})
   const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
   const today = new Date();
   const year = today.getFullYear();
@@ -46,7 +46,7 @@ const Exam = () => {
   const closeModal = () => {
     setEditingIndex(null);
     setNewExam({
-      id: "", examName: '', examDate:'', startTime:'', endTime:'', key:1
+      id: "", examName: '', examDate:'', startTime:'', endTime:'', key:111
     })
     setModalIsOpen(false);
   }
@@ -343,7 +343,7 @@ const Exam = () => {
                     <div className="col-md-12">
                       <div className="mb-3">
                         <label className="form-label">Exam Name</label>
-                        <input type="text" className="form-control" onChange={handleChange} value={newExam.examName}/>
+                        <input type="text" className="form-control" onChange={handleChange} value={newExam.examName} name = "examName"/>
                       </div>
                       <div className="mb-3">
                         <label className="form-label">Exam Date</label>
@@ -354,6 +354,7 @@ const Exam = () => {
                               format: "DD-MM-YYYY",
                               type: "mask",
                             }}
+                            name = "examDate"
                             onChange={handleDateChange}
                             value={newExam.examDate ? dayjs(newExam.examDate, "DD-MM-YYYY") : null}
                             getPopupContainer={getModalContainer}
