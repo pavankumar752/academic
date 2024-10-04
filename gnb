@@ -14,8 +14,9 @@ import { DatePicker } from "antd";
 import dayjs from "dayjs";
 import { all_routes } from "../../../router/all_routes";
 import TooltipOption from "../../../../core/common/tooltipOption";
+
 interface Exam {
-  id:number;
+  id: number;
   examName: string;
   examDate: string;
   startTime: string;
@@ -25,24 +26,24 @@ interface Exam {
 const Exam = () => {
   const routes = all_routes;
 
-  const [data, setData] = useState<Exam[]>([]); // Initialize state with sample data
+  const [data, setData] = useState<Exam[]>([]);
   const [editingExam, setEditingExam] = useState<Exam | null>(null);
-  const dropdownMenuRef = useRef(null);
+  const dropdownMenuRef = useRef<HTMLUListElement | null>(null); // Type assertion added
   const today = new Date();
   const defaultValue = dayjs(today);
 
   const handleAddExam = (examData: Omit<Exam, 'id'>) => {
-    setData((prevData) => [...prevData, { id:Date.now(), ...examData }]);
+    setData((prevData) => [...prevData, { id: Date.now(), ...examData }]);
   };
 
-  const handleEditExam = (updatedExam:Exam) => {
+  const handleEditExam = (updatedExam: Exam) => {
     setData((prevData) =>
       prevData.map((exam) => (exam.id === updatedExam.id ? updatedExam : exam))
     );
-    setEditingExam(null); // Reset editing state
+    setEditingExam(null);
   };
 
-  const handleDeleteExam = (id:number) => {
+  const handleDeleteExam = (id: number) => {
     setData((prevData) => prevData.filter((exam) => exam.id !== id));
   };
 
@@ -61,37 +62,37 @@ const Exam = () => {
     {
       title: "ID",
       dataIndex: "id",
-      render: (text:string, record:Exam) => (
+      render: (text: string, record: Exam) => (
         <Link to="#" className="link-primary">
           {record.id}
         </Link>
       ),
-      sorter: (a:Exam, b:Exam) => a.id - b.id,
+      sorter: (a: Exam, b: Exam) => a.id - b.id,
     },
     {
       title: "Exam Name",
       dataIndex: "examName",
-      sorter: (a:Exam, b:Exam) => a.examName.length - b.examName.length,
+      sorter: (a: Exam, b: Exam) => a.examName.length - b.examName.length,
     },
     {
       title: "Exam Date",
       dataIndex: "examDate",
-      sorter: (a:Exam, b:Exam) => a.examDate.length - b.examDate.length,
+      sorter: (a: Exam, b: Exam) => a.examDate.length - b.examDate.length,
     },
     {
       title: "Start Time",
       dataIndex: "startTime",
-      sorter: (a:Exam, b:Exam) => a.startTime.length - b.startTime.length,
+      sorter: (a: Exam, b: Exam) => a.startTime.length - b.startTime.length,
     },
     {
       title: "End Time",
       dataIndex: "endTime",
-      sorter: (a:Exam, b:Exam) => a.endTime.length - b.endTime.length,
+      sorter: (a: Exam, b: Exam) => a.endTime.length - b.endTime.length,
     },
     {
       title: "Action",
       dataIndex: "action",
-      render: (_: any, record:Exam) => (
+      render: (_: any, record: Exam) => (
         <div className="d-flex align-items-center">
           <div className="dropdown">
             <Link
@@ -134,7 +135,7 @@ const Exam = () => {
     },
   ];
 
-  const handleSubmitAddExam = (event:React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitAddExam = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
     const newExam = {
@@ -147,9 +148,9 @@ const Exam = () => {
     form.reset();
   };
 
-  const handleSubmitEditExam = (event:React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitEditExam = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if(!editingExam) return;
+    if (!editingExam) return;
     const form = event.target as HTMLFormElement;
     const updatedExam = {
       ...editingExam,
@@ -256,107 +257,88 @@ const Exam = () => {
                     </form>
                   </div>
                 </div>
-                <div className="dropdown mb-3">
-                  <Link
-                    to="#"
-                    className="btn btn-outline-light bg-white dropdown-toggle"
-                    data-bs-toggle="dropdown"
-                  >
-                    <i className="ti ti-sort-ascending-2 me-2" />
-                    Sort by A-Z
-                  </Link>
-                  <ul className="dropdown-menu p-3">
-                    <li>
-                      <Link to="#" className="dropdown-item rounded-1 active">
-                        Ascending
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="#" className="dropdown-item rounded-1">
-                        Descending
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="#" className="dropdown-item rounded-1">
-                        Recently Viewed
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="#" className="dropdown-item rounded-1">
-                        Recently Added
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
+                <DatePicker
+                  format="YYYY-MM-DD"
+                  defaultValue={defaultValue} // Default value added here
+                  getPopupContainer={getModalContainer}
+                />
               </div>
             </div>
-            <div className="card-body p-0 py-3">
-              <Table columns={columns} dataSource={data} Selection={true} />
+            <div className="card-body">
+              <Table columns={columns} data={data} />
             </div>
           </div>
         </div>
       </div>
-
       {/* Add Exam Modal */}
-      <div className="modal fade" id="add_exam">
-        <div className="modal-dialog modal-dialog-centered">
+      <div
+        className="modal fade"
+        id="add_exam"
+        tabIndex={-1}
+        aria-labelledby="add_examLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h4 className="modal-title">Add Exam</h4>
+              <h5 className="modal-title" id="add_examLabel">
+                Add Exam
+              </h5>
               <button
                 type="button"
-                className="btn-close custom-btn-close"
+                className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
-              >
-                <i className="ti ti-x" />
-              </button>
+              />
             </div>
             <form onSubmit={handleSubmitAddExam}>
               <div className="modal-body">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="mb-3">
-                      <label className="form-label">Exam Name</label>
-                      <input type="text" name="examName" className="form-control" required />
-                    </div>
-                    <div className="mb-3">
-                      <label className="form-label">Exam Date</label>
-                      <div className="date-pic">
-                        <DatePicker
-                          name="examDate"
-                          className="form-control datetimepicker"
-                          format="DD-MM-YYYY"
-                          getPopupContainer={getModalContainer}
-                          defaultValue={defaultValue}
-                          placeholder="16 May 2024"
-                          required
-                        />
-                        <span className="cal-icon">
-                          <i className="ti ti-calendar" />
-                        </span>
-                      </div>
-                    </div>
-                    <div className="mb-3">
-                      <label className="form-label">Start Time</label>
-                      <CommonSelect className="select" options={startTime} name="startTime" required />
-                    </div>
-                    <div className="mb-0">
-                      <label className="form-label">End Time</label>
-                      <CommonSelect className="select" options={startTimeOne} name="endTime" required />
-                    </div>
-                  </div>
+                <div className="mb-3">
+                  <label className="form-label">Exam Name</label>
+                  <input
+                    type="text"
+                    name="examName"
+                    className="form-control"
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Exam Date</label>
+                  <input
+                    type="date"
+                    name="examDate"
+                    className="form-control"
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Start Time</label>
+                  <input
+                    type="time"
+                    name="startTime"
+                    className="form-control"
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">End Time</label>
+                  <input
+                    type="time"
+                    name="endTime"
+                    className="form-control"
+                    required
+                  />
                 </div>
               </div>
               <div className="modal-footer">
-                <Link
-                  to="#"
-                  className="btn btn-light me-2"
+                <button
+                  type="button"
+                  className="btn btn-light"
                   data-bs-dismiss="modal"
                 >
-                  Cancel
-                </Link>
-                <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">
+                  Close
+                </button>
+                <button type="submit" className="btn btn-primary">
                   Add Exam
                 </button>
               </div>
@@ -364,192 +346,90 @@ const Exam = () => {
           </div>
         </div>
       </div>
-
       {/* Edit Exam Modal */}
-      <div className="modal fade" id="edit_exam">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title">Edit Exam</h4>
-              <button
-                type="button"
-                className="btn-close custom-btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              >
-                <i className="ti ti-x" />
-              </button>
-            </div>
-            <form onSubmit={handleSubmitEditExam}>
-              <div className="modal-body">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="mb-3">
-                      <label className="form-label">Exam Name</label>
-                      <input
-                        type="text"
-                        name="examName"
-                        className="form-control"
-                        placeholder="Enter Exam Name"
-                        defaultValue={editingExam?.examName || ""}
-                        required
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label className="form-label">Exam Date</label>
-                      <div className="date-pic">
-                        <DatePicker
-                          name="examDate"
-                          className="form-control datetimepicker"
-                          format="DD-MM-YYYY"
-                          getPopupContainer={getModalContainer}
-                          defaultValue={editingExam ? dayjs(editingExam.examDate) : defaultValue}
-                          placeholder="16 May 2024"
-                          required
-                        />
-                        <span className="cal-icon">
-                          <i className="ti ti-calendar" />
-                        </span>
-                      </div>
-                    </div>
-                    <div className="mb-3">
-                      <label className="form-label">Start Time</label>
-                      <CommonSelect
-                        className="select"
-                        options={startTime}
-                        name="startTime"
-                        defaultValue={editingExam?.startTime}
-                        required
-                      />
-                    </div>
-                    <div className="mb-0">
-                      <label className="form-label">End Time</label>
-                      <CommonSelect
-                        className="select"
-                        options={startTimeOne}
-                        name="endTime"
-                        defaultValue={editingExam?.endTime}
-                        required
-                      />
-                    </div>
+      {editingExam && (
+        <div
+          className="modal fade"
+          id="edit_exam"
+          tabIndex={-1}
+          aria-labelledby="edit_examLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="edit_examLabel">
+                  Edit Exam
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                />
+              </div>
+              <form onSubmit={handleSubmitEditExam}>
+                <div className="modal-body">
+                  <div className="mb-3">
+                    <label className="form-label">Exam Name</label>
+                    <input
+                      type="text"
+                      name="examName"
+                      className="form-control"
+                      defaultValue={editingExam.examName}
+                      required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Exam Date</label>
+                    <input
+                      type="date"
+                      name="examDate"
+                      className="form-control"
+                      defaultValue={editingExam.examDate}
+                      required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Start Time</label>
+                    <input
+                      type="time"
+                      name="startTime"
+                      className="form-control"
+                      defaultValue={editingExam.startTime}
+                      required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">End Time</label>
+                    <input
+                      type="time"
+                      name="endTime"
+                      className="form-control"
+                      defaultValue={editingExam.endTime}
+                      required
+                    />
                   </div>
                 </div>
-              </div>
-              <div className="modal-footer">
-                <Link
-                  to="#"
-                  className="btn btn-light me-2"
-                  data-bs-dismiss="modal"
-                >
-                  Cancel
-                </Link>
-                <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">
-                  Save Changes
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      {/* Delete Modal */}
-      <div className="modal fade" id="delete-modal">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <form>
-              <div className="modal-body text-center">
-                <span className="delete-icon">
-                  <i className="ti ti-trash-x" />
-                </span>
-                <h4>Confirm Deletion</h4>
-                <p>
-                  You want to delete this exam; this can't be undone once you delete.
-                </p>
-                <div className="d-flex justify-content-center">
-                  <Link
-                    to="#"
-                    className="btn btn-light me-3"
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-light"
                     data-bs-dismiss="modal"
                   >
-                    Cancel
-                  </Link>
-                  <Link to="#" className="btn btn-danger" onClick={() => handleDeleteExam(editingExam.id)}>
-                    Yes, Delete
-                  </Link>
+                    Close
+                  </button>
+                  <button type="submit" className="btn btn-primary">
+                    Save changes
+                  </button>
                 </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
 
 export default Exam;
-
-This is the code 
-
-Compiled with problems:
-×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:51:31
-TS2339: Property 'classList' does not exist on type 'never'.
-    49 |   const handleApplyClick = () => {
-    50 |     if (dropdownMenuRef.current) {
-  > 51 |       dropdownMenuRef.current.classList.remove("show");
-       |                               ^^^^^^^^^
-    52 |     }
-    53 |   };
-    54 |
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:342:76
-TS2322: Type '{ className: string; options: { value: string; label: string; }[]; name: string; required: true; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
-  Property 'name' does not exist on type 'IntrinsicAttributes & SelectProps'.
-    340 |                     <div className="mb-3">
-    341 |                       <label className="form-label">Start Time</label>
-  > 342 |                       <CommonSelect className="select" options={startTime} name="startTime" required />
-        |                                                                            ^^^^
-    343 |                     </div>
-    344 |                     <div className="mb-0">
-    345 |                       <label className="form-label">End Time</label>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:346:79
-TS2322: Type '{ className: string; options: { value: string; label: string; }[]; name: string; required: true; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
-  Property 'name' does not exist on type 'IntrinsicAttributes & SelectProps'.
-    344 |                     <div className="mb-0">
-    345 |                       <label className="form-label">End Time</label>
-  > 346 |                       <CommonSelect className="select" options={startTimeOne} name="endTime" required />
-        |                                                                               ^^^^
-    347 |                     </div>
-    348 |                   </div>
-    349 |                 </div>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:421:25
-TS2322: Type 'string | undefined' is not assignable to type 'Option | undefined'.
-  Type 'string' is not assignable to type 'Option'.
-    419 |                         options={startTime}
-    420 |                         name="startTime"
-  > 421 |                         defaultValue={editingExam?.startTime}
-        |                         ^^^^^^^^^^^^
-    422 |                         required
-    423 |                       />
-    424 |                     </div>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:431:25
-TS2322: Type 'string | undefined' is not assignable to type 'Option | undefined'.
-    429 |                         options={startTimeOne}
-    430 |                         name="endTime"
-  > 431 |                         defaultValue={editingExam?.endTime}
-        |                         ^^^^^^^^^^^^
-    432 |                         required
-    433 |                       />
-    434 |                     </div>
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:476:91
-TS18047: 'editingExam' is possibly 'null'.
-    474 |                     Cancel
-    475 |                   </Link>
-  > 476 |                   <Link to="#" className="btn btn-danger" onClick={() => handleDeleteExam(editingExam.id)}>
-        |                                                                                           ^^^^^^^^^^^
-    477 |                     Yes, Delete
-    478 |                   </Link>
-    479 |                 </div>
-
-
-
-these are errors retify the errors and give full updated code
