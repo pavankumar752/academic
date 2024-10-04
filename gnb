@@ -1,13 +1,13 @@
-Compiled with problems:
-×
-ERROR in src/feature-module/academic/examinations/exam/index.tsx:69:14
-TS2345: Argument of type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; }[]' is not assignable to parameter of type 'SetStateAction<ExamType[]>'.
-  Type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; }[]' is not assignable to type 'ExamType[]'.
-    Property 'key' is missing in type '{ id: string; examName: string; examDate: string; startTime: string; endTime: string; }' but required in type 'ExamType'.
-    67 |       : [...exams, { ...newExam, id: (exams.length + 1).toString() }]; // Generate ID based on current length
-    68 |
-  > 69 |     setExams(updatedExams);
-       |              ^^^^^^^^^^^^
-    70 |     closeModal();
-    71 |   };
-    72 |
+const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const updatedExams = editingIndex !== null
+      ? exams.map((exam, index) => 
+          index === editingIndex 
+          ? { ...newExam, id: exam.id, key: exam.key } // Retain original key when editing
+          : exam
+        )
+      : [...exams, { ...newExam, id: (exams.length + 1).toString(), key: exams.length + 1 }]; // Generate ID and key for new exams
+
+    setExams(updatedExams);
+    closeModal();
+};
