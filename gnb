@@ -1,14 +1,6 @@
-const fetchExams = async () => {
-  try {
-    const response = await fetch('YOUR_API_URL');
-    const data = await response.json();
-    
-    // Log the data to check its structure
-    console.log(data);
-    
-    // Set exams to the array received from the API
-    setExams(Array.isArray(data) ? data : []); // Ensure it's an array
-  } catch (error) {
-    console.error('Error fetching exam data:', error);
-  }
-};
+index.tsx:35 
+ 
+ GET http://10.10.8.14:8008/exams/exam_exam/ 403 (Forbidden)
+fetchExams	@	index.tsx:35
+(anonymous)	@	index.tsx:48
+Show 16 more frames
