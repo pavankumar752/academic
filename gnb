@@ -1,41 +1,14 @@
-Uncaught runtime errors:
-×
-ERROR
-dataSource.filter is not a function
-TypeError: dataSource.filter is not a function
-    at Datatable (http://10.30.31.129:3000/react/template/static/js/bundle.js:155:41)
-    at renderWithHooks (http://10.30.31.129:3000/react/template/static/js/bundle.js:630156:22)
-    at updateFunctionComponent (http://10.30.31.129:3000/react/template/static/js/bundle.js:633036:24)
-    at beginWork (http://10.30.31.129:3000/react/template/static/js/bundle.js:634748:20)
-    at HTMLUnknownElement.callCallback (http://10.30.31.129:3000/react/template/static/js/bundle.js:619752:18)
-    at Object.invokeGuardedCallbackDev (http://10.30.31.129:3000/react/template/static/js/bundle.js:619796:20)
-    at invokeGuardedCallback (http://10.30.31.129:3000/react/template/static/js/bundle.js:619853:35)
-    at beginWork$1 (http://10.30.31.129:3000/react/template/static/js/bundle.js:639717:11)
-    at performUnitOfWork (http://10.30.31.129:3000/react/template/static/js/bundle.js:638965:16)
-    at workLoopSync (http://10.30.31.129:3000/react/template/static/js/bundle.js:638888:9)
-ERROR
-dataSource.filter is not a function
-TypeError: dataSource.filter is not a function
-    at Datatable (http://10.30.31.129:3000/react/template/static/js/bundle.js:155:41)
-    at renderWithHooks (http://10.30.31.129:3000/react/template/static/js/bundle.js:630156:22)
-    at updateFunctionComponent (http://10.30.31.129:3000/react/template/static/js/bundle.js:633036:24)
-    at beginWork (http://10.30.31.129:3000/react/template/static/js/bundle.js:634748:20)
-    at HTMLUnknownElement.callCallback (http://10.30.31.129:3000/react/template/static/js/bundle.js:619752:18)
-    at Object.invokeGuardedCallbackDev (http://10.30.31.129:3000/react/template/static/js/bundle.js:619796:20)
-    at invokeGuardedCallback (http://10.30.31.129:3000/react/template/static/js/bundle.js:619853:35)
-    at beginWork$1 (http://10.30.31.129:3000/react/template/static/js/bundle.js:639717:11)
-    at performUnitOfWork (http://10.30.31.129:3000/react/template/static/js/bundle.js:638965:16)
-    at workLoopSync (http://10.30.31.129:3000/react/template/static/js/bundle.js:638888:9)
-ERROR
-dataSource.filter is not a function
-TypeError: dataSource.filter is not a function
-    at Datatable (http://10.30.31.129:3000/react/template/static/js/bundle.js:155:41)
-    at renderWithHooks (http://10.30.31.129:3000/react/template/static/js/bundle.js:630156:22)
-    at updateFunctionComponent (http://10.30.31.129:3000/react/template/static/js/bundle.js:633036:24)
-    at beginWork (http://10.30.31.129:3000/react/template/static/js/bundle.js:634748:20)
-    at beginWork$1 (http://10.30.31.129:3000/react/template/static/js/bundle.js:639695:18)
-    at performUnitOfWork (http://10.30.31.129:3000/react/template/static/js/bundle.js:638965:16)
-    at workLoopSync (http://10.30.31.129:3000/react/template/static/js/bundle.js:638888:9)
-    at renderRootSync (http://10.30.31.129:3000/react/template/static/js/bundle.js:638861:11)
-    at recoverFromConcurrentError (http://10.30.31.129:3000/react/template/static/js/bundle.js:638353:24)
-    at performConcurrentWorkOnRoot (http://10.30.31.129:3000/react/template/static/js/bundle.js:638266:26)
+const fetchExams = async () => {
+  try {
+    const response = await fetch('YOUR_API_URL');
+    const data = await response.json();
+    
+    // Log the data to check its structure
+    console.log(data);
+    
+    // Set exams to the array received from the API
+    setExams(Array.isArray(data) ? data : []); // Ensure it's an array
+  } catch (error) {
+    console.error('Error fetching exam data:', error);
+  }
+};
