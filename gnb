@@ -1,33 +1,6 @@
-const jwtToken = Cookies.get('authToken');
-const apiUrl = 'http://10.10.8.14:8008/exams/exam_exam/';
-
-async function fetchData() {
-  if (!jwtToken) {
-    console.error('No authentication token found');
-    return;
-  }
-
-  const options = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${jwtToken}`,
-    },
-    method: 'GET',
-  };
-
-  try {
-    const response = await fetch(apiUrl, options);
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Network response was not ok: ${response.status} ${response.statusText} - ${errorText}`);
-    }
-
-    const data = await response.json();
-    console.log(data);
-  } catch (error) {
-    console.error('There has been a problem with your fetch operation:', error);
-  }
-}
-
-fetchData();
+PS C:\Users\Scts\Downloads\spike-vue-v4\packages\main> npm run serve
+npm error Missing script: "serve"
+npm error
+npm error To see a list of scripts, run:
+npm error   npm run
+npm error A complete log of this run can be found in: C:\Users\Scts\AppData\Local\npm-cache\_logs\2024-10-07T10_02_15_889Z-debug-0.log
