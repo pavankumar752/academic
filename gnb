@@ -1,6 +1,4 @@
-PS C:\Users\Scts\Downloads\spike-vue-v4\packages\main> npm run serve
-npm error Missing script: "serve"
-npm error
-npm error To see a list of scripts, run:
-npm error   npm run
-npm error A complete log of this run can be found in: C:\Users\Scts\AppData\Local\npm-cache\_logs\2024-10-07T10_02_15_889Z-debug-0.log
+"scripts": {
+  "serve": "vue-cli-service serve",
+  "build": "vue-cli-service build"
+}
