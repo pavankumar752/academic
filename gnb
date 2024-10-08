@@ -1,106 +1,158 @@
-<div className="card">
-            <div className="card-header d-flex align-items-center justify-content-between flex-wrap pb-0">
-              <h4 className="mb-3">Exam List</h4>
-              <div className="d-flex align-items-center flex-wrap">
-                <div className="input-icon-start mb-3 me-2 position-relative">
-                  <PredefinedDateRanges />
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import CommonSelect from './CommonSelect'; // Assuming you have this component
+import Table from './Table'; // Assuming you have this component
+
+const ExamList = ({ exams, examtwo }) => {
+  const [filter, setFilter] = useState({ examName: '', examDate: '' });
+  const [sortOrder, setSortOrder] = useState('ascending');
+  const [sortedExams, setSortedExams] = useState(exams);
+
+  const handleApplyClick = () => {
+    // Apply filters
+    let filteredExams = exams;
+
+    if (filter.examName) {
+      filteredExams = filteredExams.filter(exam =>
+        exam.name.includes(filter.examName)
+      );
+    }
+
+    if (filter.examDate) {
+      filteredExams = filteredExams.filter(exam =>
+        exam.date === filter.examDate
+      );
+    }
+
+    // Sort exams based on sortOrder
+    if (sortOrder === 'ascending') {
+      filteredExams.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortOrder === 'descending') {
+      filteredExams.sort((a, b) => b.name.localeCompare(a.name));
+    } else if (sortOrder === 'recentlyViewed') {
+      // Assuming exams have a lastViewed property
+      filteredExams.sort((a, b) => b.lastViewed - a.lastViewed);
+    } else if (sortOrder === 'recentlyAdded') {
+      // Assuming exams have a createdAt property
+      filteredExams.sort((a, b) => b.createdAt - a.createdAt);
+    }
+
+    setSortedExams(filteredExams);
+  };
+
+  const handleReset = () => {
+    setFilter({ examName: '', examDate: '' });
+    setSortOrder('ascending');
+    setSortedExams(exams);
+  };
+
+  return (
+    <div className="card">
+      <div className="card-header d-flex align-items-center justify-content-between flex-wrap pb-0">
+        <h4 className="mb-3">Exam List</h4>
+        <div className="d-flex align-items-center flex-wrap">
+          {/* Date Range Selector */}
+          <div className="input-icon-start mb-3 me-2 position-relative">
+            <PredefinedDateRanges />
+          </div>
+
+          {/* Filter Dropdown */}
+          <div className="dropdown mb-3 me-2">
+            <Link
+              to="#"
+              className="btn btn-outline-light bg-white dropdown-toggle"
+              data-bs-toggle="dropdown"
+              data-bs-auto-close="outside"
+            >
+              <i className="ti ti-filter me-2" />
+              Filter
+            </Link>
+            <div className="dropdown-menu drop-width">
+              <form>
+                <div className="d-flex align-items-center border-bottom p-3">
+                  <h4>Filter</h4>
                 </div>
-                <div className="dropdown mb-3 me-2">
-                  <Link
-                    to="#"
-                    className="btn btn-outline-light bg-white dropdown-toggle"
-                    data-bs-toggle="dropdown"
-                    data-bs-auto-close="outside"
-                  >
-                    <i className="ti ti-filter me-2" />
-                    Filter
-                  </Link>
-                  <div
-                    className="dropdown-menu drop-width"
-                    ref={dropdownMenuRef}
-                  >
-                    <form>
-                      <div className="d-flex align-items-center border-bottom p-3">
-                        <h4>Filter</h4>
+                <div className="p-3 border-bottom pb-0">
+                  <div className="row">
+                    <div className="col-md-12">
+                      <div className="mb-3">
+                        <label className="form-label">Exam Name</label>
+                        <CommonSelect
+                          className="select"
+                          options={examtwo}
+                          onChange={(value) => setFilter({ ...filter, examName: value })}
+                        />
                       </div>
-                      <div className="p-3 border-bottom pb-0">
-                        <div className="row">
-                          <div className="col-md-12">
-                            <div className="mb-3">
-                              <label className="form-label">Exam Name</label>
-                              <CommonSelect
-                                className="select"
-                                options={examtwo}
-                              />
-                            </div>
-                          </div>
-                          <div className="col-md-12">
-                            <div className="mb-3">
-                              <label className="form-label">Exam Date</label>
-                              <CommonSelect
-                                className="select"
-                                options={examtwo}
-                              />
-                            </div>
-                          </div>
-                        </div>
+                    </div>
+                    <div className="col-md-12">
+                      <div className="mb-3">
+                        <label className="form-label">Exam Date</label>
+                        <CommonSelect
+                          className="select"
+                          options={examtwo}
+                          onChange={(value) => setFilter({ ...filter, examDate: value })}
+                        />
                       </div>
-                      <div className="p-3 d-flex align-items-center justify-content-end">
-                        <Link to="#" className="btn btn-light me-3">
-                          Reset
-                        </Link>
-                        <Link
-                          to="#"
-                          className="btn btn-primary"
-                          onClick={handleApplyClick}
-                        >
-                          Apply
-                        </Link>
-                      </div>
-                    </form>
+                    </div>
                   </div>
                 </div>
-                <div className="dropdown mb-3">
+                <div className="p-3 d-flex align-items-center justify-content-end">
+                  <Link to="#" className="btn btn-light me-3" onClick={handleReset}>
+                    Reset
+                  </Link>
                   <Link
                     to="#"
-                    className="btn btn-outline-light bg-white dropdown-toggle"
-                    data-bs-toggle="dropdown"
+                    className="btn btn-primary"
+                    onClick={handleApplyClick}
                   >
-                    <i className="ti ti-sort-ascending-2 me-2" />
-                    Sort by A-Z
+                    Apply
                   </Link>
-                  <ul className="dropdown-menu p-3">
-                    <li>
-                      <Link to="#" className="dropdown-item rounded-1 active">
-                        Ascending
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="#" className="dropdown-item rounded-1">
-                        Descending
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="#" className="dropdown-item rounded-1">
-                        Recently Viewed
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="#" className="dropdown-item rounded-1">
-                        Recently Added
-                      </Link>
-                    </li>
-                  </ul>
                 </div>
-              </div>
-            </div>
-            <div className="card-body p-0 py-3">
-              {/* Guardians List */}
-              <Table columns={columns} dataSource={exams} Selection={true} />
-
-              {/* /Guardians List */}
+              </form>
             </div>
           </div>
-          {/* /Guardians List */}
+
+          {/* Sort Dropdown */}
+          <div className="dropdown mb-3">
+            <Link
+              to="#"
+              className="btn btn-outline-light bg-white dropdown-toggle"
+              data-bs-toggle="dropdown"
+            >
+              <i className="ti ti-sort-ascending-2 me-2" />
+              Sort by A-Z
+            </Link>
+            <ul className="dropdown-menu p-3">
+              <li>
+                <Link to="#" className="dropdown-item rounded-1" onClick={() => setSortOrder('ascending')}>
+                  Ascending
+                </Link>
+              </li>
+              <li>
+                <Link to="#" className="dropdown-item rounded-1" onClick={() => setSortOrder('descending')}>
+                  Descending
+                </Link>
+              </li>
+              <li>
+                <Link to="#" className="dropdown-item rounded-1" onClick={() => setSortOrder('recentlyViewed')}>
+                  Recently Viewed
+                </Link>
+              </li>
+              <li>
+                <Link to="#" className="dropdown-item rounded-1" onClick={() => setSortOrder('recentlyAdded')}>
+                  Recently Added
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
+      <div className="card-body p-0 py-3">
+        {/* Exam List Table */}
+        <Table columns={columns} dataSource={sortedExams} Selection={true} />
+      </div>
+    </div>
+  );
+};
+
+export default ExamList;
