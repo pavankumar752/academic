@@ -1,53 +1,106 @@
-useEffect(() => {
-  const fetchData = async () => {
-    if (!jwtToken) {
-      console.error('No authentication token found');
-      return;
-    }
+<div className="card">
+            <div className="card-header d-flex align-items-center justify-content-between flex-wrap pb-0">
+              <h4 className="mb-3">Exam List</h4>
+              <div className="d-flex align-items-center flex-wrap">
+                <div className="input-icon-start mb-3 me-2 position-relative">
+                  <PredefinedDateRanges />
+                </div>
+                <div className="dropdown mb-3 me-2">
+                  <Link
+                    to="#"
+                    className="btn btn-outline-light bg-white dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                    data-bs-auto-close="outside"
+                  >
+                    <i className="ti ti-filter me-2" />
+                    Filter
+                  </Link>
+                  <div
+                    className="dropdown-menu drop-width"
+                    ref={dropdownMenuRef}
+                  >
+                    <form>
+                      <div className="d-flex align-items-center border-bottom p-3">
+                        <h4>Filter</h4>
+                      </div>
+                      <div className="p-3 border-bottom pb-0">
+                        <div className="row">
+                          <div className="col-md-12">
+                            <div className="mb-3">
+                              <label className="form-label">Exam Name</label>
+                              <CommonSelect
+                                className="select"
+                                options={examtwo}
+                              />
+                            </div>
+                          </div>
+                          <div className="col-md-12">
+                            <div className="mb-3">
+                              <label className="form-label">Exam Date</label>
+                              <CommonSelect
+                                className="select"
+                                options={examtwo}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="p-3 d-flex align-items-center justify-content-end">
+                        <Link to="#" className="btn btn-light me-3">
+                          Reset
+                        </Link>
+                        <Link
+                          to="#"
+                          className="btn btn-primary"
+                          onClick={handleApplyClick}
+                        >
+                          Apply
+                        </Link>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <div className="dropdown mb-3">
+                  <Link
+                    to="#"
+                    className="btn btn-outline-light bg-white dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                  >
+                    <i className="ti ti-sort-ascending-2 me-2" />
+                    Sort by A-Z
+                  </Link>
+                  <ul className="dropdown-menu p-3">
+                    <li>
+                      <Link to="#" className="dropdown-item rounded-1 active">
+                        Ascending
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="#" className="dropdown-item rounded-1">
+                        Descending
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="#" className="dropdown-item rounded-1">
+                        Recently Viewed
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="#" className="dropdown-item rounded-1">
+                        Recently Added
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div className="card-body p-0 py-3">
+              {/* Guardians List */}
+              <Table columns={columns} dataSource={exams} Selection={true} />
 
-    const options = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwtToken}`,
-      },
-    };
-
-    try {
-      const response = await fetch(apiUrl, options);
-      const response1 = await fetch('http://10.10.8.14:8008/exams/exam_types_dropdown/', options);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Network response was not ok: ${response.status} ${response.statusText} - ${errorText}`);
-      }
-
-      const data = await response.json();
-      const examtwo = await response1.json();
-
-      const formattedData = data.results.map(item => ({
-        exam_id: item.exam_id,
-        exam_type_name: item.exam_type_name,
-        academic_year_name: item.academic_year_name,
-        name: item.name,
-        start_date: item.start_date,
-        end_date: item.end_date,
-      }));
-
-      const formattedData1 = examtwo.results.map(item => ({
-        exam_type_id: item.exam_type_id,
-        name: item.name,
-        label: item.label,
-      }));
-
-      console.log(formattedData1);
-      setExams(formattedData);
-      setExamsTwo(formattedData1);
-
-    } catch (error) {
-      console.error('There has been a problem with your fetch operation:', error);
-    }
-  };
-
-  fetchData();
-}, [jwtToken]);
+              {/* /Guardians List */}
+            </div>
+          </div>
+          {/* /Guardians List */}
+        </div>
+      </div>
