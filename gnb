@@ -1,137 +1,53 @@
-const routes = all_routes;
-  const apiUrl = 'http://10.10.8.14:8008/exams/exam_exam/';
-  const [exams,setExams] = useState<ExamType[]>([]);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const openModal = () => setModalIsOpen(true);
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [newExam, setNewExam] = useState({exam_type_name: 'Select',academic_year_name:'Select',name:'', start_date:'', end_date:''})
-  const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0"); // Month is zero-based, so we add 1
-  const day = String(today.getDate()).padStart(2, "0");
-  const formattedDate = `${month}-${day}-${year}`;
-  const defaultValue = dayjs(formattedDate);
-  const [examToDelete, setExamToDelete] = useState<ExamType | null>(null);    
-  const jwtToken = Cookies.get('authToken');
-  const [examtwo,setExamsTwo] = useState([]);
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!jwtToken) {
-        console.error('No authentication token found');
-        return;
-      }
+useEffect(() => {
+  const fetchData = async () => {
+    if (!jwtToken) {
+      console.error('No authentication token found');
+      return;
+    }
 
-      const options = {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      };
-
-      try {
-        const response = await fetch(apiUrl, options);
-        const response1 = await fetch('http://10.10.8.14:8008/exams/exam_types_dropdown/',options);
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Network response was not ok: ${response.status} ${response.statusText} - ${errorText}`);
-        }
-
-        const data = await response.json();
-        const examtwo = await response1.json();
-        console.log(examtwo);
-        console.log(data);
-        const formattedData = data.results.map((item: { exam_id: any; exam_type_name: any; academic_year_name: any; name: any; start_date: any; end_date: any; }) => ({
-          exam_id: item.exam_id,
-          exam_type_name: item.exam_type_name,
-          academic_year_name: item.academic_year_name,
-          name: item.name,
-          start_date: item.start_date,
-          end_date: item.end_date,
-        }));
-
-        const formattedData1 = examtwo.results.map((item: { exam_type_id: any; name: any; label:any }) => {
-          exam_type_id:item.exam_type_id;
-          name:item.name;
-          label:item.label;
-        })
-
-        console.log(formattedData1.result);
-        setExams(formattedData);
-        setExamsTwo(formattedData1)
-        
-
-      } catch (error) {
-        console.error('There has been a problem with your fetch operation:', error);
-      }
+    const options = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwtToken}`,
+      },
     };
 
-    fetchData();
-  }, [jwtToken]);
+    try {
+      const response = await fetch(apiUrl, options);
+      const response1 = await fetch('http://10.10.8.14:8008/exams/exam_types_dropdown/', options);
 
-  const closeModal = () => {
-    setEditingIndex(null);
-    setModalIsOpen(false);
-  }
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Network response was not ok: ${response.status} ${response.statusText} - ${errorText}`);
+      }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setNewExam((prev) => ({ ...prev, [name]: value }));
-  };
+      const data = await response.json();
+      const examtwo = await response1.json();
 
-  const handleDateChange = (date: dayjs.Dayjs | null, field: string) => {
-    setNewExam((prev) => ({ ...prev, [field]: date?.format("DD MMM YYYY") || "" }));
-  };
+      const formattedData = data.results.map(item => ({
+        exam_id: item.exam_id,
+        exam_type_name: item.exam_type_name,
+        academic_year_name: item.academic_year_name,
+        name: item.name,
+        start_date: item.start_date,
+        end_date: item.end_date,
+      }));
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+      const formattedData1 = examtwo.results.map(item => ({
+        exam_type_id: item.exam_type_id,
+        name: item.name,
+        label: item.label,
+      }));
 
-    console.log(newExam);
-    // Check if all required fields are filled
-  
-    const updatedExams = editingIndex !== null
-      ? exams.map((exam, index) => 
-          index === editingIndex 
-          ? { ...newExam, exam_id: exam.exam_id, key: exam.key} // Retain original key when editing
-          : exam
-        )
-      : [...exams, { ...newExam, exam_id: (exams.length + 1), key: exams.length + 1}]; // Generate ID and key for new exams
+      console.log(formattedData1);
+      setExams(formattedData);
+      setExamsTwo(formattedData1);
 
-      console.log(updatedExams)
-    setExams(updatedExams);
-    setNewExam({exam_type_name: 'Select',academic_year_name:'Select',name:'', start_date:'', end_date:''})
-    closeModal();
-  };
-
-  const editExam = (exam: ExamType, index: number) => {
-    setNewExam(exam);
-    setEditingIndex(index);
-    openModal();
-  };
-
-  const handleSelectChange = (option: Option | null, field: string) => {
-    setNewExam((prev) => ({
-      ...prev,
-      [field]: option ? option.name : "",
-    }));
-  };
-
-  const handleDelete = () => {
-    if (examToDelete) {
-      setExams(exams.filter(exam => exam.exam_id !== examToDelete.exam_id));
-      setExamToDelete(null);
+    } catch (error) {
+      console.error('There has been a problem with your fetch operation:', error);
     }
   };
-  
-  const handleApplyClick = () => {
-    if (dropdownMenuRef.current) {
-      dropdownMenuRef.current.classList.remove("show");
-    }
-  };
-  const getModalContainer = () => {
-    const modalElement = document.getElementById("modal-datepicker");
-    return modalElement ? modalElement : document.body; // Fallback to document.body if modalElement is null
-  };
+
+  fetchData();
+}, [jwtToken]);
