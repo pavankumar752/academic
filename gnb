@@ -1,145 +1,160 @@
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+<form onSubmit={handleSubmit} onKeyPress={(e) => { if (e.key === 'Enter') { handleSubmit(e); } }}>
+  <div className="modal-body light-violet-bg">
+    <div className="mb-3">
+      <label className="form-label">State</label>
+      <CommonSelect
+        className="select"
+        options={state}
+        onChange={(option) => {
+          handleSelectChange(option, "state", "state_name");
+          handleStateChange(option);
+        }}
+        reset={resetSelect}
+      />
+    </div>
+    <div className="mb-3">
+      <label className="form-label">Zone</label>
+      <CommonSelect
+        className="select"
+        options={zone}
+        onChange={(option) => {
+          handleSelectChange(option, "zone", "zone_name");
+          handleZoneChange(option);
+        }}
+        reset={resetSelect}
+        disabled={!selectedState}
+      />
+    </div>
+    <div className="mb-3">
+      <label className="form-label">Branch Name</label>
+      <CommonSelect
+        className="select"
+        options={branches}
+        onChange={(option) => handleSelectChange(option, "branch", "branch_name")}
+        reset={resetSelect}
+        disabled={!selectedZone}
+      />
+    </div>
+    <div className="mb-3">
+      <label className="form-label">Provider Name</label>
+      <CommonSelect
+        className="select"
+        options={provider}
+        onChange={(option) => handleSelectChange(option, "ISP_provider", "ISP_provider_name")}
+        reset={resetSelect}
+      />
+    </div>
+    <div className="mb-3">
+      <label className="form-label">Connection Status</label>
+      <input
+        type="text"
+        className={`form-control ${errors.connection_status ? 'is-invalid' : ''}`}
+        onChange={handleInputChange}
+        name="connection_status"
+        placeholder="Connection Status"
+        value={newExam.connection_status}
+      />
+      {errors.connection_status && <div className="invalid-feedback">{errors.connection_status[0]}</div>}
+    </div>
+    <div className="mb-3">
+      <label className="form-label">Isp Username</label>
+      <input
+        type="text"
+        className={`form-control ${errors.ISP_user_name ? 'is-invalid' : ''}`}
+        onChange={handleInputChange}
+        name="ISP_user_name"
+        placeholder="Isp Username"
+        value={newExam.ISP_user_name}
+      />
+      {errors.ISP_user_name && <div className="invalid-feedback">{errors.ISP_user_name[0]}</div>}
+    </div>
+    <div className="mb-3">
+      <label className="form-label">Isp Password</label>
+      <input
+        type="text"
+        className={`form-control ${errors.ISP_password ? 'is-invalid' : ''}`}
+        onChange={handleInputChange}
+        name="ISP_password"
+        placeholder="Isp Password"
+        value={newExam.ISP_password}
+      />
+      {errors.ISP_password && <div className="invalid-feedback">{errors.ISP_password[0]}</div>}
+    </div>
+    <div className="mb-3">
+      <label className="form-label">WAN IP</label>
+      <input
+        type="text"
+        className={`form-control ${errors.WAN_IP ? 'is-invalid' : ''}`}
+        onChange={handleInputChange}
+        name="WAN_IP"
+        placeholder="WAN IP"
+        value={newExam.WAN_IP || ''}
+      />
+      {errors.WAN_IP && <div className="invalid-feedback">{errors.WAN_IP[0]}</div>}
+    </div>
+    <div className="mb-3">
+      <label className="form-label">LAN IP</label>
+      <input
+        type="text"
+        className={`form-control ${errors.LAN_IP ? 'is-invalid' : ''}`}
+        onChange={handleInputChange}
+        name="LAN_IP"
+        placeholder="LAN IP"
+        value={newExam.LAN_IP || ''}
+      />
+      {errors.LAN_IP && <div className="invalid-feedback">{errors.LAN_IP[0]}</div>}
+    </div>
+    <div className="mb-3">
+      <label className="form-label">Device Type</label>
+      <input
+        type="text"
+        className={`form-control ${errors.Device_Type ? 'is-invalid' : ''}`}
+        onChange={handleInputChange}
+        name="Device_Type"
+        placeholder="Device Type"
+        value={newExam.Device_Type}
+      />
+      {errors.Device_Type && <div className="invalid-feedback">{errors.Device_Type[0]}</div>}
+    </div>
+    <div className="mb-3">
+      <label className="form-label">Serial Number</label>
+      <input
+        type="text"
+        className={`form-control ${errors.Device_serial_no ? 'is-invalid' : ''}`}
+        onChange={handleInputChange}
+        name="Device_serial_no"
+        placeholder="Serial Number"
+        value={newExam.Device_serial_no || ''}
+      />
+      {errors.Device_serial_no && <div className="invalid-feedback">{errors.Device_serial_no[0]}</div>}
+    </div>
+  </div>
+</form>
 
-    try {
-      await updateData();
-      resetForm();
-      const submitBtn = document.getElementById('submit-btn');
-      if (submitBtn) {
-        submitBtn.setAttribute('data-bs-dismiss', 'modal');
-        submitBtn.click();
-      }
-      const submitBtn1 = document.getElementById('submit-btn1');
-      if (submitBtn1) {
-        submitBtn1.setAttribute('data-bs-dismiss', 'modal');
-        submitBtn1.click();
-      }
 
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+
+  try {
+    await updateData();
+    resetForm();
+    const submitBtn = document.getElementById('submit-btn');
+    if (submitBtn) {
+      submitBtn.setAttribute('data-bs-dismiss', 'modal');
+      submitBtn.click();
     }
-    catch (error) {  }
-  };
+    const submitBtn1 = document.getElementById('submit-btn1');
+    if (submitBtn1) {
+      submitBtn1.setAttribute('data-bs-dismiss', 'modal');
+      submitBtn1.click();
+    }
+  } catch (error: any) {
+    // Assuming error is in the form of { WAN_IP: ['error message'], LAN_IP: ['error message'], ... }
+    if (error.response?.data) {
+      setErrors(error.response.data); // Update errors state with the server's error response
+    } else {
+      console.error("Unexpected error: ", error);
+    }
+  }
+};
 
-  <form onSubmit={handleSubmit} onKeyPress={(e) => { if (e.key === 'Enter') { handleSubmit(e); } }}>
-                <div className="modal-body light-violet-bg">
-                  <div className="mb-3">
-                    <label className="form-label">State</label>
-                    <CommonSelect
-                      className="select"
-                      options={state}
-                      onChange={(option) => {
-                        handleSelectChange(option, "state", "state_name");
-                        handleStateChange(option);
-                      }}
-                      reset={resetSelect}
-                    />
-                  </div> <div className="mb-3">
-                    <label className="form-label">Zone</label>
-                    <CommonSelect
-                      className="select"
-                      options={zone} onChange={(option) => { handleSelectChange(option, "zone", "zone_name"); handleZoneChange(option); }}
-                      reset={resetSelect}
-                      disabled={!selectedState}
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Branch Name</label>
-                    <CommonSelect
-                      className="select"
-                      options={branches} onChange={(option) => handleSelectChange(option, "branch", "branch_name")}
-                      reset={resetSelect}
-                      disabled={!selectedZone}
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Provider Name</label>
-                    <CommonSelect
-                      className="select"
-                      options={provider}
-                      onChange={(option) => handleSelectChange(option, "ISP_provider", "ISP_provider_name")}
-                      reset={resetSelect}
-                    />
-                  </div><div className="mb-3">
-                    <label className="form-label">Connection Status</label>
-                    <input
-                      type="text"
-                      className={`form-control`}
-                      onChange={handleInputChange}
-                      name="connection_status"
-                      placeholder="Connection Status"
-                      value={newExam.connection_status}
-                    />
-                  </div><div className="mb-3">
-                    <label className="form-label">Isp Username</label>
-                    <input
-                      type="text"
-                      className={`form-control`}
-                      onChange={handleInputChange}
-                      name="ISP_user_name"
-                      placeholder="Isp Username"
-                      value={newExam.ISP_user_name}
-                    />
-                  </div><div className="mb-3">
-                    <label className="form-label">Isp Password</label>
-                    <input
-                      type="text"
-                      className={`form-control`}
-                      onChange={handleInputChange}
-                      name="ISP_password"
-                      placeholder="Isp Password"
-                      value={newExam.ISP_password}
-                    />
-                  </div><div className="mb-3">
-                    <label className="form-label">WAN IP</label>
-                    <input
-                      type="text"
-                      className={`form-control`}
-                      onChange={handleInputChange}
-                      name="WAN_IP"
-                      placeholder="WAN IP"
-                      value={newExam.WAN_IP || ''}
-                    />
-                  </div><div className="mb-3">
-                    <label className="form-label">LAN IP</label>
-                    <input
-                      type="text"
-                      className={`form-control`}
-                      onChange={handleInputChange}
-                      name="LAN_IP"
-                      placeholder="LAN IP"
-                      value={newExam.LAN_IP || ''}
-                    />
-                  </div><div className="mb-3">
-                    <label className="form-label">Device Type</label>
-                    <input
-                      type="text"
-                      className={`form-control`}
-                      onChange={handleInputChange}
-                      name="Device_Type"
-                      placeholder="Device Type"
-                      value={newExam.Device_Type}
-                    />
-                  </div><div className="mb-3">
-                    <label className="form-label">Serial Number</label>
-                    <input
-                      type="text"
-                      className={`form-control`}
-                      onChange={handleInputChange}
-                      name="Device_serial_no"
-                      placeholder="Serial Number"
-                      value={newExam.Device_serial_no || ''}
-                    />
-                  </div>
-
-
-This is code 
-
-{
-    "WAN_IP": [
-        "BranchConnectionDetails with this WAN IP already exists."
-    ],
-    "LAN_IP": [
-        "BranchConnectionDetails with this LAN IP already exists."
-    ]
-}
-
-These are some possible errors dduring submit of form add error message for each element for particular message
