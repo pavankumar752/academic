@@ -158,3 +158,10 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   }
 };
 
+
+{
+  "WAN_IP": ["BranchConnectionDetails with this WAN IP already exists."],
+  "LAN_IP": ["BranchConnectionDetails with this LAN IP already exists."]
+}
+
+
